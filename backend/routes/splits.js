@@ -1,26 +1,27 @@
 const express = require('express');
 const {
-    getWorkouts,
-    getWorkout,
-    postWorkout,
-    deleteWorkout,
-    patchWorkout
-} = require('../controllers/workoutController');
+    getSplits,
+    getSplit,
+    postSplit,
+    deleteSplit,
+    patchSplit
+} = require('../controllers/splitController');
+
 const router = express.Router();
 
 // Get all workouts
-router.get('/', getWorkouts);
+router.get('/', getSplits);
 
 // Get a single workout 
-router.get('/:id', getWorkout);
+router.get('/:id', getSplit);
 
 // Post a new workout
-router.post('/', postWorkout);
+router.post('/', postSplit);
 
 // Delete a workout
-router.delete('/:id', deleteWorkout);
+router.delete('/:id', deleteSplit);
 
 // Patch a workout
-router.patch('/:id', patchWorkout);
+router.patch('/:id', patchSplit);
 
 module.exports = router;
