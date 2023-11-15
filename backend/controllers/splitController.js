@@ -1,11 +1,11 @@
+const Split = require('../models/splitModel');
 const mongoose = require('mongoose');
-const Split = require('../models/SplitModel');
 
 // GET all workouts from the workout split
 const getSplits = async (req, res) => {
-    const workout = await Split.find({});
+    const split = await Split.find({});
 
-    res.status(200).json(workout);
+    res.status(200).json(split);
 }
 
 // GET a single split

@@ -24,6 +24,7 @@ const splitSchema = new Schema({
         type: Array,
         require: true
     }
+    
 });
 
-module.export = mongoose.model('Split', splitSchema);
+module.exports = mongoose.model('Split', splitSchema);
