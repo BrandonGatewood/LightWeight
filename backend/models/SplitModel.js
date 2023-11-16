@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 /* Split Schema Details */
@@ -21,10 +20,26 @@ const splitSchema = new Schema({
         require: true
     },
     workouts: {
-        type: Array,
+        type: [[{
+            WorkoutName: {
+                type: String,
+                require: true
+            },
+            sets: {
+                type: [Number],
+                require: true
+            },
+            reps: {
+                type: [Number],
+                require: true
+            },
+            weight: {
+                type: [Number],
+                require: true
+            },
+        }]],
         require: true
     }
-    
 });
 
 module.exports = mongoose.model('Split', splitSchema);

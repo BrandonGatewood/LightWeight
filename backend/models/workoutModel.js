@@ -9,15 +9,15 @@ const workoutSchema = new Schema({
         required: true
     },
     sets: {
-        type: Array,
+        type: [Number],
         required: true
     },
     reps: {
-        type: Array,
+        type: [Number],
         required: true
     },
     weight: {
-        type: Array,
+        type: [Number],
         required: true
     }
 })

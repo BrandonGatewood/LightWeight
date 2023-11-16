@@ -65,3 +65,12 @@ const patchWorkout = async(req, res) => {
 
     res.status(200).json(workout);
 }
+
+// Export workoutController object
+module.exports = {
+    getWorkouts,
+    getWorkout,
+    postWorkout,
+    deleteWorkout,
+    patchWorkout
+};
