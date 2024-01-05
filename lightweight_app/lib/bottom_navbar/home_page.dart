@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          child: const Text('Edit Workouts',
+          child: const Text('Edit Split',
             style: TextStyle(
               color: Colors.white,
             ), 

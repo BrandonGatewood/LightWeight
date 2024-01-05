@@ -38,7 +38,9 @@ class _NavigationState extends State<Navigation> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     ProgressPage(),
-    ProfilePage(), 
+    // MyWorkoutsPage(),
+    SettingsPage(),
+    SettingsPage(), 
   ];
 
   void _onItemTapped(int index) {
@@ -61,14 +63,6 @@ class _NavigationState extends State<Navigation> {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TrackWorkoutPage()));
             },
           ),
-          // Navigate to SettingsPage
-          IconButton(
-            icon: const Icon(Icons.settings_rounded),
-            tooltip: 'Settings',
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsPage()));
-            },
-          ),
         ], 
       ),
       body: Center(
@@ -85,8 +79,12 @@ class _NavigationState extends State<Navigation> {
             label: 'Progress',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_rounded),
-            label: 'Profile',
+            icon: Icon(Icons.fitness_center_rounded),
+            label: 'My Workouts',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_rounded),
+            label: 'Settings',
           ),
           
         ],
