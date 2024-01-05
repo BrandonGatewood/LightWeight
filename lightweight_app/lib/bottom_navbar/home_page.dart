@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import '../app_bar/track_workout_page.dart';
+import 'package:lightweight_app/edit_workouts_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -7,25 +8,72 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Open a connection to DB
-    
-    return Column(
-      children: <Widget>[
-        // Workout overview title
-        const SizedBox(
-          // SizedBox styling
-          height: 50,
-          child: Center(
-            child: Text(
-              'Todays Workout Overview',
-              // Text Style
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25, 
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(
+          child: Text('Todays Workout Overview',
+            style: TextStyle(
+              color: Colors.blue,
+            ), 
+          ),
+        ),
+      ),
+      body: SizedBox(
+        // SizedBox Styling 
+        height: 500,
+        child: ListView(
+          children: const <Widget>[
+            Card(
+              child: ListTile(
+                title: Text('Incline Dumbbell Bench'),
+                subtitle: Text('\t3 x 10'),
               ),
             ),
-          )
+          ],
         ),
-        // Workout Overview
+      ),
+      persistentFooterButtons: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditWorkoutsPage())); 
+          },
+          child: const Text('Edit Workouts',
+            style: TextStyle(
+              color: Colors.white,
+            ), 
+          ),
+          
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TrackWorkoutPage()));
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+          ),
+          child: const Wrap(
+            children: <Widget>[
+              Icon(Icons.track_changes_rounded,
+                color: Colors.white,
+              ),
+              Text('Track Workout',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ]
+          ),
+        ),
+      ],
+      persistentFooterAlignment: AlignmentDirectional.center,
+    );
+  }
+}
+
+   /* 
+    return Column(
+      children: <Widget>[
         SizedBox(
           // SizedBox Styling 
           height: 500,
@@ -81,9 +129,7 @@ class HomePage extends StatelessWidget {
         ),
       ],
     );
-    
-  }
-
+  */ 
   /*
     findDay function uses DateTime class to find the current day.
 
@@ -125,4 +171,3 @@ class HomePage extends StatelessWidget {
     }
   }
   */
-}
