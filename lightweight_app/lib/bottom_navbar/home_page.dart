@@ -38,6 +38,11 @@ class HomePage extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditWorkoutsPage())); 
           },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
           child: const Text('Edit Workouts',
             style: TextStyle(
               color: Colors.white,
@@ -50,6 +55,9 @@ class HomePage extends StatelessWidget {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TrackWorkoutPage()));
           },
           style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             backgroundColor: Colors.blue,
           ),
           child: const Wrap(
