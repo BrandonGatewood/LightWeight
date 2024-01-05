@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import './bottom_navbar/home_page.dart';
-import './bottom_navbar/profile_page.dart';
 import './bottom_navbar/progress_page.dart';
+import './bottom_navbar/settings_page.dart';
+import './bottom_navbar/my_workouts.dart';
 import './app_bar/track_workout_page.dart';
-import './app_bar/settings_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,8 +38,7 @@ class _NavigationState extends State<Navigation> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     ProgressPage(),
-    // MyWorkoutsPage(),
-    SettingsPage(),
+    MyWorkoutsPage(),
     SettingsPage(), 
   ];
 
