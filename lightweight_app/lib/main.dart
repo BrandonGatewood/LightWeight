@@ -38,7 +38,6 @@ class _NavigationState extends State<Navigation> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     ProgressPage(),
-    MyWorkoutsPage(),
     SettingsPage(), 
   ];
 
@@ -57,7 +56,7 @@ class _NavigationState extends State<Navigation> {
           // Navigate to TrackWorkoutPage
           IconButton(
             icon: const Icon(Icons.track_changes_rounded),
-            tooltip: 'Track Workout',
+            tooltip: 'Notifications',
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TrackWorkoutPage()));
             },
@@ -76,10 +75,6 @@ class _NavigationState extends State<Navigation> {
           BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart_rounded),
             label: 'Progress',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center_rounded),
-            label: 'My Workouts',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_rounded),
