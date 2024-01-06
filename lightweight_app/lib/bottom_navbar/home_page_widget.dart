@@ -1,6 +1,10 @@
 import "package:flutter/material.dart";
 import '../app_bar/track_workout_page.dart';
 import 'package:lightweight_app/edit_workouts_page.dart';
+import 'home_page_widgets/summary_widget.dart';
+import 'home_page_widgets/planning_widget.dart';
+import 'home_page_widgets/highlight_widget.dart';
+import 'home_page_widgets/workout_overview_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,26 +14,22 @@ class HomePage extends StatelessWidget {
     // Open a connection to DB
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text('Todays Workout Overview',
-            style: TextStyle(
-              color: Colors.blue,
-            ), 
-          ),
-        ),
-      ),
-      body: SizedBox(
-        // SizedBox Styling 
-        height: 500,
+      body: Padding(
+        padding: const EdgeInsets.only(left: 15),
         child: ListView(
+          // Todays Workout 
           children: const <Widget>[
-            Card(
-              child: ListTile(
-                title: Text('Incline Dumbbell Bench'),
-                subtitle: Text('\t3 x 10'),
-              ),
-            ),
+            Text('Summary'),
+            Summary(),
+            Text('Today\'s Workout Overview'),
+            WorkoutOverview(),
+            Text('Plan'),
+            Plan(),
+            Text('Highlights'),
+            Highlight(),
+            // Planning
+           
+
           ],
         ),
       ),
@@ -46,9 +46,7 @@ class HomePage extends StatelessWidget {
           child: const Text('Edit Split',
             style: TextStyle(
               color: Colors.white,
-            ), 
-          ),
-          
+            ), ),
         ),
         ElevatedButton(
           onPressed: () {
