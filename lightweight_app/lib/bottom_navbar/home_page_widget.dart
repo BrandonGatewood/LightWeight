@@ -15,18 +15,37 @@ class HomePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(left: 15),
         child: ListView(
-          children: const <Widget>[
-            Text('Summary'),
-            Summary(),
-            Text('Today\'s Workout Overview'),
-            WorkoutOverview(),
-            Text('Plan'),
-            Plan(),
-            Text('Highlights'),
-            Highlight(),
+          children: <Widget>[
+            Text(
+              'Summary',
+              style: header(), 
+            ),
+            const Summary(),
+            Text(
+              'Today\'s Workout Overview',
+              style: header(),
+            ),
+            const WorkoutOverview(),
+            Text(
+              'Plan',
+              style: header(),
+            ),
+            const Plan(),
+            Text(
+              'Highlights',
+              style: header(),
+            ),
+            const Highlight(),
           ],
         ),
       ),
+    );
+  }
+
+  TextStyle header() {
+    return const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
     );
   }
 }
