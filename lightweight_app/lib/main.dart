@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'bottom_navbar/home_page_widget.dart';
+import 'bottom_navbar/home_page.dart';
 import './bottom_navbar/progress_page.dart';
 import './bottom_navbar/settings_page.dart';
 import './bottom_navbar/my_workouts.dart';

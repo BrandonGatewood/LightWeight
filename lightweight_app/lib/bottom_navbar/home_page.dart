@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
             ),
             const Summary(),
             Text(
-              'Today\'s Workout Overview',
+              'Today\'s Workout',
               style: header(),
             ),
             const WorkoutOverview(),
@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
 
   TextStyle header() {
     return const TextStyle(
-      fontSize: 14,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
     );
   }

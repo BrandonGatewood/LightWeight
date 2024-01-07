@@ -14,7 +14,7 @@ class Summary extends StatelessWidget {
             children: <Widget>[
               // Todays Workout
               Expanded(
-                child: getMissedEntries(context),
+                child: getMissedWorkouts(context),
               ),
               // Weight
               Expanded(
@@ -40,12 +40,11 @@ class Summary extends StatelessWidget {
   /*
     Function to find the number of missed entries and returns a summaryCard.
   */
-  Widget getMissedEntries(BuildContext context) {
+  Widget getMissedWorkouts(BuildContext context) {
     // Find missed entries 
     String content = '0';
 
-    return summaryCard(context, 'Days Untracked', content);
-
+    return summaryCard(context, 'Workouts Missed', content);
   }
 
   /*
