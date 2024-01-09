@@ -20,7 +20,7 @@ class Plan extends StatelessWidget {
   */ 
   Widget planButton(BuildContext context) {
     return ElevatedButton(
-      style: planButtonStyle(), 
+      style: planButtonStyle(context, true), 
       onPressed: () {
         displayOptions(context);
       }, 
@@ -47,7 +47,7 @@ class Plan extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton(
-        style: planButtonStyle(),
+        style: planButtonStyle(context, false),
         onPressed: () {
           if(selection == 0) {
             // Open new page to exercise
@@ -87,14 +87,30 @@ class Plan extends StatelessWidget {
     );
   }
 
-  ButtonStyle planButtonStyle() {
-    return ButtonStyle(
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+  /*
+    planButtonStyle is a generic ButtonStyle, the passed in boolean will determine
+    if the button should be primary color or not.
+  */
+  ButtonStyle planButtonStyle(BuildContext context, bool mainButton) {
+    if(mainButton) {
+      return ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
-      ),
-    );
+        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.inversePrimary),
+      );
+    }
+    else {
+      return ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
   }
 
 /*
