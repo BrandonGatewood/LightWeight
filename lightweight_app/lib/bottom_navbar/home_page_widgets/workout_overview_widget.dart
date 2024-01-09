@@ -13,51 +13,37 @@ class WorkoutOverview extends StatelessWidget {
         // SizedBox Styling 
         height: 350,
         child: ListView(
-          children: const <Widget>[
-            Card(
-              child: ListTile(
-                title: Text('Incline Dumbbell Bench'),
-                subtitle: Text('\t3 x 10'),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Incline Dumbbell Bench'),
-                subtitle: Text('\t3 x 10'),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Incline Dumbbell Bench'),
-                subtitle: Text('\t3 x 10'),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Incline Dumbbell Bench'),
-                subtitle: Text('\t3 x 10'),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Incline Dumbbell Bench'),
-                subtitle: Text('\t3 x 10'),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Incline Dumbbell Bench'),
-                subtitle: Text('\t3 x 10'),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                title: Text('Incline Dumbbell Bench'),
-                subtitle: Text('\t3 x 10'),
-              ),
-            ),
-          ],
+          children: workouts(),
         ),
       );
+  }
+
+  /*
+    workouts will generate a list of the users workouts for the day.
+  */
+  List<Widget> workouts() {
+    // find todays workouts
+    List<Widget> workoutList = [];
+
+    List<String> name = ['incline Bench', 'flat bench', 'incline dumbbell bench', 'seated flies', 'standing flies'];
+    List<String> reps = ['4', '3', '4', '2', '3'];
+
+    for(int i = 0; i < name.length; ++i) {
+      workoutList.add(workoutCard(name[i], reps[i]));
+    }
+    return workoutList;
+  }
+  /*
+    workoutCard generates a Generic workout card with the workout name 
+    and the number of reps.
+  */
+  Card workoutCard(String title, String reps) {
+    String sub = '$reps reps';
+    return Card(
+      child: ListTile(
+        title: Text(title),
+        subtitle: Text(sub),
+      ),
+    );
   }
 }
