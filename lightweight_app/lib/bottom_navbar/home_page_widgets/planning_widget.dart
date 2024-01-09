@@ -123,7 +123,7 @@ class Plan extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 6),
+            padding: const EdgeInsets.only(left: 6),
             child: Text(title,
               style: const TextStyle(
                 fontSize: 14,

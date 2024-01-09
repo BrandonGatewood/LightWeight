@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import 'bottom_navbar/home_page.dart';
 import './bottom_navbar/progress_page.dart';
 import './bottom_navbar/settings_page.dart';
-import './app_bar/track_workout_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,16 +50,6 @@ class _NavigationState extends State<Navigation> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('LightWeight'),
-        actions: <Widget>[
-          // Navigate to TrackWorkoutPage
-          IconButton(
-            icon: const Icon(Icons.track_changes_rounded),
-            tooltip: 'Notifications',
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TrackWorkoutPage()));
-            },
-          ),
-        ], 
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
