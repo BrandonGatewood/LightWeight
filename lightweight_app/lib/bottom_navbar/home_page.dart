@@ -1,6 +1,4 @@
 import "package:flutter/material.dart";
-import '../app_bar/track_workout_page.dart';
-import 'package:lightweight_app/edit_workouts_page.dart';
 import 'home_page_widgets/summary_widget.dart';
 import 'home_page_widgets/planning_widget.dart';
 import 'home_page_widgets/highlight_widget.dart';

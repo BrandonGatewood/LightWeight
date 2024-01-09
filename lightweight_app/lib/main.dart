@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import 'bottom_navbar/home_page.dart';
 import './bottom_navbar/progress_page.dart';
 import './bottom_navbar/settings_page.dart';
-import './bottom_navbar/my_workouts.dart';
 import './app_bar/track_workout_page.dart';
 
 void main() {
