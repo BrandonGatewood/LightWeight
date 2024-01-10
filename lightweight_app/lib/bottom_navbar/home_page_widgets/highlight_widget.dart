@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
-import 'package:fl_chart/fl_chart.dart';
+import '../../charts/weight_chart.dart';
+
 class Highlight extends StatefulWidget {
   const Highlight({super.key});
 
@@ -23,25 +24,30 @@ class _Highlight extends State<Highlight> {
   Widget build(BuildContext context) {
     int pageCount = 4;
     return SizedBox(
-      height: 500,
+      height: 700,
       child: Column(
         children: <Widget>[
-          weightHighlight(context),
-          //exerciseHighlight(),
-          SizedBox(
-            height: 200,
-            child: favoriteExercise(context),
-          ),
-
- 
-
-
-
+          const WeightChart(),
         ],
       )
     );
    
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   /*
     Get a random favorite exercise
@@ -87,37 +93,7 @@ class _Highlight extends State<Highlight> {
   }
   
 
-  /*
-    Weight card widget
-  */
-  Widget weightHighlight(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: SizedBox(
-            height: 200,
-            child: Card(
-              child: ListTile(
-                title: Text('Weight Chart'),
-                subtitle: Text(''),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
-/*
-  Widget weightLineChart() {
-    return LineChart(
-      LineChartData(
 
-      )
-    );
-  } 
-  */
-  /*
-    Create a chart for weight card widget
-  */
+
 }

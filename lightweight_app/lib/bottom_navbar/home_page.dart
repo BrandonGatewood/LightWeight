@@ -14,32 +14,55 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.only(left: 15),
         child: ListView(
           children: <Widget>[
-            Text(
-              'Summary',
-              style: header(), 
-            ),
-            const Summary(),
-            Text(
-              'Today\'s Workout',
-              style: header(),
-            ),
-            const WorkoutOverview(),
-            Text(
-              'Plan',
-              style: header(),
-            ),
-            const Plan(),
-            Text(
-              'Highlights',
-              style: header(),
-            ),
-            const Highlight(),
+            homepageSections('Summary', 0),
+            homepageSections('Today\'s Workout', 1),
+            homepageSections('Plan', 2),
+            homepageSections('Highlights', 3),
           ],
         ),
       ),
     );
   }
 
+  /*
+    Create a generic section with appropriate title and section
+  */
+  Widget homepageSections(String title, int selection) {
+    Widget section; 
+
+    if(selection == 0) {
+      section = const Summary();
+    }
+    else if(selection == 1) {
+      section = const WorkoutOverview();
+    }
+    else if(selection == 2) {
+      section = const Plan();
+    }
+    else {
+      section = const Highlight();
+    }
+    
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              title,
+              style: header(), 
+            ),
+          ),
+          section,
+        ],
+      )
+    );
+  }
+
+  /*
+    Style for each header Section
+  */
   TextStyle header() {
     return const TextStyle(
       fontSize: 20,
