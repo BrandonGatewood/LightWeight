@@ -31,21 +31,21 @@ class _BodyWeightChart extends State<BodyWeightChart> {
                     alignment: Alignment.topLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: 8),
-                      child: Text('Weight Chart'),
+                      child: Text('Body Weight Chart'),
                     ),
                   ),
                   SizedBox(
                     height: 300,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                        right: 18,
-                        left: 12,
-                        top: 24,
-                        bottom: 12,
+                        right: 15,
+                        left: 10,
+                        top: 20,
+                        bottom: 10,
                       ),
                       child: LineChart(
-                        weightData(),
-                        ),
+                        bodyWeightChart(),
+                      ),
                     ),
                   ),
                 ],
@@ -61,25 +61,27 @@ class _BodyWeightChart extends State<BodyWeightChart> {
     const style = TextStyle(
       fontSize: 12,
     );
+
     Widget text;
+
     switch (value.toInt()) {
-      case 1:
-        text = const Text('Jan', style: style);
+      case 2:
+        text = const Text('Feb', style: style);
         break;
-      case 3:
-        text = const Text('Mar', style: style);
+      case 4:
+        text = const Text('Apr', style: style);
         break;
-      case 5:
-        text = const Text('May', style: style);
+      case 6:
+        text = const Text('Jun', style: style);
         break;
-      case 7:
-        text = const Text('Jul', style: style);
+      case 8:
+        text = const Text('Aug', style: style);
         break;
-      case 9:
-        text = const Text('SEP', style: style);
+      case 10:
+        text = const Text('Oct', style: style);
         break;
-      case 11:
-        text = const Text('Nov', style: style);
+      case 12:
+        text = const Text('Dec', style: style);
         break;
       default:
         text = const Text('', style: style);
@@ -96,39 +98,39 @@ class _BodyWeightChart extends State<BodyWeightChart> {
     const style = TextStyle(
       fontSize: 12,
     );
+
     String text;
+
     switch (value.toInt()) {
       case 1:
-        text = '50';
+        text = '100 lbs';
         break;
       case 2:
-        text = '100';
+        text = '200 lbs';
         break;
       case 3:
-        text = '150';
+        text = '300 lbs';
         break;
       case 4:
-        text = '200';
-        break;
-      case 5:
-        text = '250';
-        break;
-      case 6:
-        text = '300';
-        break;
-      case 7:
-        text = '350';
+        text = '400 lbs';
         break;
       default:
         return Container();
     }
 
-    return Text(text, style: style, textAlign: TextAlign.left);
+    return Padding(
+      padding: EdgeInsets.only(right: 3),
+      child: Text(
+        text, 
+        style: style, 
+        textAlign: TextAlign.left
+      )
+    );
   }
 
-  LineChartData weightData() {
+  LineChartData bodyWeightChart() {
     return LineChartData(
-gridData: FlGridData(
+      gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
         horizontalInterval: 1,
@@ -177,44 +179,39 @@ gridData: FlGridData(
         border: Border.all(color: const Color(0xff37434d)),
       ),
       minX: 0,
-      //maxX: 12,
+      maxX: 12,
       minY: 0,
-      //maxY: 7,
+      maxY: 4,
       lineBarsData: [
         LineChartBarData(
-          spots: const [ 
-            FlSpot(1, 184),
-            FlSpot(2, 183),
-            FlSpot(3, 185),
-            FlSpot(4, 190),
-            FlSpot(5, 185),
-            FlSpot(6, 183),
-            FlSpot(7, 170),
-          ],
+          spots: bodyWeightDummyData(),
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,
           ),
-          barWidth: 5,
+          barWidth: 4,
           isStrokeCapRound: true,
           dotData: const FlDotData(
-            show: false,
+            show: true,
           ),
-          
         ),
+        
       ],
     );
   }
 
   List<FlSpot> bodyWeightDummyData() {
     return [
-      FlSpot(184, 1),
-      FlSpot(183, 2),
-      FlSpot(185, 3),
-      FlSpot(190, 4),
-      FlSpot(185, 5),
-      FlSpot(183, 6.5),
-      FlSpot(170, 7),
+      FlSpot(1, 184/100),
+      FlSpot(2, 183/100),
+      FlSpot(3, 185/100),
+      FlSpot(4, 190/100),
+      FlSpot(5, 185/100),
+      FlSpot(6, 183/100),
+      FlSpot(7.2, 200/100),
+      FlSpot(8, 170/100),
+      FlSpot(9, 170/100),
+      FlSpot(10, 170/100),
     ];
   }
 }

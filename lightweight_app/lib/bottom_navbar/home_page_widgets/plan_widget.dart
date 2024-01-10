@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import 'plan/exercise_widget.dart';
-import './plan/workout_widget.dart';
-import './plan/current_splits_widget.dart';
+import 'plan_exercise_widget.dart';
+import 'workout_widget.dart';
+import 'current_splits_widget.dart';
 
 class Plan extends StatelessWidget {
   const Plan({super.key});

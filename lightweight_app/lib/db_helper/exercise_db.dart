@@ -6,13 +6,11 @@ import 'package:sqflite/sqflite.dart';
 class Exercise {
   final int id; 
   final String name;
-  final int sets;
   final int numOfTimesEntered;
 
   const Exercise({
     required this.id,
     required this.name,
-    required this.sets,
     required this.numOfTimesEntered
   });
 
@@ -20,7 +18,6 @@ class Exercise {
     return {
       'id': id,
       'name': name,
-      'sets': sets,
       'numOfTimesEntered': numOfTimesEntered,
     };
   }
@@ -62,7 +59,6 @@ class ExerciseDBHelper {
       return Exercise(
         id: maps[i]['id'] as int,
         name: maps[i]['name'] as String,
-        sets: maps[i]['sets'] as int,
         numOfTimesEntered: maps[i]['numOfTimesEntered'] as int,
       );
     });

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'home_page_widgets/summary_widget.dart';
-import 'home_page_widgets/planning_widget.dart';
+import 'home_page_widgets/plan_widget.dart';
 import 'home_page_widgets/highlight_widget.dart';
 import 'home_page_widgets/workout_overview_widget.dart';
 
