@@ -76,7 +76,6 @@ class Plan extends StatelessWidget {
     showDialog(
       context: context, 
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Select One'),
         content: const Text('Plan your exercises, workouts, and current workout split'),
         actions: <Widget>[
           optionButton(context, 0),

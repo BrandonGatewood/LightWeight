@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import '../../charts/weight_chart.dart';
+import '../../charts/body_weight_chart.dart';
 
 class Highlight extends StatefulWidget {
   const Highlight({super.key});
@@ -27,7 +27,7 @@ class _Highlight extends State<Highlight> {
       height: 700,
       child: Column(
         children: <Widget>[
-          const WeightChart(),
+          const BodyWeightChart(),
         ],
       )
     );

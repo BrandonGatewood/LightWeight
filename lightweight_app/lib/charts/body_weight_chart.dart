@@ -1,14 +1,14 @@
 import "package:flutter/material.dart";
 import 'package:fl_chart/fl_chart.dart';
 
-class WeightChart extends StatefulWidget {
-  const WeightChart({super.key});
+class BodyWeightChart extends StatefulWidget {
+  const BodyWeightChart({super.key});
 
   @override
-  State<WeightChart> createState() => _WeightChart(); 
+  State<BodyWeightChart> createState() => _BodyWeightChart(); 
 }
 
-class _WeightChart extends State<WeightChart> {
+class _BodyWeightChart extends State<BodyWeightChart> {
     List<Color> gradientColors = [
       Colors.deepPurple,
       Colors.cyan,
@@ -30,7 +30,7 @@ class _WeightChart extends State<WeightChart> {
                   const Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
+                      padding: EdgeInsets.only(left: 8),
                       child: Text('Weight Chart'),
                     ),
                   ),
