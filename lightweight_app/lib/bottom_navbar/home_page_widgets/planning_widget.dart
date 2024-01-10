@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import './plan/excercise_widget.dart';
+import 'plan/exercise_widget.dart';
 import './plan/workout_widget.dart';
 import './plan/current_splits_widget.dart';
 

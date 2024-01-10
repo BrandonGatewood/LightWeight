@@ -177,19 +177,19 @@ gridData: FlGridData(
         border: Border.all(color: const Color(0xff37434d)),
       ),
       minX: 0,
-      maxX: 12,
+      //maxX: 12,
       minY: 0,
-      maxY: 7,
+      //maxY: 7,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
+          spots: const [ 
+            FlSpot(1, 184),
+            FlSpot(2, 183),
+            FlSpot(3, 185),
+            FlSpot(4, 190),
+            FlSpot(5, 185),
+            FlSpot(6, 183),
+            FlSpot(7, 170),
           ],
           isCurved: true,
           gradient: LinearGradient(
@@ -204,5 +204,17 @@ gridData: FlGridData(
         ),
       ],
     );
+  }
+
+  List<FlSpot> bodyWeightDummyData() {
+    return [
+      FlSpot(184, 1),
+      FlSpot(183, 2),
+      FlSpot(185, 3),
+      FlSpot(190, 4),
+      FlSpot(185, 5),
+      FlSpot(183, 6.5),
+      FlSpot(170, 7),
+    ];
   }
 }
