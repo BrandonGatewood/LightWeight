@@ -1,22 +1,23 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Exercise {
-  final int id; 
   final String name;
   final int numOfTimesEntered;
 
   const Exercise({
-    required this.id,
     required this.name,
     required this.numOfTimesEntered
   });
 
+  Exercise.fromMap(Map<String, dynamic> item):
+    name = item['name'], numOfTimesEntered = item['numOfTimesEntered'];
+
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
       'numOfTimesEntered': numOfTimesEntered,
     };
@@ -26,41 +27,42 @@ class Exercise {
 class ExerciseDBHelper {
   Future<Database> openExercise() async {
     WidgetsFlutterBinding.ensureInitialized();
-    final database = openDatabase(
-      join(await getDatabasesPath(), 'exercise.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name Text, sets INTEGER, numerOfTimesEntered INTEGER)',
+    String path = await getDatabasesPath();
+
+    return openDatabase(
+      join(path, 'database.db'),
+      onCreate: (database, version) async {
+        await database.execute(
+          '''CREATE TABLE exercises(
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            name Text NOT NULL,
+            numOfTimesEntered INTEGER NOT NULL)'''
         );
       },
       version: 1,
     );
-
-    return database;
   }
 
-  Future<void> insertExercise(Exercise anExercise, Future<Database> database) async {
+ 
+  Future<void> insertExercise(String name) async {
+    Exercise newExercise = Exercise(name: name, numOfTimesEntered: 0);
 
-    final db = await database;
+    final Database db = await ExerciseDBHelper().openExercise();
 
     await db.insert(
       'exercises', 
-      anExercise.toMap(),
+      newExercise.toMap(),
       conflictAlgorithm: ConflictAlgorithm.rollback,
     );
+    
+    
   }
 
-  Future<List<Exercise>> getAllExercise(Future<Database> database) async {
-    final db = await database;
+  Future<List<Exercise>> getAllExercise() async {
+    final Database db = await ExerciseDBHelper().openExercise();
 
-    final List<Map<String, dynamic>> maps = await db.query('exercises');
+    final List<Map<String, Object?>> maps = await db.query('exercises');
 
-    return List.generate(maps.length, (i) {
-      return Exercise(
-        id: maps[i]['id'] as int,
-        name: maps[i]['name'] as String,
-        numOfTimesEntered: maps[i]['numOfTimesEntered'] as int,
-      );
-    });
+    return maps.map((e) => Exercise.fromMap(e)).toList(); 
   }
 }

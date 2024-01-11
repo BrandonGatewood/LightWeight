@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'plan_exercise_widget.dart';
+import 'my_exercise_widget.dart';
 import 'workout_widget.dart';
 import 'current_splits_widget.dart';
 
@@ -51,7 +51,12 @@ class Plan extends StatelessWidget {
         onPressed: () {
           if(selection == 0) {
             // Open new page to exercise
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Exercises()));
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const Exercises(), 
+                  settings: const RouteSettings(name: '/exercises')
+              )
+            );
           }
           else if(selection == 1) {
             // Open new page to workouts
