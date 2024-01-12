@@ -34,7 +34,7 @@ class ExerciseDBHelper {
       onCreate: (database, version) async {
         await database.execute(
           '''CREATE TABLE exercises(
-            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            id INTEGER PRIMARY KEY NOT NULL,
             name Text NOT NULL,
             numOfTimesEntered INTEGER NOT NULL)'''
         );
@@ -43,19 +43,31 @@ class ExerciseDBHelper {
     );
   }
 
- 
-  Future<void> insertExercise(String name) async {
-    Exercise newExercise = Exercise(name: name, numOfTimesEntered: 0);
-
+  Future<bool> insertExercise(String name) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
-    await db.insert(
-      'exercises', 
-      newExercise.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.rollback,
+    // check if name is already in the workout list
+    final List<Map<String, Object?>> maps = await db.query(
+      'exercises',
+      where: "name = ?",
+      whereArgs: [name]
     );
-    
-    
+
+    // exercise not found. Insert into db and return true
+    if(maps.isEmpty) {
+      Exercise newExercise = Exercise(name: name, numOfTimesEntered: 0);
+
+      await db.insert(
+        'exercises', 
+        newExercise.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   Future<List<Exercise>> getAllExercise() async {
@@ -64,5 +76,36 @@ class ExerciseDBHelper {
     final List<Map<String, Object?>> maps = await db.query('exercises');
 
     return maps.map((e) => Exercise.fromMap(e)).toList(); 
+  }
+
+  Future<bool> deleteItem(String name) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+
+    try {
+      await db.delete(
+        'exercises',
+        where: "name = ?",
+        whereArgs: [name]
+      );
+    }
+    catch(err) {
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<bool> updateExercise(String name, String newName) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+
+    try {
+      await db.rawUpdate(
+        'UPDATE exercises SET name = ? WHERE name = ?', [newName, name]);
+    }
+    catch(err) {
+      return false;
+    }
+
+    return true;
   }
 }

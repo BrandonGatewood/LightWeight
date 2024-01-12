@@ -14,12 +14,23 @@ class _ExercisesState extends State<Exercises> {
 
   List<Widget> workoutList = [];
 
+  void _refreshExercises() async {
+    final data = await getExercises();
+
+    setState(() {
+      workoutList = data;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
     _dbHelper = ExerciseDBHelper();
     _dbHelper.openExercise().whenComplete(() async {
+      _refreshExercises();
+      setState(() {
+      });
     });
   }
 
@@ -31,7 +42,6 @@ class _ExercisesState extends State<Exercises> {
 
   @override
   Widget build(BuildContext context) {
-    getExercises();
     //return planYourWorkoutsWidget(context);
     return Scaffold(
       appBar: AppBar(
@@ -56,8 +66,7 @@ class _ExercisesState extends State<Exercises> {
   }
 
   /*
-    addExerciseWidget will display an AlertDialog widget with a form to fill out an
-    exercise. 
+    Add an exercise form
   */
   void addExerciseForm(BuildContext context, TextEditingController _controller) {
     showDialog(
@@ -71,7 +80,7 @@ class _ExercisesState extends State<Exercises> {
               child: TextField(
                 controller: _controller,
                 onSubmitted: (String value) async {
-                  addExerciseData(context, _controller);
+                  addExercise(context, _controller);
                   Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
                 },
                 decoration: const InputDecoration(
@@ -93,7 +102,7 @@ class _ExercisesState extends State<Exercises> {
               const Spacer(),
               TextButton(
                 onPressed: () {
-                  addExerciseData(context, _controller);
+                  addExercise(context, _controller);
                   Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
                 },
                 child: const Text('Save'),
@@ -106,33 +115,118 @@ class _ExercisesState extends State<Exercises> {
   }
 
   /*
-    SaveexerciseData function will talk with  
-    to add a new exercise into the sqlite database.
+    Exercise card used to display an exercise and give the user and option
+    to delete or edit the exercise 
   */
-  void addExerciseData(BuildContext context, TextEditingController _controller) async {
+  Card exerciseCard(String name) {
+    return Card(
+      child: Row(
+        children: <Widget>[
+          Text(name),
+          const Spacer(),
+          IconButton(
+            onPressed: () {
+              updateExercise(name);
+            }, 
+            icon: const Icon(Icons.arrow_forward_ios_rounded,
+              color: Colors.white, 
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              deleteExercise(name);
+            },
+            icon: const Icon(Icons.delete_forever_rounded,
+              color: Colors.white, 
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void failedDialog(int selection) {
+    String title = '';
+    String content = 'Exercise not found';
+
+    switch(selection) {
+      case 0: 
+        title = 'Failed to add new exercise';
+        content = 'Exercise already exists';
+        break;
+      case 1:
+        title = 'Failed to update exercise';
+        break;
+      case 2:
+        title = 'Failed to delete exercise';
+        break;
+    }
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+      ),
+    );
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  /*
+    add an exercise to the database
+  */
+  void addExercise(BuildContext context, TextEditingController _controller) async {
     String name = _controller.text;
     _controller.clear();
 
     // open db
-    await _dbHelper.insertExercise(name);
+    bool add = await _dbHelper.insertExercise(name);
+
+    if(add) {
+      // refresh exercise list to keep it updated
+      _refreshExercises();
+    }
+    else {
+      failedDialog(0);
+    }
   }
 
-  Future<void> getExercises() async {
+  // get all exercises from the database
+  Future<List<Widget>> getExercises() async {
+    List<Widget> cardList = [];
     List<Exercise> myList = await _dbHelper.getAllExercise();
 
     for(int i = 0; i < myList.length; ++i) {
-      workoutList.add(workoutCard(myList[i]));
+      cardList.add(exerciseCard(myList[i].name));
+    }
+
+    return cardList;
+  }
+
+  // Update an Exercise 
+  void updateExercise(String name) async {
+    bool update = await _dbHelper.updateExercise(name, 'It works');
+
+    if(!update) {
+      failedDialog(1);
+    }
+    else {
+      _refreshExercises();
     }
   }
-  /*
-    workoutCard generates a Generic workout card with the workout name 
-    and the number of reps.
-  */
-  Card workoutCard(Exercise anExercise) {
-    return Card(
-      child: ListTile(
-        title: Text(anExercise.name),
-      ),
-    );
+  // delete an Exercise
+  void deleteExercise(String name) async {
+    bool del = await _dbHelper.deleteItem(name);
+
+    if(!del) {
+      failedDialog(2);
+    }
+    else {
+      _refreshExercises();
+    }
   }
 }
