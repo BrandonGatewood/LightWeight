@@ -49,7 +49,9 @@ class _ExercisesState extends State<Exercises> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              addExerciseForm(context, _controller);
+              const flag = [(true, '')];
+
+              exerciseForm(context, _controller, flag);
             }, 
             icon: Icon(
               Icons.add,
@@ -66,9 +68,16 @@ class _ExercisesState extends State<Exercises> {
   }
 
   /*
-    Add an exercise form
+    Exercise form used for both adding a new exercise and updating an existing exercise
   */
-  void addExerciseForm(BuildContext context, TextEditingController _controller) {
+  void exerciseForm(BuildContext context, TextEditingController textController, List<(bool, String)> flag) {
+    String name = 'Exercise name';
+
+    // flag is false, updating exercise
+    if(!flag.first.$1) {
+      name = 'New exercise name';
+    }
+
     showDialog(
       context: context, 
       builder: (BuildContext context) => AlertDialog(
@@ -80,12 +89,18 @@ class _ExercisesState extends State<Exercises> {
               child: TextField(
                 controller: _controller,
                 onSubmitted: (String value) async {
-                  addExercise(context, _controller);
+                  if(flag.first.$1) {
+                    addExercise(context, _controller);
+                  }
+                  else {
+                    updateExercise(flag.first.$2, value);
+                  }
+
                   Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
                 },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Exercise name',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: name,
                 ),
               ),
             ),
@@ -102,7 +117,12 @@ class _ExercisesState extends State<Exercises> {
               const Spacer(),
               TextButton(
                 onPressed: () {
-                  addExercise(context, _controller);
+                  if(!flag.first.$1) {
+                    addExercise(context, _controller);
+                  }
+                  else {
+                    updateExercise(_controller.text, flag.first.$2);
+                  }
                   Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
                 },
                 child: const Text('Save'),
@@ -115,34 +135,75 @@ class _ExercisesState extends State<Exercises> {
   }
 
   /*
-    Exercise card used to display an exercise and give the user and option
+    Exercise card used to display an exercise and give the user a option
     to delete or edit the exercise 
   */
-  Card exerciseCard(String name) {
-    return Card(
-      child: Row(
-        children: <Widget>[
-          Text(name),
-          const Spacer(),
-          IconButton(
-            onPressed: () {
-              updateExercise(name);
-            }, 
-            icon: const Icon(Icons.arrow_forward_ios_rounded,
-              color: Colors.white, 
+  SizedBox exerciseCard(String name) {
+    return SizedBox( 
+      height: 70,
+      child: Card(
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 10), 
+              child: Text(
+                name,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              deleteExercise(name);
-            },
-            icon: const Icon(Icons.delete_forever_rounded,
-              color: Colors.white, 
+            const Spacer(),
+            IconButton(
+              onPressed: () {
+                final flag = [(false, name)];
+                exerciseForm(context, _controller, flag);
+              }, 
+              icon: const Icon(Icons.arrow_forward_ios_rounded,
+                color: Colors.white, 
+              ),
             ),
+            IconButton(
+              onPressed: () {
+                confirmDeleteDialog(name);
+              },
+              icon: const Icon(Icons.delete_forever_rounded,
+                color: Colors.white, 
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void confirmDeleteDialog(String name) {
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Confirm Exercise'),
+        content: Text('Are you sure you want to delete $name?'),
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('Cancel'),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () {
+                  deleteExercise(name);
+                  Navigator.pop(context, 'OK');
+                },
+                child: const Text('OK'),
+              ),
+            ],
           ),
         ],
       ),
     );
+
   }
 
   void failedDialog(int selection) {
@@ -208,8 +269,9 @@ class _ExercisesState extends State<Exercises> {
   }
 
   // Update an Exercise 
-  void updateExercise(String name) async {
-    bool update = await _dbHelper.updateExercise(name, 'It works');
+  void updateExercise(String name, String newName) async {
+    _controller.clear();
+    bool update = await _dbHelper.updateExercise(name, newName);
 
     if(!update) {
       failedDialog(1);

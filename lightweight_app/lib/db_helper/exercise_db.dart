@@ -34,8 +34,7 @@ class ExerciseDBHelper {
       onCreate: (database, version) async {
         await database.execute(
           '''CREATE TABLE exercises(
-            id INTEGER PRIMARY KEY NOT NULL,
-            name Text NOT NULL,
+            name Text PRIMARY KEY NOT NULL,
             numOfTimesEntered INTEGER NOT NULL)'''
         );
       },
@@ -46,26 +45,19 @@ class ExerciseDBHelper {
   Future<bool> insertExercise(String name) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
-    // check if name is already in the workout list
-    final List<Map<String, Object?>> maps = await db.query(
-      'exercises',
-      where: "name = ?",
-      whereArgs: [name]
-    );
+    Exercise newExercise = Exercise(name: name, numOfTimesEntered: 0);
 
-    // exercise not found. Insert into db and return true
-    if(maps.isEmpty) {
-      Exercise newExercise = Exercise(name: name, numOfTimesEntered: 0);
-
+    // insert new exercise into db and abort if primary key (name) already exists
+    try{
       await db.insert(
         'exercises', 
         newExercise.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
+        conflictAlgorithm: ConflictAlgorithm.abort,
       );
 
       return true;
     }
-    else {
+    catch(err) {
       return false;
     }
   }
