@@ -92,11 +92,13 @@ class _ExercisesState extends State<Exercises> {
               child: TextField(
                 controller: _controller,
                 onSubmitted: (String value) async {
-                  if(flag.first.$1) {
-                    addExercise(context, _controller);
-                  }
-                  else {
-                    updateExercise(flag.first.$2, value);
+                  if(value.isNotEmpty) {
+                    if(flag.first.$1) {
+                      addExercise(context, _controller);
+                    }
+                    else {
+                      updateExercise(flag.first.$2, value);
+                    }
                   }
 
                   Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
@@ -110,6 +112,7 @@ class _ExercisesState extends State<Exercises> {
           ),
           Row(
             children: <Widget>[
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   _controller.clear();
@@ -120,16 +123,19 @@ class _ExercisesState extends State<Exercises> {
               const Spacer(),
               TextButton(
                 onPressed: () {
-                  if(!flag.first.$1) {
+                  if(_controller.text.isNotEmpty) {
+                    if(flag.first.$1) {
                     addExercise(context, _controller);
-                  }
-                  else {
-                    updateExercise(_controller.text, flag.first.$2);
+                    }
+                    else {
+                      updateExercise(_controller.text, flag.first.$2);
+                    }
                   }
                   Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
                 },
                 child: const Text('Save'),
               ),
+              const Spacer(),
             ],
           ),
         ],
@@ -187,11 +193,11 @@ class _ExercisesState extends State<Exercises> {
     showDialog(
       context: context, 
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Confirm Exercise'),
         content: Text('Are you sure you want to delete $name?'),
         actions: <Widget>[
           Row(
             children: <Widget>[
+              const Spacer(),
               TextButton(
                 onPressed: () => Navigator.pop(context, 'Cancel'),
                 child: const Text('Cancel'),
@@ -200,48 +206,83 @@ class _ExercisesState extends State<Exercises> {
               TextButton(
                 onPressed: () {
                   deleteExercise(name);
-                  Navigator.pop(context, 'OK');
+                  Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
                 },
                 child: const Text('OK'),
               ),
+              const Spacer(),
             ],
           ),
         ],
       ),
     );
-
   }
 
-/*
-  Generic AlertDialog to notify user on a failed action
-*/
+  /*
+    Generic AlertDialog to notify user on a failed action
+  */
   void failedDialog(int selection) {
     String title = '';
-    String content = 'Exercise not found';
+    String content = 'Exercise already exists.';
 
     switch(selection) {
       case 0: 
-        title = 'Failed to add new exercise';
-        content = 'Exercise already exists';
+        title = 'Failed to add exercise.';
         break;
       case 1:
-        title = 'Failed to update exercise';
+        title = 'Failed to update exercise.';
         break;
       case 2:
-        title = 'Failed to delete exercise';
+        title = 'Failed to delete exercise.';
+        content = 'Exercise not found.';
         break;
     }
     showDialog(
       context: context, 
       builder: (BuildContext context) => AlertDialog(
-        title: Text(title),
+        title: Center(
+          child: Text(title),
+        ),
         content: Text(content),
       ),
     );
     Future.delayed(
       const Duration(seconds: 2),
       () {
-        Navigator.pop(context);
+        Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
+      },
+    );
+  }
+
+  /*
+    Generic AlertDialog to notify user on successful action 
+  */
+  void successDialog(int selection) {
+    String title = '';
+
+    switch(selection) {
+      case 0:
+        title = 'Exercise added to List.';
+        break;
+      case 1:
+        title = 'Exercise updated.';
+        break;
+      case 2:
+        title = 'Exercise deleted.';
+        break;
+    }
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) => AlertDialog(
+        title: Center(
+          child: Text(title),
+        ),
+      ),
+    );
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
       },
     );
   }
@@ -261,6 +302,7 @@ class _ExercisesState extends State<Exercises> {
     bool add = await _dbHelper.insertExercise(name);
 
     if(add) {
+      successDialog(0);
       // refresh exercise list to keep it updated
       _refreshExercises();
     }
@@ -269,7 +311,9 @@ class _ExercisesState extends State<Exercises> {
     }
   }
 
-  // get all exercises from the database
+  /* 
+    get all exercises from the database
+  */
   Future<List<Widget>> getExercises() async {
     List<Widget> cardList = [];
     List<Exercise> myList = await _dbHelper.getAllExercise();
@@ -281,7 +325,9 @@ class _ExercisesState extends State<Exercises> {
     return cardList;
   }
 
-  // Update an Exercise 
+  /*
+    Update an Exercise 
+  */
   void updateExercise(String name, String newName) async {
     _controller.clear();
     bool update = await _dbHelper.updateExercise(name, newName);
@@ -290,10 +336,14 @@ class _ExercisesState extends State<Exercises> {
       failedDialog(1);
     }
     else {
+      successDialog(1);
       _refreshExercises();
     }
   }
-  // delete an Exercise
+
+  /*
+    delete an Exercise
+  */
   void deleteExercise(String name) async {
     bool del = await _dbHelper.deleteItem(name);
 
@@ -301,6 +351,7 @@ class _ExercisesState extends State<Exercises> {
       failedDialog(2);
     }
     else {
+      successDialog(2);
       _refreshExercises();
     }
   }
