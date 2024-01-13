@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import '../../db_helper/exercise_db.dart';
+import '../../../db_helper/exercise_db.dart';
 
 class Exercises extends StatefulWidget {
   const Exercises({super.key});
