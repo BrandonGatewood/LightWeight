@@ -168,7 +168,7 @@ class _ExercisesState extends State<Exercises> {
                 final flag = [(false, name)];
                 exerciseForm(context, _controller, flag);
               }, 
-              icon: const Icon(Icons.arrow_forward_ios_rounded,
+              icon: const Icon(Icons.edit_rounded,
                 color: Colors.white, 
               ),
             ),
