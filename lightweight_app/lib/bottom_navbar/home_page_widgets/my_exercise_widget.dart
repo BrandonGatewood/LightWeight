@@ -42,7 +42,6 @@ class _ExercisesState extends State<Exercises> {
 
   @override
   Widget build(BuildContext context) {
-    //return planYourWorkoutsWidget(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Exercises'),
@@ -66,6 +65,10 @@ class _ExercisesState extends State<Exercises> {
       ),
     );
   }
+
+
+// Forms and AlertDialogs
+
 
   /*
     Exercise form used for both adding a new exercise and updating an existing exercise
@@ -145,10 +148,10 @@ class _ExercisesState extends State<Exercises> {
         child: Row(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(left: 10), 
+              padding: const EdgeInsets.only(left: 10), 
               child: Text(
                 name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                 ),
               ),
@@ -177,6 +180,9 @@ class _ExercisesState extends State<Exercises> {
     );
   }
 
+/*
+  Alertdialog to confirm deletion of an exercise
+*/
   void confirmDeleteDialog(String name) {
     showDialog(
       context: context, 
@@ -206,6 +212,9 @@ class _ExercisesState extends State<Exercises> {
 
   }
 
+/*
+  Generic AlertDialog to notify user on a failed action
+*/
   void failedDialog(int selection) {
     String title = '';
     String content = 'Exercise not found';
@@ -236,6 +245,10 @@ class _ExercisesState extends State<Exercises> {
       },
     );
   }
+
+
+// Communication with database
+
 
   /*
     add an exercise to the database
