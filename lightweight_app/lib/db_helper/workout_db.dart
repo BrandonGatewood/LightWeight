@@ -29,3 +29,24 @@ class Workout {
     };
   }
 }
+
+class WorkoutsDBHelper {
+  Future<Database> openWorkouts() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    String path = await getDatabasesPath();
+
+    return openDatabase(
+      join(path, 'database.db'),
+      onCreate: (database, version) async {
+        await database.execute(
+          '''CREATE TABLE workouts(
+            name Text PRIMARY KEY NOT NULL,
+            workoutList Text NOT NULL,
+            numOfReps Text NOT NULL
+          )'''
+        );
+      },
+      version: 1,
+    );
+  }
+}

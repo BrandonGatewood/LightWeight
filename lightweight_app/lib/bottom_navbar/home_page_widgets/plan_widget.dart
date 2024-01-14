@@ -54,13 +54,18 @@ class Plan extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const Exercises(), 
-                  settings: const RouteSettings(name: '/exercises')
-              )
+                settings: const RouteSettings(name: '/exercises'),
+              ),
             );
           }
           else if(selection == 1) {
             // Open new page to workouts
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Workouts()));
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const Workouts(),
+                settings: const RouteSettings(name: '/workouts'),
+              ),
+            );
           }
           else {
             // Open new page to current workouts
