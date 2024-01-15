@@ -1,5 +1,8 @@
 import "package:flutter/material.dart";
+import 'package:sqflite/sqflite.dart';
 import '../../../icons.dart';
+
+enum SampleItem {editWorkout, changeName, deleteWorkout}
 
 class WorkoutsDialog {
   MyIcons icons = MyIcons();
@@ -52,7 +55,7 @@ class WorkoutsDialog {
     ];
   }
 
-  List<Widget> editWorkoutDialog(BuildContext context, TextEditingController controller) {
+  List<Widget> workoutDialog(BuildContext context, TextEditingController controller) {
     return <Widget>[
       Row(
         children: <Widget>[
@@ -62,11 +65,11 @@ class WorkoutsDialog {
           ),
           const Spacer(),
           Text(
-            'Edit Workout',
+            'Workout Name',
             style: dialogHeader(), 
           ),
           const Spacer(),
-          const Spacer(),
+          const WorkoutsDialogPopUp(),
         ],
       ),
       Padding(
@@ -78,22 +81,6 @@ class WorkoutsDialog {
           },
           decoration: inputWorkoutName('Rename Workout'),
         ),
-      ),
-      Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: () {
-
-            },
-            icon: icons.editIcon(),
-          ),
-          IconButton(
-            onPressed: () {
-              deleteWorkoutDialog(context);
-            },
-            icon: icons.deleteIcon(),
-          ),
-        ],
       ),
       Align(
         alignment: Alignment.centerRight,
@@ -171,4 +158,60 @@ class WorkoutsDialog {
       labelText: name
     );
   } 
+}
+
+class WorkoutsDialogPopUp extends StatefulWidget {
+  const WorkoutsDialogPopUp({super.key});
+
+  @override
+  State<WorkoutsDialogPopUp> createState() => _WorkoutsDialogPopUp();
+}
+class _WorkoutsDialogPopUp extends State<WorkoutsDialogPopUp> {
+
+  @override
+  Widget build(BuildContext context) {
+    SampleItem? selectedMenu;
+    WorkoutsDialog dialog = WorkoutsDialog();
+
+    return PopupMenuButton<SampleItem>(
+      initialValue: selectedMenu,
+      // Callback that sets the selected popup menu item.
+      onSelected: (SampleItem item) {
+        setState(() {
+          selectedMenu = item;
+        });
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<SampleItem>>[
+        const PopupMenuItem<SampleItem>(
+          value: SampleItem.editWorkout,
+          child: Text('Edit'),
+        ),
+        PopupMenuDivider(),
+        const PopupMenuItem<SampleItem>(
+          value: SampleItem.changeName,
+          child: Text('Rename'),
+        ),
+        PopupMenuDivider(),
+        PopupMenuItem<SampleItem>(
+          value: SampleItem.deleteWorkout,
+          child: const Text('Delete'),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => Dialog(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+                child: SizedBox(
+                  height: 220.0,
+                  width: 300.0,
+                  child: Column(
+                    children: dialog.deleteWorkoutDialog(this.context),              
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ]
+    );
+  }
 }

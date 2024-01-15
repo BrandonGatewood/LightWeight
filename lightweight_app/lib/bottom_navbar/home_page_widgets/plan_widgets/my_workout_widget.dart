@@ -58,10 +58,10 @@ class _WorkoutsState extends State<Workouts> {
 
     switch(options) {
       case 0:
-        dialogList = workoutsDialog.editWorkoutDialog(context, _controller);
+        dialogList = workoutsDialog.workoutDialog(context, _controller);
         break;
       case 1:
-        dialogList = workoutsDialog.editWorkoutDialog(context, _controller);
+        dialogList = workoutsDialog.workoutDialog(context, _controller);
         break;
     }
 

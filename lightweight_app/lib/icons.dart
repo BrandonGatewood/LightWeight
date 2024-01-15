@@ -32,6 +32,7 @@ class MyIcons {
       size: 30,
     );
   }
+
   Icon editIcon() {
     return const Icon(
       Icons.check_rounded,
@@ -39,4 +40,13 @@ class MyIcons {
       size: 30,
     );
   }
+
+  Icon menuIcon() {
+    return const Icon(
+      Icons.menu_rounded,
+      color: Colors.white,
+      size: 30,
+    );
+  }
+
 }
