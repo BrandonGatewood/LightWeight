@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import '../../../icons.dart';
+import './my_workouts_dialog.dart';
 
 class Workouts extends StatefulWidget {
   const Workouts({super.key});
@@ -11,6 +12,7 @@ class Workouts extends StatefulWidget {
 class _WorkoutsState extends State<Workouts> {
   late TextEditingController _controller;
   MyIcons icons = MyIcons();
+  WorkoutsDialog workoutsDialog = WorkoutsDialog();
 
   @override
   void initState() {
@@ -56,7 +58,10 @@ class _WorkoutsState extends State<Workouts> {
 
     switch(options) {
       case 0:
-        dialogList = addWorkoutDialog();
+        dialogList = workoutsDialog.editWorkoutDialog(context, _controller);
+        break;
+      case 1:
+        dialogList = workoutsDialog.editWorkoutDialog(context, _controller);
         break;
     }
 
@@ -75,117 +80,8 @@ class _WorkoutsState extends State<Workouts> {
     );
   }
 
-  List<Widget> addWorkoutDialog() {
-    return <Widget>[
-      Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon:  icons.backArrowIcon(),
-          ),
-          const Spacer(),
-          Text(
-            'Add Workout',
-            style: dialogHeader(), 
-          ),
-          const Spacer(),
-          const Spacer(),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: TextField(
-          controller: _controller,
-          onSubmitted: (String value) async {
-
-          },
-          decoration: inputWorkoutName('Workout name'),
-        ),
-      ),
-      Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            right: 20,
-          ), 
-          child: CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
-                
-              },
-              icon: icons.checkIcon(), 
-            ),
-          ),
-        ),
-      ),
-    ];
-  }
   
-  List<Widget> renameWorkoutNameDialog() {
-    return <Widget>[
-      Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon:  icons.backArrowIcon(),
-          ),
-          const Spacer(),
-          Text(
-            'Rename Workout',
-            style: dialogHeader(), 
-          ),
-          const Spacer(),
-          const Spacer(),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: TextField(
-          controller: _controller,
-          onSubmitted: (String value) async {
+  
 
-          },
-          decoration: inputWorkoutName('New name'),
-        ),
-      ),
-      Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            right: 20,
-          ), 
-          child: CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
-                
-              },
-              icon: icons.checkIcon(), 
-            ),
-          ),
-        ),
-      ),
-    ];
-  }
-
-  /*
-    Styles for headers, textfields ...
-  */
-  // Textstyle for dialog headers
-  TextStyle dialogHeader() {
-    return const TextStyle(
-      fontSize: 20,
-    );
-  }
-
-  // InputDecoration for TextField
-  InputDecoration inputWorkoutName(String name) {
-    return InputDecoration(
-      border: const OutlineInputBorder(),
-      labelText: name
-    );
-  } 
+  
 }

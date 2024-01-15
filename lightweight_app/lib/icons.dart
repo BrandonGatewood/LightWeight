@@ -1,10 +1,9 @@
 import "package:flutter/material.dart";
 
 class MyIcons {
-
   Icon deleteIcon() {
     return const Icon( 
-      Icons.highlight_remove_outlined,
+      Icons.remove_rounded,
       color: Colors.white,
       size: 30,
     );
@@ -32,6 +31,12 @@ class MyIcons {
       color: Colors.white,
       size: 30,
     );
-
+  }
+  Icon editIcon() {
+    return const Icon(
+      Icons.check_rounded,
+      color: Colors.white,
+      size: 30,
+    );
   }
 }
