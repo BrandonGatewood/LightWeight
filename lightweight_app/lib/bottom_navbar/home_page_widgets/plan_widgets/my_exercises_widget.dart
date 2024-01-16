@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_exercises_dialog.dart';
+import '../../../icons.dart';
 import '../../../db_helper/exercise_db.dart';
 
 class Exercises extends StatefulWidget {
@@ -42,20 +44,21 @@ class _ExercisesState extends State<Exercises> {
 
   @override
   Widget build(BuildContext context) {
+    MyIcons icons = MyIcons();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Exercises'),
         actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              const flag = [(true, '')];
-
-              exerciseForm(context, _controller, flag);
-            }, 
-            icon: Icon(
-              Icons.add,
-              color: Theme.of(context).colorScheme.inversePrimary,
-              size: 30,
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            child: IconButton(
+              onPressed: () {
+                dialog(0);
+                _refreshExercises();
+              },
+              icon: icons.addIcon(), 
             ),
           ),
         ],
@@ -65,6 +68,34 @@ class _ExercisesState extends State<Exercises> {
       ),
     );
   }
+
+  void dialog(int options) {
+    List<Widget> dialogList = <Widget>[];
+
+    switch(options) {
+      case 0: 
+        dialogList = ExerciseDialogs().addExerciseDialog(context, _controller, _dbHelper);
+        break;
+      case 1:
+        break; 
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 220.0,
+          width: 300.0,
+          child: Column(
+            children: dialogList,              
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
 
 
 // Forms and AlertDialogs
