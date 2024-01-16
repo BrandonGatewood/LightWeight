@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_exercises_dialog.dart';
 import '../../../icons.dart';
 import '../../../db_helper/exercise_db.dart';
 
@@ -13,7 +12,7 @@ class Exercises extends StatefulWidget {
 class _ExercisesState extends State<Exercises> {
   late TextEditingController _controller;
   late ExerciseDBHelper _dbHelper;
-
+  MyIcons icons = MyIcons();
   List<Widget> workoutList = [];
 
   void _refreshExercises() async {
@@ -56,7 +55,6 @@ class _ExercisesState extends State<Exercises> {
             child: IconButton(
               onPressed: () {
                 dialog(0);
-                _refreshExercises();
               },
               icon: icons.addIcon(), 
             ),
@@ -69,12 +67,20 @@ class _ExercisesState extends State<Exercises> {
     );
   }
 
+
+// DIALOG FUNCTIONS
+
+
+  /*
+    dialog function selects the appropriate dialog to display. Each selection returns a
+    List<Widget> to display as children for the Column widget in ShowDialog().
+  */
   void dialog(int options) {
     List<Widget> dialogList = <Widget>[];
 
     switch(options) {
       case 0: 
-        dialogList = ExerciseDialogs().addExerciseDialog(context, _controller, _dbHelper);
+        dialogList = addExerciseDialog();
         break;
       case 1:
         break; 
@@ -93,6 +99,171 @@ class _ExercisesState extends State<Exercises> {
       ),
     );
   }
+
+  /*
+    addExerciseDialog function is the layout for adding a new exercise into the database.
+    It includes two buttons to exit and save, and a Textfield to enter an exercise name.
+  */ 
+  List<Widget> addExerciseDialog() {
+    return <Widget>[
+      Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon:  icons.backArrowIcon(),
+          ),
+          const Spacer(),
+          Text(
+            'Add Exercise',
+            style: dialogHeader(), 
+          ),
+          const Spacer(),
+          const Spacer(),
+        ],
+      ),
+      Padding(
+        padding: const EdgeInsets.all(20),
+        child: TextField(
+          controller: _controller,
+          onSubmitted: (String value) async {
+            onSubmitAdd(_controller.text);
+          },
+          decoration: inputWorkoutName('Exercise name'),
+        ),
+      ),
+      Align(
+        alignment: Alignment.centerRight,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            right: 20,
+          ), 
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            child: IconButton(
+              onPressed: () {
+                onSubmitAdd(_controller.text);
+              },
+              icon: icons.checkIcon(), 
+            ),
+          ),
+        ),
+      ),
+    ]; 
+  }
+
+  /*
+    editExerciseDialog function is the layout for adding a new exercise into the database.
+    It includes two buttons to exit and save, and a Textfield to enter an exercise name.
+  */ 
+  List<Widget> editExerciseDialog() {
+    return <Widget>[
+      Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon:  icons.backArrowIcon(),
+          ),
+          const Spacer(),
+          Text(
+            'Add Exercise',
+            style: dialogHeader(), 
+          ),
+          const Spacer(),
+          const Spacer(),
+        ],
+      ),
+      Padding(
+        padding: const EdgeInsets.all(20),
+        child: TextField(
+          controller: _controller,
+          onSubmitted: (String value) async {
+            onSubmitAdd(_controller.text);
+          },
+          decoration: inputWorkoutName('Exercise name'),
+        ),
+      ),
+      Align(
+        alignment: Alignment.centerRight,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            right: 20,
+          ), 
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            child: IconButton(
+              onPressed: () {
+                onSubmitAdd(_controller.text);
+              },
+              icon: icons.checkIcon(), 
+            ),
+          ),
+        ),
+      ),
+    ]; 
+  }
+
+
+// ON SUBMIT FUNCTIONS
+
+
+  /*
+    onSubmitAdd function handles the users input to add the exercise into the database
+    with the help of the ExerciseDBHelper class.
+
+    If add was successful, then it will call successDialog() and refresh the exercise
+    list to stay up to date.
+
+    If add was unsuccessful, then it will call failedDialog(). 
+  */
+  void onSubmitAdd(String name) async {
+    bool add = await _dbHelper.insertExercise(_controller.text);
+
+    _controller.clear();  
+
+    if(add) {
+      successDialog(0);
+      // refresh exercise list to keep it updated
+      _refreshExercises();
+    }
+    else {
+      failedDialog(0);
+    }
+  }
+
+
+
+ /*
+    Styles for headers, textfields ...
+  */
+  // Textstyle for dialog headers
+  TextStyle dialogHeader() {
+    return const TextStyle(
+      fontSize: 20,
+    );
+  }
+
+  // InputDecoration for TextField
+  InputDecoration inputWorkoutName(String name) {
+    return InputDecoration(
+      border: const OutlineInputBorder(),
+      labelText: name
+    );
+  } 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -332,14 +503,7 @@ class _ExercisesState extends State<Exercises> {
     // open db
     bool add = await _dbHelper.insertExercise(name);
 
-    if(add) {
-      successDialog(0);
-      // refresh exercise list to keep it updated
-      _refreshExercises();
-    }
-    else {
-      failedDialog(0);
-    }
+    
   }
 
   /* 
