@@ -16,6 +16,14 @@ class MyIcons {
       size: 30,
     );
   }
+  
+  Icon forwardArrowIcon() {
+    return const Icon(
+      Icons.arrow_forward_ios_rounded,
+      color: Colors.white,
+      size: 30,
+    );
+  }
 
   Icon addIcon() {
     return const Icon(
