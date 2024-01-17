@@ -541,7 +541,8 @@ Sill need:
     deletedialog
     update dialog
   check to see if _refresh function works
-
+  add alphabetically and uppercase first letter of each word
+  add progress to database. 
   test everything
 
 
