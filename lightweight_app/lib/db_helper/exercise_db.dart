@@ -67,7 +67,7 @@ class ExerciseDBHelper {
 
     final List<Map<String, Object?>> maps = await db.query('exercises');
 
-    return maps.map((e) => Exercise.fromMap(e)).toList(); 
+    return maps.map((e) => Exercise.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
   }
 
   Future<bool> deleteItem(String name) async {
