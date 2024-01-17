@@ -531,3 +531,20 @@ class _ExercisesState extends State<Exercises> {
     );
   } 
 }
+
+
+/*
+
+Sill need:
+  fix how dialog texts look
+  implement popupmenu in exercisecard
+    deletedialog
+    update dialog
+  check to see if _refresh function works
+
+  test everything
+
+
+
+
+*/
