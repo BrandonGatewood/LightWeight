@@ -98,27 +98,24 @@ class _ExercisesState extends State<Exercises> {
     }
   }
   
- SizedBox exerciseCard(Exercise anExercise) {
-      return SizedBox(
-        height: 85,
-        child: Card(
-          child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                anExercise.name,
-                style: dialogHeader(),
-              ),
-              subtitle: const Text('Max Weight: 140lbs'),
-              trailing: IconButton(
-                onPressed: () {
-                  dialog(1, anExercise.name);
-                },
-                icon: icons.forwardArrowIcon(),
-              ),
+  Card exerciseCard(Exercise anExercise) {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              anExercise.name,
+              style: cardTitle(),
             ),
-          ],
-        ),
+            subtitle: const Text('Max Weight: 140lbs'),
+            trailing: IconButton(
+              onPressed: () {
+                dialog(1, anExercise.name);
+              },
+              icon: icons.forwardArrowIcon(),
+            ),
+          ),
+        ],
       ),
     ); 
   }
@@ -522,6 +519,14 @@ class _ExercisesState extends State<Exercises> {
   TextStyle dialogHeader() {
     return const TextStyle(
       fontSize: 25,
+      fontWeight: FontWeight.bold,
+    );
+  }
+
+  // TextStyle for card titles
+  TextStyle cardTitle() {
+    return const TextStyle(
+      fontSize: 20,
       fontWeight: FontWeight.bold,
     );
   }
