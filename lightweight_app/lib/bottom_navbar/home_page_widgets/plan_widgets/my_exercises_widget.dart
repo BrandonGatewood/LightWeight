@@ -2,6 +2,9 @@ import "package:flutter/material.dart";
 import '../../../icons.dart';
 import '../../../db_helper/exercise_db.dart';
 
+// Enum for exercise card pop up menu
+enum Menu {rename, deleteExercise}
+
 class Exercises extends StatefulWidget {
   const Exercises({super.key});
 
@@ -247,10 +250,10 @@ class _ExercisesState extends State<Exercises> {
             style: dialogHeader(), 
           ),
           const Spacer(),
+          popUpMenu(name),
           // popupmenu
           // updateDialog
           // deleteDialog
-          const Spacer(),
         ],
       ),
       const Padding(
@@ -439,6 +442,42 @@ class _ExercisesState extends State<Exercises> {
   }
 
 
+//
+  /*
+
+  */
+  PopupMenuButton<Menu> popUpMenu(String name) {
+    Menu? selectedMenu;
+
+    return PopupMenuButton<Menu>(
+      initialValue: selectedMenu,
+
+      onSelected: (Menu item) {
+        setState(() {
+          selectedMenu = item;
+        });
+      },
+
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
+        PopupMenuItem<Menu>(
+          value: Menu.rename,
+          child: const Text('Rename'),
+          onTap: () {
+            dialog(2, name);
+          },
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem<Menu>(
+          value: Menu.deleteExercise,
+          child: const Text('Delete'),
+          onTap: () {
+            dialog(3, name);
+          },
+        ),
+      ],
+    );
+  }
+
 //    *** ONSUBMIT FUNCTIONS AND DATABASE INTERACTION ***
 
 
@@ -541,11 +580,17 @@ class _ExercisesState extends State<Exercises> {
 }
 
 
+
+
+
+
+
+  
+  
+
 /*
 
 Sill need:
-  
-  move exercisecards to listview
   implement popupmenu in exercisecard
     deletedialog
     update dialog
