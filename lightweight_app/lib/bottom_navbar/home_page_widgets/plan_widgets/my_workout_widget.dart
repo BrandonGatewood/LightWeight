@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/db_helper/workout_db.dart';
 import '../../../icons.dart';
-import './my_workouts_dialog.dart';
+import '../../../db_helper/exercise_db.dart';
 
 class Workouts extends StatefulWidget {
   const Workouts({super.key});
@@ -11,8 +12,9 @@ class Workouts extends StatefulWidget {
 
 class _WorkoutsState extends State<Workouts> {
   late TextEditingController _controller;
+  late WorkoutsDBHelper _dbHelper;
   MyIcons icons = MyIcons();
-  WorkoutsDialog workoutsDialog = WorkoutsDialog();
+  List<Workout> workoutList = [];
 
   @override
   void initState() {
@@ -37,7 +39,6 @@ class _WorkoutsState extends State<Workouts> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
-                dialog(0);
               },
               icon: icons.addIcon(), 
             ),
@@ -52,71 +53,47 @@ class _WorkoutsState extends State<Workouts> {
 //    *** MAIN LAYOUT FUNCTIONS ***
 
 
-  Widget mainLayout() {
-    if
-  }
-
-
-
-
-
-
-  /*
-    dialog function selects the approrate dialog to display
-
-    this function can display add, edit, or delete dialog.
-  */
-  void dialog(int options) {
-    List<Widget> dialogList = <Widget>[];
-
-    switch(options) {
-      case 0:
-        dialogList = workoutsDialog.workoutDialog(context, _controller);
-        break;
-      case 1:
-        dialogList = workoutsDialog.workoutDialog(context, _controller);
-        break;
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
-        child: SizedBox(
-          height: 220.0,
-          width: 300.0,
-          child: Column(
-            children: dialogList,              
-          ),
-        ),
-      ),
-    );
-  }
 /*
+    mainLayout function returns the appropriate Widget depending on the users exercise list.
+
+    If the users exercise list is empty, then it will return a Text widget stating that there
+    are no exercies. Otherwise it will return a GridView of the users exercises. 
+
+    Each exercise is represented as a card, where the user can view the exercise name. 
+  */
   Widget mainLayout() {
     if(workoutList.isEmpty) {
       return const Center(
         child: Text(
-          'No Exercises.',
+          'No Workouts',
         )
       );
     }
     else {
-      return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns in the grid
-          childAspectRatio: 1.2,
-          crossAxisSpacing: 8.0, // Spacing between columns
-          mainAxisSpacing: 8.0, // Spacing between rows
+      return Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: ListView.builder(
+          itemCount: workoutList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return workoutCard(workoutList[index]);
+          },
         ),
-        itemCount: workoutList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return exerciseCard(workoutList[index]);
-        },
       );
     }
   }
- */ 
+
+  /*
+
+  */
+  Card workoutCard(Workout aWorkout) {
+    return Card(
+      child: Text('Workoutlist'),
+    );
+  }
+
+
+
+
 
   
 }
