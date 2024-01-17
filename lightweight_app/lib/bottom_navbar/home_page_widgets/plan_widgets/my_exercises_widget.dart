@@ -16,13 +16,13 @@ class _ExercisesState extends State<Exercises> {
   late TextEditingController _controller;
   late ExerciseDBHelper _dbHelper;
   MyIcons icons = MyIcons();
-  List<Exercise> workoutList = [];
+  List<Exercise> exerciseList = [];
 
   void _refreshExercises() async {
     final data = await _dbHelper.getAllExercise();
 
     setState(() {
-      workoutList = data;
+      exerciseList = data;
     });
   }
 
@@ -81,7 +81,7 @@ class _ExercisesState extends State<Exercises> {
     Each exercise is represented as a card, where the user can view the exercise name. 
   */
   Widget mainLayout() {
-    if(workoutList.isEmpty) {
+    if(exerciseList.isEmpty) {
       return const Center(
         child: Text(
           'No Exercises.',
@@ -92,9 +92,9 @@ class _ExercisesState extends State<Exercises> {
       return Padding(
         padding: const EdgeInsets.only(top: 10),
         child: ListView.builder(
-          itemCount: workoutList.length,
+          itemCount: exerciseList.length,
           itemBuilder: (BuildContext context, int index) {
-            return exerciseCard(workoutList[index]);
+            return exerciseCard(exerciseList[index]);
           },
         ),
       );
@@ -597,7 +597,6 @@ class _ExercisesState extends State<Exercises> {
 /*
 
 Sill need:
-  add alphabetically and uppercase first letter of each word
   add progress to database. 
   test everything
 

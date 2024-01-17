@@ -44,9 +44,22 @@ class _WorkoutsState extends State<Workouts> {
           ),
         ],
       ),
-      //body: layout(),
+      body: mainLayout(),
     );
   }
+
+
+//    *** MAIN LAYOUT FUNCTIONS ***
+
+
+  Widget mainLayout() {
+    if
+  }
+
+
+
+
+
 
   /*
     dialog function selects the approrate dialog to display
