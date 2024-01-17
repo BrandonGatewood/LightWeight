@@ -100,7 +100,14 @@ class _ExercisesState extends State<Exercises> {
       );
     }
   }
-  
+
+  /*
+    exerciseCard function displays each exercise in a card with a ListTile
+    to display information on the exercise.
+
+    Each card displays the exercise name as the title, max weight as the subtitle.
+    and a trailing IconButton to give user more options with the exercise.
+  */ 
   Card exerciseCard(Exercise anExercise) {
     return Card(
       child: Column(
@@ -450,7 +457,8 @@ class _ExercisesState extends State<Exercises> {
 
 
   /*
-    popUpMenu function 
+    popUpMenu function builds a menu for an exercise card. Pop up menu
+    has only two options, edit the exercise or delete it.  
   */
   PopupMenuButton<Menu> popUpMenu(String name) {
     Menu? selectedMenu;
@@ -584,15 +592,6 @@ class _ExercisesState extends State<Exercises> {
     );
   } 
 }
-
-
-
-
-
-
-
-  
-  
 
 /*
 
