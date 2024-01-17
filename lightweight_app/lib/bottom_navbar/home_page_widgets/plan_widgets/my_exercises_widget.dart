@@ -89,6 +89,7 @@ class _ExercisesState extends State<Exercises> {
       return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // Number of columns in the grid
+          childAspectRatio: 1.2,
           crossAxisSpacing: 8.0, // Spacing between columns
           mainAxisSpacing: 8.0, // Spacing between rows
         ),
@@ -100,10 +101,8 @@ class _ExercisesState extends State<Exercises> {
     }
   }
   
- SizedBox exerciseCard(Exercise anExercise) {
-    return SizedBox( 
-      height: 70,
-      child: Card(
+ Card exerciseCard(Exercise anExercise) {
+      return Card(
         child: Column(
           children: <Widget>[
             Align(
@@ -117,22 +116,25 @@ class _ExercisesState extends State<Exercises> {
             ),
             Row(
               children: <Widget>[
-                const Spacer(),
-                Text(
-                  anExercise.name,
-                  style: const TextStyle(
-                    fontSize: 14,
+                Flexible(
+                  flex: 20, 
+                  fit: FlexFit.tight,
+                  child: Text(
+                    anExercise.name,
+                    style: dialogHeader(),
                   ),
                 ),
                 const Spacer(),
               ],
             ),
-            const Text('Max Weight'),
-            const Text('Max Reps'),
+            const Spacer(),
+            const Align(
+              alignment: Alignment.bottomLeft,
+              child: Text('\t\tMax Weight: 140lbs'),
+            ),
           ],
         ),
-      ), 
-    );
+      ); 
   }
 
 
@@ -269,11 +271,11 @@ class _ExercisesState extends State<Exercises> {
         ],
       ),
       const Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top: 40),
         child: Text('Max Weight: 140lbs x 8reps'),
       ),
       const Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top: 10),
         child: Text('Max Reps: 12reps x 100lbs'),
       ),
     ]; 
@@ -358,7 +360,7 @@ class _ExercisesState extends State<Exercises> {
         child: Text(
           'Confirm to delete Exercise',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 14,
           ),
         ),
       ),
@@ -406,7 +408,14 @@ class _ExercisesState extends State<Exercises> {
     }
 
     return <Widget>[
-      Center(child: Text(title),),
+      const Spacer(),
+      Center(
+        child: Text(
+          title,
+          style: dialogHeader(),
+        ),
+      ),
+      const Spacer(),
     ];
   }
 
@@ -434,8 +443,15 @@ class _ExercisesState extends State<Exercises> {
         break;
     }
     return <Widget>[
-      Center(child: Text(title),),
+      const Spacer(),
+      Center(
+        child: Text(
+          title,
+          style: dialogHeader(),
+        ),
+      ),
       Center(child: Text(content)),
+      const Spacer(),
     ];
   }
 
@@ -505,7 +521,7 @@ class _ExercisesState extends State<Exercises> {
       _refreshExercises();
     }
     else {
-      dialog(4, selection.toString());
+      dialog(5, selection.toString());
     }
   }
 
@@ -519,7 +535,8 @@ class _ExercisesState extends State<Exercises> {
   // Textstyle for dialog headers
   TextStyle dialogHeader() {
     return const TextStyle(
-      fontSize: 20,
+      fontSize: 25,
+      fontWeight: FontWeight.bold,
     );
   }
 
@@ -536,11 +553,11 @@ class _ExercisesState extends State<Exercises> {
 /*
 
 Sill need:
-  fix how dialog texts look
+  
+  move exercisecards to listview
   implement popupmenu in exercisecard
     deletedialog
     update dialog
-  check to see if _refresh function works
   add alphabetically and uppercase first letter of each word
   add progress to database. 
   test everything
