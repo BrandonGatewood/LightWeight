@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import '../../../icons.dart';
 import '../../../db_helper/exercise_db.dart';
+import '../../../styles.dart';
 
 // Enum for exercise card pop up menu
 enum Menu {rename, deleteExercise}
@@ -76,9 +77,9 @@ class _ExercisesState extends State<Exercises> {
     mainLayout function returns the appropriate Widget depending on the users exercise list.
 
     If the users exercise list is empty, then it will return a Text widget stating that there
-    are no exercies. Otherwise it will return a GridView of the users exercises. 
+    are no exercies. Otherwise it will return a ListView of the users exercises. 
 
-    Each exercise is represented as a card, where the user can view the exercise name. 
+    Each exercise is represented as a card, where the user can view the exercise. 
   */
   Widget mainLayout() {
     if(exerciseList.isEmpty) {
@@ -115,7 +116,7 @@ class _ExercisesState extends State<Exercises> {
           ListTile(
             title: Text(
               anExercise.name,
-              style: cardTitle(),
+              style: Styles().cardTitle(),
             ),
             subtitle: const Text('Max Weight: 140lbs'),
             trailing: IconButton(
@@ -201,7 +202,7 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
           Text(
             'Add Exercise',
-            style: dialogHeader(), 
+            style: Styles().dialogHeader(), 
           ),
           const Spacer(),
           const Spacer(),
@@ -214,7 +215,7 @@ class _ExercisesState extends State<Exercises> {
           onSubmitted: (String value) async {
             onSubmitAdd();
           },
-          decoration: inputWorkoutName('Exercise name'),
+          decoration: Styles().inputWorkoutName('Exercise name'),
         ),
       ),
       Align(
@@ -254,7 +255,7 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
           Text(
             name,
-            style: dialogHeader(), 
+            style: Styles().dialogHeader(), 
           ),
           const Spacer(),
           popUpMenu(name),
@@ -286,7 +287,7 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
           Text(
             'Rename Exercise',
-            style: dialogHeader(), 
+            style: Styles().dialogHeader(), 
           ),
           const Spacer(),
           const Spacer(),
@@ -299,7 +300,7 @@ class _ExercisesState extends State<Exercises> {
           onSubmitted: (String value) async {
             onSubmitUpdate(name);
           },
-          decoration: inputWorkoutName('New exercise name'),
+          decoration: Styles().inputWorkoutName('New exercise name'),
         ),
       ),
       Align(
@@ -339,7 +340,7 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
           Text(
             'Delete Exercise',
-            style: dialogHeader(), 
+            style: Styles().dialogHeader(), 
           ),
           const Spacer(),
           const Spacer(),
@@ -405,7 +406,7 @@ class _ExercisesState extends State<Exercises> {
       Center(
         child: Text(
           title,
-          style: dialogHeader(),
+          style: Styles().dialogHeader(),
         ),
       ),
       const Spacer(),
@@ -440,7 +441,7 @@ class _ExercisesState extends State<Exercises> {
       Center(
         child: Text(
           title,
-          style: dialogHeader(),
+          style: Styles().dialogHeader(),
         ),
       ),
       Center(
@@ -492,7 +493,7 @@ class _ExercisesState extends State<Exercises> {
     );
   }
 
-//    *** ONSUBMIT FUNCTIONS AND DATABASE INTERACTION ***
+//    *** ONSUBMIT FUNCTIONS AND DATABASE REQUESTS ***
 
 
   /*
@@ -560,37 +561,6 @@ class _ExercisesState extends State<Exercises> {
       dialog(5, selection.toString());
     }
   }
-
-
-//    *** STYLES AND DECORATIONS ***
-
-
- /*
-    Styles for headers, textfields ...
-  */
-  // Textstyle for dialog headers
-  TextStyle dialogHeader() {
-    return const TextStyle(
-      fontSize: 25,
-      fontWeight: FontWeight.bold,
-    );
-  }
-
-  // TextStyle for card titles
-  TextStyle cardTitle() {
-    return const TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-    );
-  }
-
-  // InputDecoration for TextField
-  InputDecoration inputWorkoutName(String name) {
-    return InputDecoration(
-      border: const OutlineInputBorder(),
-      labelText: name
-    );
-  } 
 }
 
 /*
