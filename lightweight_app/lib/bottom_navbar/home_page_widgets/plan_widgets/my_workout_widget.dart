@@ -79,9 +79,31 @@ class _WorkoutsState extends State<Workouts> {
       ),
     );
   }
-
-  
-  
+/*
+  Widget mainLayout() {
+    if(workoutList.isEmpty) {
+      return const Center(
+        child: Text(
+          'No Exercises.',
+        )
+      );
+    }
+    else {
+      return GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // Number of columns in the grid
+          childAspectRatio: 1.2,
+          crossAxisSpacing: 8.0, // Spacing between columns
+          mainAxisSpacing: 8.0, // Spacing between rows
+        ),
+        itemCount: workoutList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return exerciseCard(workoutList[index]);
+        },
+      );
+    }
+  }
+ */ 
 
   
 }

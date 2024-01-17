@@ -86,55 +86,41 @@ class _ExercisesState extends State<Exercises> {
       );
     }
     else {
-      return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns in the grid
-          childAspectRatio: 1.2,
-          crossAxisSpacing: 8.0, // Spacing between columns
-          mainAxisSpacing: 8.0, // Spacing between rows
+      return Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: ListView.builder(
+          itemCount: workoutList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return exerciseCard(workoutList[index]);
+          },
         ),
-        itemCount: workoutList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return exerciseCard(workoutList[index]);
-        },
       );
     }
   }
   
- Card exerciseCard(Exercise anExercise) {
-      return Card(
-        child: Column(
+ SizedBox exerciseCard(Exercise anExercise) {
+      return SizedBox(
+        height: 85,
+        child: Card(
+          child: Column(
           children: <Widget>[
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
+            ListTile(
+              title: Text(
+                anExercise.name,
+                style: dialogHeader(),
+              ),
+              subtitle: const Text('Max Weight: 140lbs'),
+              trailing: IconButton(
                 onPressed: () {
                   dialog(1, anExercise.name);
                 },
                 icon: icons.forwardArrowIcon(),
-              )
-            ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 20, 
-                  fit: FlexFit.tight,
-                  child: Text(
-                    anExercise.name,
-                    style: dialogHeader(),
-                  ),
-                ),
-                const Spacer(),
-              ],
-            ),
-            const Spacer(),
-            const Align(
-              alignment: Alignment.bottomLeft,
-              child: Text('\t\tMax Weight: 140lbs'),
+              ),
             ),
           ],
         ),
-      ); 
+      ),
+    ); 
   }
 
 
