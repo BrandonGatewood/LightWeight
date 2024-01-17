@@ -214,7 +214,7 @@ class _ExercisesState extends State<Exercises> {
         alignment: Alignment.centerRight,
         child: Padding(
           padding: const EdgeInsets.only(
-            right: 20,
+            right: 10,
           ), 
           child: CircleAvatar(
             radius: 30,
@@ -251,9 +251,6 @@ class _ExercisesState extends State<Exercises> {
           ),
           const Spacer(),
           popUpMenu(name),
-          // popupmenu
-          // updateDialog
-          // deleteDialog
         ],
       ),
       const Padding(
@@ -302,7 +299,7 @@ class _ExercisesState extends State<Exercises> {
         alignment: Alignment.centerRight,
         child: Padding(
           padding: const EdgeInsets.only(
-            right: 20,
+            right: 10,
           ), 
           child: CircleAvatar(
             radius: 30,
@@ -341,20 +338,23 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
         ],
       ),
+      const Spacer(),
       const Padding(
         padding: EdgeInsets.all(20),
         child: Text(
           'Confirm to delete Exercise',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 16,
           ),
         ),
       ),
+      const Spacer(),
       Align(
         alignment: Alignment.centerRight,
         child: Padding(
           padding: const EdgeInsets.only(
-            right: 20,
+            right: 10,
+            bottom: 10,
           ), 
           child: CircleAvatar(
             radius: 30,
@@ -436,15 +436,21 @@ class _ExercisesState extends State<Exercises> {
           style: dialogHeader(),
         ),
       ),
-      Center(child: Text(content)),
+      Center(
+        child: Text(
+          content,
+        ),
+      ),
       const Spacer(),
     ];
   }
 
 
-//
-  /*
+//  *** POP UP MENUS ***
 
+
+  /*
+    popUpMenu function 
   */
   PopupMenuButton<Menu> popUpMenu(String name) {
     Menu? selectedMenu;
@@ -591,9 +597,6 @@ class _ExercisesState extends State<Exercises> {
 /*
 
 Sill need:
-  implement popupmenu in exercisecard
-    deletedialog
-    update dialog
   add alphabetically and uppercase first letter of each word
   add progress to database. 
   test everything
