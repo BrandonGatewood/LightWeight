@@ -84,7 +84,7 @@ class _ExercisesState extends State<Exercises> {
     if(exerciseList.isEmpty) {
       return const Center(
         child: Text(
-          'No Exercises.',
+          'No Exercises',
         )
       );
     }
