@@ -556,14 +556,3 @@ class _ExercisesState extends State<Exercises> {
     _controller.clear();
   }
 }
-
-/*
-
-Sill need:
-  add progress to database. 
-  test everything
-
-
-
-
-*/
