@@ -369,7 +369,7 @@ class _ExercisesState extends State<Exercises> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
-                onSubmitUpdate(name);
+                onSubmitDelete(name);
               },
               icon: icons.checkIcon(), 
             ),
@@ -500,11 +500,6 @@ class _ExercisesState extends State<Exercises> {
     onSubmitAdd function handles the users input with the TextEditingContoller class to
     get the users input and passes that as a parameter to add a new exercise into the 
     database.
-
-    If add was successful, then it will call successDialog() and refresh the exercise
-    list to stay up to date.
-
-    If add was unsuccessful, then it will call failedDialog(). 
   */
   void onSubmitAdd() async {
     bool add = await _dbHelper.insertExercise(_controller.text);
@@ -516,11 +511,6 @@ class _ExercisesState extends State<Exercises> {
     onSubmitUpdate function handles the users input with the TextEditingContoller class to
     get the users input and passes that as a parameter to update an exercise in the 
     database.
-
-    If update was successful, then it will call successDialog() and refresh the exercise
-    list to stay up to date.
-
-    If update was unsuccessful, then it will call failedDialog(). 
   */
   void onSubmitUpdate(String name) async {
     bool update = await _dbHelper.updateExercise(name, _controller.text);
@@ -530,14 +520,9 @@ class _ExercisesState extends State<Exercises> {
   
   /*
     onSubmitDelete function handles the users input to delete an exercise from the database.
-
-    If update was successful, then it will call successDialog() and refresh the exercise
-    list to stay up to date.
-
-    If update was unsuccessful, then it will call failedDialog(). 
   */
   void onSubmitDelete(String name) async {
-    bool delete = await _dbHelper.deleteItem(name);
+    bool delete = await _dbHelper.deleteExercise(name);
 
     handleRequest(delete, 2);
   }

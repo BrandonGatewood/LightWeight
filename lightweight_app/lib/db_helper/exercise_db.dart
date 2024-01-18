@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:lightweight_app/db_helper/db.dart';
 
 class Exercise {
   final String name;
@@ -26,20 +24,7 @@ class Exercise {
 
 class ExerciseDBHelper {
   Future<Database> openExercise() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    String path = await getDatabasesPath();
-
-    return openDatabase(
-      join(path, 'database.db'),
-      onCreate: (database, version) async {
-        await database.execute(
-          '''CREATE TABLE exercises(
-            name Text PRIMARY KEY NOT NULL,
-            numOfTimesEntered INTEGER NOT NULL)'''
-        );
-      },
-      version: 1,
-    );
+    return DB().openDB();
   }
 
   Future<bool> insertExercise(String name) async {
@@ -70,7 +55,7 @@ class ExerciseDBHelper {
     return maps.map((e) => Exercise.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
   }
 
-  Future<bool> deleteItem(String name) async {
+  Future<bool> deleteExercise(String name) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
     try {
