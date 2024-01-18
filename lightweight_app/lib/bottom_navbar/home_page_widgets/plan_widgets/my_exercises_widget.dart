@@ -167,9 +167,10 @@ class _ExercisesState extends State<Exercises> {
       builder: (BuildContext context) => Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 220.0,
+          height: 250.0,
           width: 300.0,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: dialogList,              
           ),
         ),
@@ -196,7 +197,7 @@ class _ExercisesState extends State<Exercises> {
       Row(
         children: <Widget>[
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => pop(),
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
@@ -211,6 +212,7 @@ class _ExercisesState extends State<Exercises> {
       Padding(
         padding: const EdgeInsets.all(20),
         child: TextField(
+          maxLength: 24,
           controller: _controller,
           onSubmitted: (String value) async {
             onSubmitAdd();
@@ -253,13 +255,14 @@ class _ExercisesState extends State<Exercises> {
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
-          Text(
+          popUpMenu(name),
+        ],
+      ),
+      Padding(padding: EdgeInsets.symmetric(horizontal: 50),
+      child: Text(
             name,
             style: Styles().dialogHeader(), 
           ),
-          const Spacer(),
-          popUpMenu(name),
-        ],
       ),
       const Padding(
         padding: EdgeInsets.only(top: 40),
@@ -281,7 +284,7 @@ class _ExercisesState extends State<Exercises> {
       Row(
         children: <Widget>[
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => pop(),
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
@@ -296,6 +299,7 @@ class _ExercisesState extends State<Exercises> {
       Padding(
         padding: const EdgeInsets.all(20),
         child: TextField(
+          maxLength: 24,
           controller: _controller,
           onSubmitted: (String value) async {
             onSubmitUpdate(name);
@@ -545,6 +549,11 @@ class _ExercisesState extends State<Exercises> {
     else {
       dialog(5, selection.toString());
     }
+  }
+
+  void pop() {
+    Navigator.pop(context);
+    _controller.clear();
   }
 }
 
