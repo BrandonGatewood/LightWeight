@@ -47,8 +47,6 @@ class _ExercisesState extends State<Exercises> {
 
   @override
   Widget build(BuildContext context) {
-    MyIcons icons = MyIcons();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Exercises'),
@@ -177,6 +175,8 @@ class _ExercisesState extends State<Exercises> {
       ),
     );
 
+    _controller.clear();
+
     // Success or failed dialog, so return to my_exercises
     if(options == 4 || options == 5) {
       Future.delayed(
@@ -197,7 +197,7 @@ class _ExercisesState extends State<Exercises> {
       Row(
         children: <Widget>[
           IconButton(
-            onPressed: () => pop(),
+            onPressed: () => Navigator.pop(context),
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
@@ -284,7 +284,7 @@ class _ExercisesState extends State<Exercises> {
       Row(
         children: <Widget>[
           IconButton(
-            onPressed: () => pop(),
+            onPressed: () => Navigator.pop(context),
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
@@ -549,10 +549,5 @@ class _ExercisesState extends State<Exercises> {
     else {
       dialog(5, selection.toString());
     }
-  }
-
-  void pop() {
-    Navigator.pop(context);
-    _controller.clear();
   }
 }
