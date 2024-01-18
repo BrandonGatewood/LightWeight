@@ -212,7 +212,7 @@ class _ExercisesState extends State<Exercises> {
       Padding(
         padding: const EdgeInsets.all(20),
         child: TextField(
-          maxLength: 24,
+          maxLength: 23,
           controller: _controller,
           onSubmitted: (String value) async {
             onSubmitAdd();
@@ -299,7 +299,7 @@ class _ExercisesState extends State<Exercises> {
       Padding(
         padding: const EdgeInsets.all(20),
         child: TextField(
-          maxLength: 24,
+          maxLength: 23,
           controller: _controller,
           onSubmitted: (String value) async {
             onSubmitUpdate(name);
