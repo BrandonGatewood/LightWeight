@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_exercises_widget.dart";
 import '../../../db_helper/exercise_db.dart';
 import '../../../db_helper/workout_db.dart';
 import '../../../icons.dart';
@@ -18,24 +17,26 @@ class WorkoutSelectExercises extends StatefulWidget {
 }
 
 class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
-  List<TextEditingController> _controller = [];
-  late ExerciseDBHelper _dbHelper;
+  final List<TextEditingController> _controller = [];
+  late ExerciseDBHelper exerciseDb;
+  late WorkoutsDBHelper workoutDb;
   late List<Exercise> exerciseList;
   List<String> selectedList = [];
   MyIcons icons = MyIcons(); 
 
-
   @override
   void initState() {
     super.initState();
-    _dbHelper = ExerciseDBHelper();
-    _dbHelper.openExercise().whenComplete(() async {
-      final data = await _dbHelper.getAllExercise();
+    exerciseDb = ExerciseDBHelper();
+    exerciseDb.openExercise().whenComplete(() async {
+      final data = await exerciseDb.getAllExercise();
 
       setState(() {
         exerciseList = data;
       });
     });
+    workoutDb = WorkoutsDBHelper();
+    workoutDb.openWorkouts().whenComplete(() => null);
   }
 
   @override
@@ -52,19 +53,34 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
       appBar: AppBar(
         title: const Text('Select Exercises'),
         actions: <Widget>[
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
-                selectExerciseDialog();
-              },
-              icon: icons.addIcon(), 
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: CircleAvatar(
+              radius: 25,
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              child: IconButton(
+                onPressed: () {
+                  selectExerciseDialog();
+                },
+                icon: icons.addIcon(), 
+              ),
             ),
           ),
         ],
       ),
       body: mainLayout(),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        onPressed: () {
+          onSubmitSave();
+        },
+        label: const Text('Save',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white, 
+          ) 
+        ),
+      ),
     );
   }
 
@@ -82,7 +98,13 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
       return const Center(child: Text('Workout is empty'),);
     }
     else {
-      return selectedExercises();
+      return Padding(
+        padding: const EdgeInsets.only(
+          top: 5,
+          bottom: 120,
+        ),
+        child: selectedExercises(),
+      );
     }
   }
 
@@ -91,6 +113,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   */
   ReorderableListView selectedExercises() {
       return ReorderableListView(
+        buildDefaultDragHandles: true,
         children: <Widget>[
           for(int i = 0; i < selectedList.length; ++i)
           exerciseCard(selectedList[i], i),
@@ -116,75 +139,56 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     , delete icon to remove the selected exercise. 
   */ 
   SizedBox exerciseCard(String anExercise, int i) {
-    int reps = int.parse(_controller[i].text);
+    int sets = int.parse(_controller[i].text);
 
     return SizedBox(
       key: Key('$i'),
-      height: 115,
+      height: 75,
       child: Card(
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
+        child: 
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row( 
+                children: <Widget>[
+                  Text(
                     anExercise,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
-                ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
+                  const Spacer(),
+                  SizedBox(
+                    width: 65,
+                    height: 50,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      controller: _controller[i],
+                      decoration: Styles().inputWorkoutName('sets'),
+                      textAlign: TextAlign.center, 
+                    ),
+                  ),
+                  IconButton(
                     onPressed: () {
-                      // delete from selectedList
-                      // append back to exerciseList
-                      // reset state.
-                    },
-                    icon: icons.deleteIcon(),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                SizedBox(
-                  width: 65,
-                  height: 50,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _controller[i],
-                    decoration: Styles().inputWorkoutName('reps'),
-                    textAlign: TextAlign.center, 
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    ++reps;
+                      ++sets;
 
-                    setState(() {
-                      _controller[i].text = reps.toString();
-                    }); 
-                  },
-                  icon: icons.addIcon(),
-                ),
-                IconButton(
-                  onPressed: () {
-                    --reps;
-                    
-                    _controller[i].text = reps.toString();
-                  },
-                  icon: icons.minusIcon(),
-                ),
-                const Spacer(),
-              ],
+                      setState(() {
+                        _controller[i].text = sets.toString();
+                      }); 
+                    },
+                    icon: icons.addIcon(),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      --sets;
+                      
+                      _controller[i].text = sets.toString();
+                    },
+                    icon: icons.minusIcon(),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),     
+      ),
     ); 
   }
 
@@ -200,12 +204,12 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
+        insetPadding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 500.0,
-          width: 400.0,
+          height: 550.0,
           child: Column(
-            children: selectionLayout(),              
+            children: selectExerciseDialogLayout(),              
           ),
         ),
       ),
@@ -218,14 +222,16 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     Function contains a button to return to the exercise list for that workout, and a list of
     all available exercises.
   */
-  List<Widget> selectionLayout() {
+  List<Widget> selectExerciseDialogLayout() {
     return <Widget>[
+      const Spacer(),
       Row(
-        children: <Widget>[
+        children: [
           IconButton(
             onPressed: () => Navigator.pop(context),
             icon:  icons.backArrowIcon(),
           ),
+          const Spacer(),
           const Spacer(),
           Text(
             'Select Exercise',
@@ -233,18 +239,21 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
           ),
           const Spacer(),
           const Spacer(),
+          const Spacer(),
         ],
       ),
+      const Spacer(),
+      const Spacer(),
       SizedBox(
         height: 440,
-        width: 350,
         child: ListView.builder(
           itemCount: exerciseList.length,
           itemBuilder: (BuildContext context, int index) {
-            return exerciseSelection(index);
+            return selectExerciseItem(index);
           }
         ),
       ) ,
+      const Spacer(),
     ];
   }
 
@@ -252,40 +261,86 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     exerciseSelectionButton function is a button that contains an exercise name. When a button is
     selected, it will remove that exercise from exerciseList and add it to the selectedList.
   */
-  Padding exerciseSelection(int i) {
+  Padding selectExerciseItem(int i) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.all(0),
       child: SizedBox(
-        height: 50,
+        height: 60,
         child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
             ),
+            backgroundColor: Colors.transparent,
+            side: BorderSide( 
+              width: 0.5,
+              color: Colors.transparent.withOpacity(0.6),
+            )
+          ),
+          onPressed: () {
+            selectedList.add(exerciseList[i].name);
+            TextEditingController c = TextEditingController();
+            c.text = '4';
+            _controller.add(c);
+
+            setState(() {
+            });
+
+            Navigator.pop(context);
+          }, 
+          child: Text(
+            exerciseList[i].name,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ), 
           ),
         ),
-        onPressed: () {
-          selectedList.add(exerciseList[i].name);
-          exerciseList.removeAt(i);
-          TextEditingController c = TextEditingController();
-          c.text = '4';
-          _controller.add(c);
-
-          setState(() {
-          });
-
-          Navigator.pop(context);
-        }, 
-        child: Text(
-          exerciseList[i].name,
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-          ), 
-        ),
-      ),
       ),
     );
+  }
+
+
+//    *** PARSE SUBMIT DATABASE ***
+
+
+  // Converts the selected exercises in selectList to string and return it
+  String selectedListToString() {
+    String exercises = '';
+
+    for(final s in selectedList) {
+      exercises = '$exercises$s;';
+    }
+
+    return exercises;
+  }
+
+  // Converts the sets for each selected exercise in _controllerList to a single string and return it
+  String controllerListToString() {
+    String sets = '';
+
+    for(final c in _controller) {
+      String set = c.text;
+      sets = '$sets$set;';
+    }
+
+    return sets;
+  }
+
+  /*
+    onSubmiteSave function calls both selectedListToString() and controllerListToString() and
+    in
+  */
+  void onSubmitSave() async {
+    String exercises = selectedListToString();
+    String reps = controllerListToString();
+    await workoutDb.insertWorkout(widget.workoutName,exercises, reps);
+
+    handleRequest();
+  }
+
+  void handleRequest() {
+    Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
   }
 }

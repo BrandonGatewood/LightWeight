@@ -149,16 +149,20 @@ class _WorkoutsState extends State<Workouts> {
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
           height: 220.0,
-          width: 300.0,
           child: Column(
             children: dialogList,              
           ),
         ),
       ),
     );
+
+    if(options == 1) {
+      _refreshWorkouts();
+    }
   }
 
   /*
@@ -195,7 +199,6 @@ class _WorkoutsState extends State<Workouts> {
                 builder: (context) => WorkoutSelectExercises(workoutName: value),
               ),
             );
-
             //onSubmitAdd();
             // Select exercises for this workout
             //Map<String, int> exerciseMap = workoutToMap()
@@ -259,7 +262,7 @@ class _WorkoutsState extends State<Workouts> {
             // Select exercises for this workout
             //Map<String, int> exerciseMap = workoutToMap()
             // String numOfSetsString = setsToString()
-            onSubmitAdd();
+            //onSubmitAdd();
           },
           decoration: Styles().inputWorkoutName('new Workout name'),
         ),
@@ -275,7 +278,7 @@ class _WorkoutsState extends State<Workouts> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
-                onSubmitAdd();
+                //onSubmitAdd();
               },
               icon: icons.checkIcon(), 
             ),
@@ -415,18 +418,6 @@ class _WorkoutsState extends State<Workouts> {
 //    *** ONSUBMIT FUNCTIONS AND DATABASE REQUESTS ***
 
 
-  /*
-    onSubmitAdd function handles the users input with the TextEditingContoller class to
-    get the users input and passes that as a parameter to add a new workout into the 
-    database.
-  */
-  void onSubmitAdd() async {
-    Map<String, int> exerciseMap = {'Incline Bench': 4};
-
-    bool add = await _dbHelper.insertWorkout(_controller.text, exerciseMap);
-
-    handleRequest(add, 0);
-  }
   
   /*
     onSubmitUpdate function handles the users input with the TextEditingContoller class to

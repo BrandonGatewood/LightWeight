@@ -40,31 +40,16 @@ class WorkoutsDBHelper {
     return maps.map((e) => Workout.fromMap(e)).toList();
   }
 
-  Future<bool> insertWorkout(String name, Map<String, int> exerciseMap) async {
+  Future<void> insertWorkout(String name, String exerciseList, String setsList) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
-    String exerciseList = '';
-    String numOfSets = '';
 
-    // Convert map to strings
-    exerciseMap.forEach((key, value) {
-      exerciseList += '$key;';  
-      numOfSets += '$value;';
-    });
+    Workout newWorkout = Workout(name: name, exerciseList: exerciseList, numOfSets: setsList);
 
-    Workout newWorkout = Workout(name: name, exerciseList: exerciseList, numOfSets: numOfSets);
-
-    try {
-      await db.insert(
-        'workouts', 
-        newWorkout.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.abort, 
-      );
-
-      return true;
-    }
-    catch(err) {
-      return false;
-    }
+    await db.insert(
+      'workouts', 
+      newWorkout.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.abort, 
+    );
   }
 
   Future<bool> updateWorkout(String name, String newName) async {

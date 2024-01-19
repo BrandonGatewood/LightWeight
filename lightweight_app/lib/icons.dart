@@ -5,7 +5,7 @@ class MyIcons {
     return const Icon( 
       Icons.delete_rounded,
       color: Colors.white,
-      size: 30,
+      size: 25,
     );
   }
 
@@ -13,7 +13,7 @@ class MyIcons {
     return const Icon( 
       Icons.remove_rounded,
       color: Colors.white,
-      size: 30,
+      size: 25,
     );
   }
 
@@ -37,7 +37,7 @@ class MyIcons {
     return const Icon(
       Icons.add_rounded,
       color: Colors.white,
-      size: 30,
+      size: 25,
     );
   }
 

@@ -22,7 +22,7 @@ class DB {
           '''CREATE TABLE workouts(
             name Text PRIMARY KEY NOT NULL,
             exerciseList Text NOT NULL,
-            numOfSets Text NOT NULL
+            setsList Text NOT NULL
           )'''
         );
 
