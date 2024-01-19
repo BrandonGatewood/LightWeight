@@ -189,20 +189,16 @@ class _ExercisesState extends State<Exercises> {
   */ 
   List<Widget> addExerciseDialog() {
     return <Widget>[
-      Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon:  icons.backArrowIcon(),
-          ),
-          const Spacer(),
-          Text(
-            'Add Exercise',
-            style: Styles().dialogHeader(), 
-          ),
-          const Spacer(),
-          const Spacer(),
-        ],
+      Align(
+        alignment: Alignment.topLeft,
+        child: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon:  icons.backArrowIcon(),
+        ),
+      ),
+      Text(
+        'Add Exercise',
+        style: Styles().dialogHeader(), 
       ),
       Padding(
         padding: const EdgeInsets.only(
@@ -221,19 +217,22 @@ class _ExercisesState extends State<Exercises> {
         ),
       ),
       Align(
-        alignment: Alignment.centerRight,
+        alignment: Alignment.topRight,
         child: Padding(
           padding: const EdgeInsets.only(
             right: 10,
           ), 
-          child: CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
+          child: TextButton(
+            onPressed: () {
+              if(_controller.text.isNotEmpty) {
                 onSubmitAdd();
-              },
-              icon: icons.checkIcon(), 
+              }
+            }, 
+            child: const Text(
+              'Save',
+              style: TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
         ),
@@ -451,7 +450,7 @@ class _ExercisesState extends State<Exercises> {
 
     if(flag) {
       _refreshExercises();
-      Navigator.pop(context);
+      Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
     }
     else {
       dialog(4, selection.toString());
