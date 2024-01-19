@@ -154,9 +154,6 @@ class _ExercisesState extends State<Exercises> {
         dialogList = deleteExerciseDialog(name);
         break;
       case 4:
-        dialogList = successDialog(name);
-        break;
-      case 5:
         dialogList = failedDialog(name);
         break;
     }
@@ -178,7 +175,7 @@ class _ExercisesState extends State<Exercises> {
     _controller.clear();
 
     // Success or failed dialog, so return to my_exercises
-    if(options == 4 || options == 5) {
+    if(options == 4) {
       Future.delayed(
         const Duration(seconds: 2),
         () {
@@ -384,40 +381,6 @@ class _ExercisesState extends State<Exercises> {
   }
   
   /*
-    successDialog function is the layout dialog for a successful request with the database.
-
-    The String passed in dialog, is used to determine what kind of successful request occurred.
-
-    The successful response will display in the center of the dialog.
-  */
-  List<Widget> successDialog(String selection) {
-    String title = '';
-
-    switch(selection) {
-      case '0':
-        title = 'Exercise added to List.';
-        break;
-      case '1':
-        title = 'Exercise updated.';
-        break;
-      case '2':
-        title = 'Exercise deleted.';
-        break;
-    }
-
-    return <Widget>[
-      const Spacer(),
-      Center(
-        child: Text(
-          title,
-          style: Styles().dialogHeader(),
-        ),
-      ),
-      const Spacer(),
-    ];
-  }
-
-  /*
     failedDialog function is the layout dialog for a failed request with the database.
 
     The String passed in dialog, is used to determine what kind of failed request occurred.
@@ -543,11 +506,10 @@ class _ExercisesState extends State<Exercises> {
     _controller.clear();
 
     if(flag) {
-      dialog(4, selection.toString());
       _refreshExercises();
     }
     else {
-      dialog(5, selection.toString());
+      dialog(4, selection.toString());
     }
   }
 }
