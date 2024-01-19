@@ -21,7 +21,7 @@ class MyIcons {
     return const Icon(
       Icons.arrow_back_ios_new_rounded,
       color: Colors.white,
-      size: 30,
+      size: 20,
     );
   }
   
@@ -29,7 +29,7 @@ class MyIcons {
     return const Icon(
       Icons.arrow_forward_ios_rounded,
       color: Colors.white,
-      size: 30,
+      size: 20,
     );
   }
 

@@ -309,8 +309,14 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   String selectedListToString() {
     String exercises = '';
 
-    for(final s in selectedList) {
-      exercises = '$exercises$s;';
+    for(int i = 0; i < selectedList.length; ++i) {
+      String s = selectedList[i];
+      if(i == selectedList.length - 1) {
+        exercises = '$exercises$s';
+      }
+      else {
+        exercises = '$exercises$s;';
+      }
     }
 
     return exercises;

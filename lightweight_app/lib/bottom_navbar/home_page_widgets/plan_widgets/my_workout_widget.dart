@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/workout_db.dart';
 import '../../../icons.dart';
@@ -93,27 +95,121 @@ class _WorkoutsState extends State<Workouts> {
         child: ListView.builder(
           itemCount: workoutList.length,
           itemBuilder: (BuildContext context, int index) {
-            return workoutCard(workoutList[index]);
+            return SizedBox(
+              height: 125,
+              child: workoutCards(workoutList[index])
+            );
           },
         ),
       );
     }
   }
 
-  /*
-    workoutCard function displays each workout in a card with a ListTile
-    to display information on the workout. 
+  // getExercises converts the String, exerciseList, to a List<String>
+  List<String> getExercises(Workout aWorkout) {
+    return aWorkout.exerciseList.split(';');
+  }
 
-    Each card displays the exercise name as the title, max weight as the subtitle.
-    and a trailing IconButton to give user more options with the exercise.
+  // getExerciseSets converts the String, setsList, to a List<String>
+  List<String> getExerciseSets(Workout aWorkout) {
+    return aWorkout.setsList.split(';');
+  }
+
+  /*
+    workoutCards function creates a card for each workout the user added into the
+    database. 
+
+    Each card displays the workout name as the title and a list of the exercises in
+    that workout. ForwardArrowIcon is used to show more information and edit that workout.
   */ 
-  SizedBox workoutCard(Workout aWorkout) {
-    return SizedBox(
-      height: 300,
-      child: Column(children: <Widget>[
-        Text(aWorkout.name),
-        Text(aWorkout.exerciseList),
-      ],)
+  Card workoutCards(Workout aWorkout) {
+    List<String> exerciseList = getExercises(aWorkout);
+
+    return Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(aWorkout.name),
+              trailing: IconButton(
+                onPressed: () {},
+                icon: icons.forwardArrowIcon(),
+              )
+            ),
+            IntrinsicHeight(
+              child:Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: exerciseColumn1(exerciseList),
+                  ),
+                  if(exerciseList.length > 4)
+                    const VerticalDivider(
+                      thickness: 1,
+                    ),
+                  exerciseColumn2(exerciseList),
+                ],
+              ),
+            ),
+          ],
+        ),
+    );
+  }
+
+  // Generate the first Column of exercises for workoutCards
+  Column exerciseColumn1(List<String> exerciseList) {
+    List<String> col1 = [];
+
+    if(exerciseList.length > 3) {
+      for(int i = 0; i < 3; ++i) {
+        col1.add(exerciseList[i]);
+      }
+    }
+    else {
+      for(int i = 0; i < exerciseList.length; ++i) {
+        col1.add(exerciseList[i]);
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        for(int i = 0; i < col1.length; ++i)
+          Text(
+            col1[i],
+            style: Styles().subtitle(),
+          ),
+      ],
+    );
+  }
+
+  // Generate the second Column of exercises for workoutCards 
+  Column exerciseColumn2(List<String> exerciseList) {
+    List<String> col2 = [];
+    
+    if(exerciseList.length < 3) {
+      col2.add('');
+    }
+    else if(exerciseList.length > 3 && exerciseList.length < 6) {
+      for(int i = 3; i < exerciseList.length; ++i) {
+        col2.add(exerciseList[i]);
+      }
+    }
+    else if(exerciseList.length >= 6) {
+      for(int i = 3; i < 5; ++i) {
+        col2.add(exerciseList[i]);
+      }
+      col2.add('...');
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        for(int i = 0; i < col2.length; ++i)
+          Text(
+            col2[i],
+            style: Styles().subtitle(),
+          ),
+      ],
     );
   }
 
@@ -140,16 +236,13 @@ class _WorkoutsState extends State<Workouts> {
       case 2:
         dialogList = deleteWorkoutDialog(name);
       case 4:
-        dialogList = successDialog(name);
-        break;
-      case 5:
         dialogList = failedDialog(name);
         break;
     }
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: 10),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
           height: 220.0,
@@ -340,39 +433,6 @@ class _WorkoutsState extends State<Workouts> {
         ),
       ),
     ]; 
-  }
-  /*
-    successDialog function is the layout dialog for a successful request with the database.
-
-    The String passed in dialog, is used to determine what kind of successful request occurred.
-
-    The successful response will display in the center of the dialog.
-  */
-  List<Widget> successDialog(String selection) {
-    String title = '';
-
-    switch(selection) {
-      case '0':
-        title = 'Workout added to List.';
-        break;
-      case '1':
-        title = 'Workout updated.';
-        break;
-      case '2':
-        title = 'Workout deleted.';
-        break;
-    }
-
-    return <Widget>[
-      const Spacer(),
-      Center(
-        child: Text(
-          title,
-          style: Styles().dialogHeader(),
-        ),
-      ),
-      const Spacer(),
-    ];
   }
 
   /*

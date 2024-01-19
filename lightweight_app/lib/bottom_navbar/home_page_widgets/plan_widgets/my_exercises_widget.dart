@@ -144,7 +144,6 @@ class _ExercisesState extends State<Exercises> {
       case 0: 
         dialogList = addExerciseDialog();
         break;
-      
       case 2:
         dialogList = editExerciseDialog(name);
         break; 
