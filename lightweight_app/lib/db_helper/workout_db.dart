@@ -5,24 +5,24 @@ import 'package:sqflite/sqflite.dart';
 class Workout {
   final String name;
   final String exerciseList;
-  final String numOfSets;
+  final String setsList;
 
   const Workout({
     required this.name,
     required this.exerciseList,
-    required this.numOfSets,
+    required this.setsList,
   });
 
   Workout.fromMap(Map<String, dynamic> item):
     name = item['name'], 
     exerciseList = item['exerciseList'],
-    numOfSets = item['numOfSets'];
+    setsList = item['setsList'];
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       'exerciseList': exerciseList, 
-      'numOfSets': numOfSets,
+      'setsList': setsList,
     };
   }
 }
@@ -43,7 +43,7 @@ class WorkoutsDBHelper {
   Future<void> insertWorkout(String name, String exerciseList, String setsList) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
 
-    Workout newWorkout = Workout(name: name, exerciseList: exerciseList, numOfSets: setsList);
+    Workout newWorkout = Workout(name: name, exerciseList: exerciseList, setsList: setsList);
 
     await db.insert(
       'workouts', 
