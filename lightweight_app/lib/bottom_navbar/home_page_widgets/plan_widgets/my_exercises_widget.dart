@@ -119,7 +119,7 @@ class _ExercisesState extends State<Exercises> {
             subtitle: const Text('Max Weight: 140lbs'),
             trailing: IconButton(
               onPressed: () {
-                dialog(1, anExercise.name);
+                dialog(2, anExercise.name);
               },
               icon: icons.forwardArrowIcon(),
             ),
@@ -144,11 +144,9 @@ class _ExercisesState extends State<Exercises> {
       case 0: 
         dialogList = addExerciseDialog();
         break;
-      case 1:
-        dialogList = exerciseDialog(name);
-        break; 
+      
       case 2:
-        dialogList = updateExerciseDialog(name);
+        dialogList = editExerciseDialog(name);
         break; 
       case 3:
         dialogList = deleteExerciseDialog(name);
@@ -207,7 +205,12 @@ class _ExercisesState extends State<Exercises> {
         ],
       ),
       Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 10,
+          right: 10,
+          bottom: 5, 
+        ),
         child: TextField(
           maxLength: 23,
           controller: _controller,
@@ -239,85 +242,65 @@ class _ExercisesState extends State<Exercises> {
   }
 
   /*
-    exerciseDialog function is the layout dialog for an exercise. It includes a button to exit,
-    and a popup menu that allows users to edit the exercise name and delete the exercise. This
-    function also gets the exercises stats from the database to display.
-  */
-  List<Widget> exerciseDialog(String name) {
-    return <Widget>[
-      Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon:  icons.backArrowIcon(),
-          ),
-          const Spacer(),
-          popUpMenu(name),
-        ],
-      ),
-      Padding(padding: EdgeInsets.symmetric(horizontal: 50),
-      child: Text(
-            name,
-            style: Styles().dialogHeader(), 
-          ),
-      ),
-      const Padding(
-        padding: EdgeInsets.only(top: 40),
-        child: Text('Max Weight: 140lbs x 8reps'),
-      ),
-      const Padding(
-        padding: EdgeInsets.only(top: 10),
-        child: Text('Max Reps: 12reps x 100lbs'),
-      ),
-    ]; 
-  }
-
-  /*
     updateExerciseDialog function is the layout dialog for updating an exercise in the database.
     It includes two buttons to exit and save, and a Textfield to update an exercise name.
   */ 
-  List<Widget> updateExerciseDialog(String name) {
+  List<Widget> editExerciseDialog(String name) {
     return <Widget>[
-      Row(
+      Row( 
         children: <Widget>[
           IconButton(
             onPressed: () => Navigator.pop(context),
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
-          Text(
-            'Rename Exercise',
-            style: Styles().dialogHeader(), 
+          IconButton(
+            onPressed: () {
+              dialog(3, name);
+            }, 
+            icon: icons.deleteIcon(),
           ),
-          const Spacer(),
-          const Spacer(),
         ],
       ),
+      Text(
+        'Edit Exercise',
+        style: Styles().dialogHeader(), 
+      ),
       Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 10,
+          right: 10,
+          bottom: 5,
+        ),
         child: TextField(
           maxLength: 23,
           controller: _controller,
           onSubmitted: (String value) async {
-            onSubmitUpdate(name);
+            if(value.isNotEmpty) {
+              onSubmitUpdate(name);
+            }
           },
           decoration: Styles().inputWorkoutName('New exercise name'),
         ),
       ),
       Align(
-        alignment: Alignment.centerRight,
+        alignment: Alignment.topRight,
         child: Padding(
           padding: const EdgeInsets.only(
             right: 10,
           ), 
-          child: CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
+          child: TextButton(
+            onPressed: () {
+              if(_controller.text.isNotEmpty) {
                 onSubmitUpdate(name);
-              },
-              icon: icons.checkIcon(), 
+              }
+            }, 
+            child: const Text(
+              'Save',
+              style: TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
         ),
@@ -421,45 +404,6 @@ class _ExercisesState extends State<Exercises> {
   }
 
 
-//  *** POP UP MENUS ***
-
-
-  /*
-    popUpMenu function builds a menu for an exercise card. Pop up menu
-    has only two options, edit the exercise or delete it.  
-  */
-  PopupMenuButton<Menu> popUpMenu(String name) {
-    Menu? selectedMenu;
-
-    return PopupMenuButton<Menu>(
-      initialValue: selectedMenu,
-
-      onSelected: (Menu item) {
-        setState(() {
-          selectedMenu = item;
-        });
-      },
-
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
-        PopupMenuItem<Menu>(
-          value: Menu.rename,
-          child: const Text('Rename'),
-          onTap: () {
-            dialog(2, name);
-          },
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem<Menu>(
-          value: Menu.deleteExercise,
-          child: const Text('Delete'),
-          onTap: () {
-            dialog(3, name);
-          },
-        ),
-      ],
-    );
-  }
-
 //    *** ONSUBMIT FUNCTIONS AND DATABASE REQUESTS ***
 
 
@@ -507,6 +451,7 @@ class _ExercisesState extends State<Exercises> {
 
     if(flag) {
       _refreshExercises();
+      Navigator.pop(context);
     }
     else {
       dialog(4, selection.toString());

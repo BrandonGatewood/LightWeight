@@ -4,7 +4,7 @@ class Styles {
   // Textstyle for dialog headers
   TextStyle dialogHeader() {
     return const TextStyle(
-      fontSize: 25,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
     );
   }
