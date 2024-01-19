@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/workout_db.dart';
 import '../../../icons.dart';
 import '../../../styles.dart';
+import './select_exercises.dart';
 
 class Workouts extends StatefulWidget {
   const Workouts({super.key});
@@ -109,9 +110,10 @@ class _WorkoutsState extends State<Workouts> {
   SizedBox workoutCard(Workout aWorkout) {
     return SizedBox(
       height: 300,
-      child: Text(
-        aWorkout.name,
-      ),
+      child: Column(children: <Widget>[
+        Text(aWorkout.name),
+        Text(aWorkout.exerciseList),
+      ],)
     );
   }
 
@@ -188,10 +190,16 @@ class _WorkoutsState extends State<Workouts> {
         child: TextField(
           controller: _controller,
           onSubmitted: (String value) async {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => WorkoutSelectExercises(workoutName: value),
+              ),
+            );
+
+            //onSubmitAdd();
             // Select exercises for this workout
             //Map<String, int> exerciseMap = workoutToMap()
             // String numOfSetsString = setsToString()
-            onSubmitAdd();
           },
           decoration: Styles().inputWorkoutName('Workout name'),
         ),
@@ -207,7 +215,11 @@ class _WorkoutsState extends State<Workouts> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
-                onSubmitAdd();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => WorkoutSelectExercises(workoutName: _controller.text),
+                  ),
+                );
               },
               icon: icons.checkIcon(), 
             ),
@@ -243,6 +255,7 @@ class _WorkoutsState extends State<Workouts> {
         child: TextField(
           controller: _controller,
           onSubmitted: (String value) async {
+            
             // Select exercises for this workout
             //Map<String, int> exerciseMap = workoutToMap()
             // String numOfSetsString = setsToString()
