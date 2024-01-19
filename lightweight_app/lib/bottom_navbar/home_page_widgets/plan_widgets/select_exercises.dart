@@ -89,15 +89,23 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   /*
     selectedExercises builds a ListView for all the exercises in the selectedList
   */
-  Padding selectedExercises() {
-    return Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: ListView.builder(
-          itemCount: selectedList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return exerciseCard(selectedList[index], index);
-          },
-        ),
+  ReorderableListView selectedExercises() {
+      return ReorderableListView(
+        children: <Widget>[
+          for(int i = 0; i < selectedList.length; ++i)
+          exerciseCard(selectedList[i], i),
+        ],
+        onReorder: (int oldIndex, int newIndex) {
+          setState(() {
+            if (oldIndex < newIndex) {
+              --newIndex;
+            }
+            final String item = selectedList.removeAt(oldIndex);
+            final TextEditingController c = _controller.removeAt(oldIndex);
+            selectedList.insert(newIndex, item);
+            _controller.insert(newIndex, c);
+          });
+        },
     );
   }
 
@@ -111,7 +119,8 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     int reps = int.parse(_controller[i].text);
 
     return SizedBox(
-      height: 110,
+      key: Key('$i'),
+      height: 115,
       child: Card(
         child: Column(
           children: <Widget>[
@@ -264,7 +273,6 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
           _controller.add(c);
 
           setState(() {
-            
           });
 
           Navigator.pop(context);
