@@ -6,15 +6,6 @@ class Styles {
   TextStyle dialogHeader() {
     return const TextStyle(
       fontSize: 16,
-      fontWeight: FontWeight.bold,
-    );
-  }
-
-  // TextStyle for card titles
-  TextStyle cardTitle() {
-    return const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
     );
   }
 
@@ -23,6 +14,16 @@ class Styles {
     return const TextStyle(
       fontSize: 12,
       color: Colors.grey ,
+    );
+  }
+
+  // TextButton for Save 
+  Text saveTextButton() {
+    return  const Text(
+      'Save',
+      style: TextStyle(
+        fontSize: 18,
+      )
     );
   }
 

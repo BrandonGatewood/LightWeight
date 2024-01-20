@@ -53,16 +53,19 @@ class _WorkoutsState extends State<Workouts> {
       appBar: AppBar(
         title: const Text('My Workouts'),
         actions: <Widget>[
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
-                miniDialog(0, '');
-              },
-              icon: icons.addIcon(), 
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              child: IconButton(
+                onPressed: () {
+                  miniDialog(0, '');
+                },
+                icon: icons.addIcon(), 
+              ),
             ),
-          ),
+          )
         ],
       ),
       body: mainLayout(),
@@ -96,7 +99,7 @@ class _WorkoutsState extends State<Workouts> {
           itemCount: workoutList.length,
           itemBuilder: (BuildContext context, int index) {
             return SizedBox(
-              height: 125,
+              height: 115,
               child: workoutCards(workoutList[index])
             );
           },
@@ -130,25 +133,36 @@ class _WorkoutsState extends State<Workouts> {
           children: <Widget>[
             ListTile(
               title: Text(aWorkout.name),
-              trailing: IconButton(
-                onPressed: () {},
-                icon: icons.forwardArrowIcon(),
-              )
-            ),
-            IntrinsicHeight(
+              subtitle: IntrinsicHeight(
               child:Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(
+                      top: 10,
+                      left: 10,
+                    ),
                     child: exerciseColumn1(exerciseList),
                   ),
                   if(exerciseList.length > 4)
-                    const VerticalDivider(
-                      thickness: 1,
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: VerticalDivider(
+                        thickness: 1,
+                      ),
                     ),
-                  exerciseColumn2(exerciseList),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: exerciseColumn2(exerciseList),
+                  ),
                 ],
               ),
+            ),
+              trailing: IconButton(
+                onPressed: () {
+                  largeDialog(aWorkout);
+                },
+                icon: icons.forwardArrowIcon(),
+              )
             ),
           ],
         ),
@@ -245,7 +259,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 220.0,
+          height: 210.0,
           child: Column(
             children: dialogList,              
           ),
@@ -256,6 +270,36 @@ class _WorkoutsState extends State<Workouts> {
     if(options == 1) {
       _refreshWorkouts();
     }
+  }
+  
+  /*
+    largeDialog function is a sizedbox used for fowardArrowIcon on a workoutCard
+    is pressed. This is where users will find all information on the workout. 
+
+    edit workout name
+    delete workout
+    edit exercises
+  */
+  void largeDialog(Workout aWorkout) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 210.0,
+          child: Column(
+            children: workoutDialog(aWorkout),              
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> workoutDialog(Workout aWorkout) {
+    return <Widget> [
+      Text('aworkout')
+      ];
   }
 
   /*
@@ -292,10 +336,6 @@ class _WorkoutsState extends State<Workouts> {
                 builder: (context) => WorkoutSelectExercises(workoutName: value),
               ),
             );
-            //onSubmitAdd();
-            // Select exercises for this workout
-            //Map<String, int> exerciseMap = workoutToMap()
-            // String numOfSetsString = setsToString()
           },
           decoration: Styles().inputWorkoutName('Workout name'),
         ),
@@ -306,19 +346,15 @@ class _WorkoutsState extends State<Workouts> {
           padding: const EdgeInsets.only(
             right: 10,
           ), 
-          child: CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => WorkoutSelectExercises(workoutName: _controller.text),
-                  ),
-                );
-              },
-              icon: icons.checkIcon(), 
-            ),
+          child: TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => WorkoutSelectExercises(workoutName: _controller.text),
+                ),
+              );
+            },
+            child: Styles().saveTextButton(),
           ),
         ),
       ),

@@ -51,14 +51,17 @@ class _ExercisesState extends State<Exercises> {
       appBar: AppBar(
         title: const Text('My Exercises'),
         actions: <Widget>[
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
-                dialog(0, '');
-              },
-              icon: icons.addIcon(), 
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: CircleAvatar(
+              radius: 25,
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              child: IconButton(
+                onPressed: () {
+                  dialog(0, '');
+                },
+                icon: icons.addIcon(), 
+              ),
             ),
           ),
         ],
@@ -112,11 +115,11 @@ class _ExercisesState extends State<Exercises> {
       child: Column(
         children: <Widget>[
           ListTile(
-            title: Text(
-              anExercise.name,
-              style: Styles().cardTitle(),
+            title: Text(anExercise.name),
+            subtitle: Text(
+              'Max Weight: 140lbs',
+              style: Styles().subtitle()
             ),
-            subtitle: const Text('Max Weight: 140lbs'),
             trailing: IconButton(
               onPressed: () {
                 dialog(2, anExercise.name);
@@ -157,10 +160,10 @@ class _ExercisesState extends State<Exercises> {
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 250.0,
-          width: 300.0,
+          height: 210.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: dialogList,              
@@ -188,16 +191,22 @@ class _ExercisesState extends State<Exercises> {
   */ 
   List<Widget> addExerciseDialog() {
     return <Widget>[
-      Align(
-        alignment: Alignment.topLeft,
-        child: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon:  icons.backArrowIcon(),
-        ),
-      ),
-      Text(
-        'Add Exercise',
-        style: Styles().dialogHeader(), 
+      Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon:  icons.backArrowIcon(),
+          ),
+          const Spacer(),
+          const Spacer(),
+          Text(
+            'Add Exercise',
+            style: Styles().dialogHeader(), 
+          ),
+          const Spacer(),
+          const Spacer(),
+          const Spacer(),
+        ],
       ),
       Padding(
         padding: const EdgeInsets.only(
@@ -227,12 +236,7 @@ class _ExercisesState extends State<Exercises> {
                 onSubmitAdd();
               }
             }, 
-            child: const Text(
-              'Save',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
+            child: Styles().saveTextButton(),
           ),
         ),
       ),
@@ -252,6 +256,11 @@ class _ExercisesState extends State<Exercises> {
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
+          Text(
+            'Edit Exercise',
+            style: Styles().dialogHeader(), 
+          ),
+          const Spacer(),
           IconButton(
             onPressed: () {
               dialog(3, name);
@@ -260,10 +269,7 @@ class _ExercisesState extends State<Exercises> {
           ),
         ],
       ),
-      Text(
-        'Edit Exercise',
-        style: Styles().dialogHeader(), 
-      ),
+      
       Padding(
         padding: const EdgeInsets.only(
           top: 20,
@@ -294,12 +300,7 @@ class _ExercisesState extends State<Exercises> {
                 onSubmitUpdate(name);
               }
             }, 
-            child: const Text(
-              'Save',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
+            child: Styles().saveTextButton(),
           ),
         ),
       ),
@@ -320,22 +321,22 @@ class _ExercisesState extends State<Exercises> {
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
+          const Spacer(),
           Text(
             'Delete Exercise',
             style: Styles().dialogHeader(), 
           ),
           const Spacer(),
           const Spacer(),
+          const Spacer(),
         ],
       ),
       const Spacer(),
-      const Padding(
-        padding: EdgeInsets.all(20),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Text(
-          'Confirm to delete Exercise',
-          style: TextStyle(
-            fontSize: 16,
-          ),
+          'Confirm to delete exercise',
+          style: Styles().subtitle(), 
         ),
       ),
       const Spacer(),
@@ -347,7 +348,7 @@ class _ExercisesState extends State<Exercises> {
             bottom: 10,
           ), 
           child: CircleAvatar(
-            radius: 30,
+            radius: 25,
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
@@ -395,6 +396,7 @@ class _ExercisesState extends State<Exercises> {
       Center(
         child: Text(
           content,
+          style: Styles().subtitle(),
         ),
       ),
       const Spacer(),
