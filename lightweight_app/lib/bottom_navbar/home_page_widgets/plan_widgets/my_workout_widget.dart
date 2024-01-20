@@ -270,7 +270,7 @@ class _WorkoutsState extends State<Workouts> {
     _controller.clear();
 
     if(options == 3) {
-    Future.delayed(
+      Future.delayed(
         const Duration(seconds: 2),
         () {
           Navigator.pop(context); 
@@ -345,9 +345,9 @@ class _WorkoutsState extends State<Workouts> {
             if(validated) {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => WorkoutSelectExercises(workoutName: value),
+                  builder: (context) => WorkoutSelectExercises(workoutName: value, workoutDb: _dbHelper,),
                 ),
-              );
+              ).then((value) => _refreshWorkouts());
             }
             else {
               miniDialog(3, '0');
@@ -369,9 +369,9 @@ class _WorkoutsState extends State<Workouts> {
               if(validated) {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => WorkoutSelectExercises(workoutName: _controller.text),
+                    builder: (context) => WorkoutSelectExercises(workoutName: _controller.text, workoutDb: _dbHelper,),
                   ),
-                );
+                ).then((value) => _refreshWorkouts());
               }
               else {
                 miniDialog(3, '0');

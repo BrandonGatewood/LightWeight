@@ -8,9 +8,11 @@ class WorkoutSelectExercises extends StatefulWidget {
   const WorkoutSelectExercises({
     super.key,
     required this.workoutName,
+    required this.workoutDb
   });
 
   final String workoutName;
+  final WorkoutsDBHelper workoutDb;
 
   @override
   State<WorkoutSelectExercises> createState() => _WorkoutSelectExerciseState();
@@ -19,7 +21,6 @@ class WorkoutSelectExercises extends StatefulWidget {
 class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   final List<TextEditingController> _controller = [];
   late ExerciseDBHelper exerciseDb;
-  late WorkoutsDBHelper workoutDb;
   late List<Exercise> exerciseList;
   List<String> selectedList = [];
   MyIcons icons = MyIcons(); 
@@ -35,8 +36,6 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
         exerciseList = data;
       });
     });
-    workoutDb = WorkoutsDBHelper();
-    workoutDb.openWorkouts().whenComplete(() => null);
   }
 
   @override
@@ -341,7 +340,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   void onSubmitSave() async {
     String exercises = selectedListToString();
     String reps = controllerListToString();
-    await workoutDb.insertWorkout(widget.workoutName,exercises, reps);
+    await widget.workoutDb.insertWorkout(widget.workoutName,exercises, reps);
 
     handleRequest();
   }
