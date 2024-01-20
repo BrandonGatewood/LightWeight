@@ -142,7 +142,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     return SizedBox(
       key: Key('$i'),
-      height: 75,
+      height: 80,
       child: Card(
         child: 
             Padding(
@@ -152,14 +152,15 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                   Text(
                     anExercise,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                   const Spacer(),
                   SizedBox(
-                    width: 65,
-                    height: 50,
+                    width: 49,
+                    height: 65,
                     child: TextField(
+                      maxLength: 2,
                       keyboardType: TextInputType.number,
                       controller: _controller[i],
                       decoration: Styles().inputWorkoutName('sets'),
@@ -241,10 +242,8 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
           const Spacer(),
         ],
       ),
-      const Spacer(),
-      const Spacer(),
       SizedBox(
-        height: 440,
+        height: 450,
         child: ListView.builder(
           itemCount: exerciseList.length,
           itemBuilder: (BuildContext context, int index) {
@@ -252,6 +251,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
           }
         ),
       ) ,
+      const Spacer(),
       const Spacer(),
     ];
   }
@@ -264,7 +264,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: SizedBox(
-        height: 60,
+        height: 40,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             elevation: 0,
@@ -288,13 +288,17 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
             Navigator.pop(context);
           }, 
-          child: Text(
-            exerciseList[i].name,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-            ), 
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              exerciseList[i].name,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+              ), 
+            ),
           ),
+          
         ),
       ),
     );

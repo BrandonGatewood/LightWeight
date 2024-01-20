@@ -216,7 +216,7 @@ class _ExercisesState extends State<Exercises> {
           bottom: 5, 
         ),
         child: TextField(
-          maxLength: 30,
+          maxLength: 28,
           controller: _controller,
           onSubmitted: (String value) async {
             onSubmitAdd();
@@ -278,7 +278,7 @@ class _ExercisesState extends State<Exercises> {
           bottom: 5,
         ),
         child: TextField(
-          maxLength: 30,
+          maxLength: 28,
           controller: _controller,
           onSubmitted: (String value) async {
             if(value.isNotEmpty) {
