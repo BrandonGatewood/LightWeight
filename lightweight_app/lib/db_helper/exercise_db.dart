@@ -55,21 +55,14 @@ class ExerciseDBHelper {
     return maps.map((e) => Exercise.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
   }
 
-  Future<bool> deleteExercise(String name) async {
+  Future<void> deleteExercise(String name) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
-    try {
       await db.delete(
         'exercises',
         where: "name = ?",
         whereArgs: [name]
       );
-    }
-    catch(err) {
-      return false;
-    }
-
-    return true;
   }
 
   Future<bool> updateExercise(String name, String newName) async {

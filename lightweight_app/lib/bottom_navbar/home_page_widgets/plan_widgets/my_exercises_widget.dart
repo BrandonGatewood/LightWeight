@@ -179,7 +179,7 @@ class _ExercisesState extends State<Exercises> {
       Future.delayed(
         const Duration(seconds: 2),
         () {
-          Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
+          Navigator.pop(context); 
         },
       );
     }
@@ -380,10 +380,6 @@ class _ExercisesState extends State<Exercises> {
       case '1':
         title = 'Failed to update exercise.';
         break;
-      case '2':
-        title = 'Failed to delete exercise.';
-        content = 'Exercise not found.';
-        break;
     }
     return <Widget>[
       const Spacer(),
@@ -433,9 +429,7 @@ class _ExercisesState extends State<Exercises> {
     onSubmitDelete function handles the users input to delete an exercise from the database.
   */
   void onSubmitDelete(String name) async {
-    bool delete = await _dbHelper.deleteExercise(name);
-
-    handleRequest(delete, 2);
+    await _dbHelper.deleteExercise(name);
   }
 
   /*
