@@ -249,7 +249,7 @@ class _WorkoutsState extends State<Workouts> {
         break;
       case 2:
         dialogList = deleteWorkoutDialog(name);
-      case 4:
+      case 3:
         dialogList = failedDialog(name);
         break;
     }
@@ -267,8 +267,15 @@ class _WorkoutsState extends State<Workouts> {
       ),
     );
 
-    if(options == 1) {
-      _refreshWorkouts();
+    _controller.clear();
+
+    if(options == 3) {
+    Future.delayed(
+        const Duration(seconds: 2),
+        () {
+          Navigator.pop(context); 
+        },
+      );
     }
   }
   
@@ -310,6 +317,8 @@ class _WorkoutsState extends State<Workouts> {
     for that workout.
   */
   List<Widget> addWorkoutDialog() {
+    bool validated; 
+
     return <Widget>[
       Row(
         children: <Widget>[
@@ -331,11 +340,18 @@ class _WorkoutsState extends State<Workouts> {
         child: TextField(
           controller: _controller,
           onSubmitted: (String value) async {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => WorkoutSelectExercises(workoutName: value),
-              ),
-            );
+            validated = validateWorkoutName(value);
+
+            if(validated) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => WorkoutSelectExercises(workoutName: value),
+                ),
+              );
+            }
+            else {
+              miniDialog(3, '0');
+            }
           },
           decoration: Styles().inputWorkoutName('Workout name'),
         ),
@@ -348,17 +364,40 @@ class _WorkoutsState extends State<Workouts> {
           ), 
           child: TextButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => WorkoutSelectExercises(workoutName: _controller.text),
-                ),
-              );
+              validated = validateWorkoutName(_controller.text);
+
+              if(validated) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => WorkoutSelectExercises(workoutName: _controller.text),
+                  ),
+                );
+              }
+              else {
+                miniDialog(3, '0');
+              }
             },
             child: Styles().saveTextButton(),
           ),
         ),
       ),
     ];
+  }
+
+  /*
+    validateWorkoutName function is called when adding a new Workout. It is
+    called before selecting exercises to save time.
+
+    returns true if new workout name is unique and false otherwise.
+  */
+  bool validateWorkoutName(String workoutName) {
+    for(int i = 0; i < workoutList.length; ++i) {
+      if(workoutName == workoutList[i].name) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /*
@@ -547,11 +586,10 @@ class _WorkoutsState extends State<Workouts> {
     _controller.clear();
 
     if(flag) {
-      miniDialog(4, selection.toString());
       _refreshWorkouts();
     }
     else {
-      miniDialog(5, selection.toString());
+      miniDialog(3, selection.toString());
     }
   }
 }
