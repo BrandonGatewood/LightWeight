@@ -261,6 +261,7 @@ class _WorkoutsState extends State<Workouts> {
         child: SizedBox(
           height: 210.0,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: dialogList,              
           ),
         ),
@@ -336,8 +337,14 @@ class _WorkoutsState extends State<Workouts> {
         ],
       ),
       Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 10,
+          right: 10,
+          bottom: 5,
+        ),
         child: TextField(
+          maxLength: 30,
           controller: _controller,
           onSubmitted: (String value) async {
             validated = validateWorkoutName(value);
@@ -364,17 +371,19 @@ class _WorkoutsState extends State<Workouts> {
           ), 
           child: TextButton(
             onPressed: () {
-              validated = validateWorkoutName(_controller.text);
+              if(_controller.text.isNotEmpty) {
+                validated = validateWorkoutName(_controller.text);
 
-              if(validated) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => WorkoutSelectExercises(workoutName: _controller.text, workoutDb: _dbHelper,),
-                  ),
-                ).then((value) => _refreshWorkouts());
-              }
-              else {
-                miniDialog(3, '0');
+                if(validated) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => WorkoutSelectExercises(workoutName: _controller.text, workoutDb: _dbHelper,),
+                    ),
+                  ).then((value) => _refreshWorkouts());
+                }
+                else {
+                  miniDialog(3, '0');
+                }
               }
             },
             child: Styles().saveTextButton(),

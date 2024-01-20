@@ -160,7 +160,7 @@ class _ExercisesState extends State<Exercises> {
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
           height: 210.0,
