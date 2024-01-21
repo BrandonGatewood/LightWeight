@@ -58,7 +58,7 @@ class _ExercisesState extends State<Exercises> {
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               child: IconButton(
                 onPressed: () {
-                  dialog(0, '');
+                  addExerciseDialog();
                 },
                 icon: icons.addIcon(), 
               ),
@@ -71,8 +71,7 @@ class _ExercisesState extends State<Exercises> {
   }
 
 
-//    *** MAIN LAYOUT FUNCTIONS ***
-
+//        ***** MAIN LAYOUT FUNCTIONS *****
 
   /*
     mainLayout function returns the appropriate Widget depending on the users exercise list.
@@ -82,6 +81,13 @@ class _ExercisesState extends State<Exercises> {
 
     Each exercise is represented as a card, where the user can view the exercise. 
   */
+  /*
+    exerciseCard function displays each exercise in a card with a ListTile
+    to display information on the exercise.
+
+    Each card displays the exercise name as the title, max weight as the subtitle.
+    and a trailing IconButton to give user more options with the exercise.
+  */ 
   Widget mainLayout() {
     if(exerciseList.isEmpty) {
       return const Center(
@@ -96,65 +102,47 @@ class _ExercisesState extends State<Exercises> {
         child: ListView.builder(
           itemCount: exerciseList.length,
           itemBuilder: (BuildContext context, int index) {
-            return exerciseCard(exerciseList[index]);
+            return Card(
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text(exerciseList[index].name),
+                    subtitle: Text(
+                      'Max Weight: 140lbs',
+                      style: Styles().subtitle()
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        dialog(0, exerciseList[index]);
+                      },
+                      icon: icons.forwardArrowIcon(),
+                    ),
+                  ),
+                ],
+              ),
+            ); 
           },
         ),
       );
     }
   }
 
-  /*
-    exerciseCard function displays each exercise in a card with a ListTile
-    to display information on the exercise.
 
-    Each card displays the exercise name as the title, max weight as the subtitle.
-    and a trailing IconButton to give user more options with the exercise.
-  */ 
-  Card exerciseCard(Exercise anExercise) {
-    return Card(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Text(anExercise.name),
-            subtitle: Text(
-              'Max Weight: 140lbs',
-              style: Styles().subtitle()
-            ),
-            trailing: IconButton(
-              onPressed: () {
-                dialog(2, anExercise.name);
-              },
-              icon: icons.forwardArrowIcon(),
-            ),
-          ),
-        ],
-      ),
-    ); 
-  }
-
-
-//    *** DIALOG FUNCTIONS ***
-
+//        ***** DIALOG FUNCTIONS *****
 
   /*
     dialog function selects the appropriate dialog to display. Each selection returns a
     List<Widget> to display as children for the Column widget in ShowDialog().
   */
-  void dialog(int options, String name) {
+  void dialog(int options, Exercise anExercise) {
     List<Widget> dialogList = <Widget>[];
 
     switch(options) {
-      case 0: 
-        dialogList = addExerciseDialog();
-        break;
-      case 2:
-        dialogList = editExerciseDialog(name);
+      case 0:
+        dialogList = editExerciseWidgetList(anExercise);
         break; 
-      case 3:
-        dialogList = deleteExerciseDialog(name);
-        break;
-      case 4:
-        dialogList = failedDialog(name);
+      case 1:
+        dialogList = deleteExerciseWidgetList(anExercise);
         break;
     }
     showDialog(
@@ -172,82 +160,85 @@ class _ExercisesState extends State<Exercises> {
       ),
     );
 
-    _controller.clear();
-
-    // Success or failed dialog, so return to my_exercises
-    if(options == 4) {
-      Future.delayed(
-        const Duration(seconds: 2),
-        () {
-          Navigator.pop(context); 
-        },
-      );
-    }
+    clearController();
   }
 
   /*
-    addExerciseDialog function is the layout dialog for adding a new exercise into the database.
-    It includes two buttons to exit and save, and a Textfield to enter an exercise name.
   */ 
-  List<Widget> addExerciseDialog() {
-    return <Widget>[
-      Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon:  icons.backArrowIcon(),
+  void addExerciseDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 210.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon:  icons.backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  Text(
+                    'Add Exercise',
+                    style: Styles().dialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  left: 10,
+                  right: 10,
+                  bottom: 5, 
+                ),
+                child: TextField(
+                  maxLength: 28,
+                  controller: _controller,
+                  onSubmitted: (String value) async {
+                    onSubmitAdd();
+                  },
+                  decoration: Styles().inputWorkoutName('Exercise name'),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10,
+                  ), 
+                  child: TextButton(
+                    onPressed: () {
+                      if(_controller.text.isNotEmpty) {
+                        onSubmitAdd();
+                      }
+                    }, 
+                    child: Styles().saveTextButton(),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const Spacer(),
-          const Spacer(),
-          Text(
-            'Add Exercise',
-            style: Styles().dialogHeader(), 
-          ),
-          const Spacer(),
-          const Spacer(),
-          const Spacer(),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.only(
-          top: 20,
-          left: 10,
-          right: 10,
-          bottom: 5, 
-        ),
-        child: TextField(
-          maxLength: 28,
-          controller: _controller,
-          onSubmitted: (String value) async {
-            onSubmitAdd();
-          },
-          decoration: Styles().inputWorkoutName('Exercise name'),
         ),
       ),
-      Align(
-        alignment: Alignment.topRight,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            right: 10,
-          ), 
-          child: TextButton(
-            onPressed: () {
-              if(_controller.text.isNotEmpty) {
-                onSubmitAdd();
-              }
-            }, 
-            child: Styles().saveTextButton(),
-          ),
-        ),
-      ),
-    ]; 
+    );
+
+    clearController(); 
   }
 
   /*
     updateExerciseDialog function is the layout dialog for updating an exercise in the database.
     It includes two buttons to exit and save, and a Textfield to update an exercise name.
   */ 
-  List<Widget> editExerciseDialog(String name) {
+  List<Widget> editExerciseWidgetList(Exercise anExercise) {
     return <Widget>[
       Row( 
         children: <Widget>[
@@ -263,7 +254,7 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
           IconButton(
             onPressed: () {
-              dialog(3, name);
+              dialog(1, anExercise);
             }, 
             icon: icons.deleteIcon(),
           ),
@@ -281,7 +272,7 @@ class _ExercisesState extends State<Exercises> {
           maxLength: 28,
           controller: _controller,
           onSubmitted: (String value) async {
-            onSubmitUpdate(name);
+            onSubmitUpdate(anExercise.name);
           },
           decoration: Styles().inputWorkoutName('New exercise name'),
         ),
@@ -295,7 +286,7 @@ class _ExercisesState extends State<Exercises> {
           child: TextButton(
             onPressed: () {
               if(_controller.text.isNotEmpty) {
-                onSubmitUpdate(name);
+                onSubmitUpdate(anExercise.name);
               }
             }, 
             child: Styles().saveTextButton(),
@@ -310,7 +301,7 @@ class _ExercisesState extends State<Exercises> {
     It includes two buttons to exit and save, and a Text Widget stating to confirm deletion of 
     the exercise.
   */ 
-  List<Widget> deleteExerciseDialog(String name) {
+  List<Widget> deleteExerciseWidgetList(Exercise anExercise) {
     return <Widget>[
       Row(
         children: <Widget>[
@@ -350,7 +341,7 @@ class _ExercisesState extends State<Exercises> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
-                onSubmitDelete(name);
+                onSubmitDelete(anExercise.name);
               },
               icon: icons.checkIcon(), 
             ),
@@ -367,39 +358,59 @@ class _ExercisesState extends State<Exercises> {
 
     The failed response will display in the center of the dialog.
   */
-  List<Widget> failedDialog(String selection) {
+  void failedDialog(int selection) {
     String title = '';
     String content = 'Exercise already exists.';
 
     switch(selection) {
-      case '0': 
+      case 0: 
         title = 'Failed to add exercise.';
         break;
-      case '1':
+      case 1:
         title = 'Failed to update exercise.';
         break;
     }
-    return <Widget>[
-      const Spacer(),
-      Center(
-        child: Text(
-          title,
-          style: Styles().dialogHeader(),
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 210.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const Spacer(),
+              Center(
+                child: Text(
+                  title,
+                  style: Styles().dialogHeader(),
+                ),
+              ),
+              Center(
+                child: Text(
+                  content,
+                  style: Styles().subtitle(),
+                ),
+              ),
+              const Spacer(),
+            ]
+          ),
         ),
       ),
-      Center(
-        child: Text(
-          content,
-          style: Styles().subtitle(),
-        ),
-      ),
-      const Spacer(),
-    ];
+    );
+
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        Navigator.pop(context); 
+      },
+    );
   }
 
 
-//    *** ONSUBMIT FUNCTIONS AND DATABASE REQUESTS ***
-
+//        ***** ONSUBMIT FUNCTIONS AND DATABASE REQUESTS *****
 
   /*
     onSubmitAdd function handles the users input with the TextEditingContoller class to
@@ -446,7 +457,13 @@ class _ExercisesState extends State<Exercises> {
       Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
     }
     else {
-      dialog(4, selection.toString());
+      failedDialog(selection);
+    }
+  }
+  
+  void clearController() {
+    if(_controller.text.isNotEmpty) {
+      _controller.clear();
     }
   }
 }
