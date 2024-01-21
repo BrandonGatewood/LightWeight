@@ -3,19 +3,22 @@ import 'package:sqflite/sqflite.dart';
 import 'package:lightweight_app/db_helper/db.dart';
 
 class Exercise {
+  final String id;
   final String name;
   final int numOfTimesEntered;
 
   const Exercise({
+    required this.id,
     required this.name,
     required this.numOfTimesEntered
   });
 
   Exercise.fromMap(Map<String, dynamic> item):
-    name = item['name'], numOfTimesEntered = item['numOfTimesEntered'];
+    id = item['id'], name = item['name'], numOfTimesEntered = item['numOfTimesEntered'];
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'numOfTimesEntered': numOfTimesEntered,
     };
@@ -27,10 +30,13 @@ class ExerciseDBHelper {
     return DB().openDB();
   }
 
+
   Future<bool> insertExercise(String name) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
-    Exercise newExercise = Exercise(name: name, numOfTimesEntered: 0);
+    String id = DB().idGenerator(); 
+
+    Exercise newExercise = Exercise(id: id, name: name, numOfTimesEntered: 0);
 
     // insert new exercise into db and abort if primary key (name) already exists
     try{

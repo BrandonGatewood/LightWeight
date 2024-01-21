@@ -135,7 +135,7 @@ class _WorkoutsState extends State<Workouts> {
 
     showDialog(
       context: context,
-      builder: (BuildContext context) => Dialog(
+      builder: (context) => Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
@@ -145,7 +145,7 @@ class _WorkoutsState extends State<Workouts> {
               Row(
                 children: <Widget>[
                   IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.popUntil(context, (route) => route.settings.name == '/workouts'),
                     icon:  icons.backArrowIcon(),
                   ),
                   const Spacer(),
@@ -195,7 +195,7 @@ class _WorkoutsState extends State<Workouts> {
             ],
           ),
         ),
-      ),
+      )
     );
   }
 
@@ -411,7 +411,7 @@ class _WorkoutsState extends State<Workouts> {
             validated = validateWorkoutName(value);
 
             if(validated) {
-              onSubmitUpdate(aWorkout.name);
+              onSubmitUpdate(aWorkout);
             }
           },
           decoration: Styles().inputWorkoutName('New workout name'),
@@ -428,7 +428,7 @@ class _WorkoutsState extends State<Workouts> {
               validated = validateWorkoutName(_controller.text);
 
               if(validated) {
-                onSubmitUpdate(aWorkout.name);
+                onSubmitUpdate(aWorkout);
               }
             },
             child: Styles().saveTextButton(),
@@ -554,10 +554,15 @@ class _WorkoutsState extends State<Workouts> {
     get the users input and passes that as a parameter to update the workout in the 
     database.
   */
-  void onSubmitUpdate(String name) async {
-    bool update = await _dbHelper.updateWorkout(name, _controller.text);
+  void onSubmitUpdate(Workout aWorkout) async {
+    bool update = await _dbHelper.updateWorkout(aWorkout.name, _controller.text);
+    Workout? updatedWorkout = await _dbHelper.getAWorkout(aWorkout.id);
 
-    handleUpdateRequest(update);
+    handleUpdateRequest(update, updatedWorkout);
+
+    if(updatedWorkout != null) {
+      workoutDialog(updatedWorkout);
+    }
   }
   
   /*
@@ -570,16 +575,15 @@ class _WorkoutsState extends State<Workouts> {
   }
 
    /*
-    handleRequest function is a helper function for all onSubmit functions. It will 
-    display the appropriate dialog.
+    handleUpdateRequest function is a helper function for onSubmitUpdate functions. It will 
 
-    When a request is successful, it will refresh the layout to keep up to date with the
-    list.
+    if the workout was successfully updated, then it will refresh the workoutList and the current
+    workoutDialog.
   */
-  void handleUpdateRequest(bool flag) {
+  void handleUpdateRequest(bool flag, Workout? updatedWorkout) {
     if(flag) {
       _refreshWorkouts();
-      Navigator.pop(context);
+      Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
     }
     else {
       failedDialog(3);

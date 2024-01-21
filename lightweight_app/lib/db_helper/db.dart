@@ -13,29 +13,33 @@ class DB {
       onCreate: (database, version) async {
         await database.execute(
           '''CREATE TABLE exercises(
-          name Text PRIMARY KEY NOT NULL,
+          id TEXT PRIMARY KEY NOT NULL,
+          name TEXT NOT NULL,
           numOfTimesEntered INTEGER NOT NULL
           )'''
         );
 
         await database.execute(
           '''CREATE TABLE workouts(
-            name Text PRIMARY KEY NOT NULL,
-            exerciseList Text NOT NULL,
-            setsList Text NOT NULL
+            id TEXT PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL,
+            exerciseList TEXT NOT NULL,
+            setsList TEXT NOT NULL
           )'''
         );
 
         await database.execute(
           '''CREATE TABLE currentSplit(
-            name Text PRIMARY KEY NOT NULL,
+            id TEXT PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL,
             workoutList Text NOT NULL
           )'''
         );
 
         await database.execute(
           '''CREATE TABLE progress(
-            name Text PRIMARY KEY NOT NULL,
+            id Text PRIMARY KEY NOT NULL,
+            exerciseId TEXT NOT NULL,
             workoutList Text NOT NULL
           )'''
         );
@@ -49,5 +53,10 @@ class DB {
       },
       version: 1,
     );
+  }
+
+  String idGenerator() {
+    final now = DateTime.now();
+    return now.microsecondsSinceEpoch.toString();
   }
 }
