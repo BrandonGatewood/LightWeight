@@ -91,9 +91,9 @@ class WorkoutsDBHelper {
   Future<Workout?> getAWorkout(String id) async {
     List<Workout> workoutList = await getAllWorkouts();
 
-    for(int i = 0; i < workoutList.length; ++i) {
-      if(workoutList[i].id == id){
-       return workoutList[i];
+    for(final workout in workoutList) {
+      if(workout.id == id){
+        return workout;
       }
     }
 

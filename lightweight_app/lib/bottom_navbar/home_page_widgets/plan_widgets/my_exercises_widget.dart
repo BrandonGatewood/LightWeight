@@ -238,12 +238,12 @@ class _ExercisesState extends State<Exercises> {
       Row( 
         children: <Widget>[
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.popUntil(context, (route) => route.settings.name == '/exercises'),
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
           Text(
-            'Edit Exercise',
+            anExercise.name,
             style: Styles().dialogHeader(), 
           ),
           const Spacer(),
@@ -267,7 +267,7 @@ class _ExercisesState extends State<Exercises> {
           maxLength: 28,
           controller: _controller,
           onSubmitted: (String value) async {
-            onSubmitUpdate(anExercise.name);
+            onSubmitUpdate(anExercise);
           },
           decoration: Styles().inputWorkoutName('New exercise name'),
         ),
@@ -281,7 +281,7 @@ class _ExercisesState extends State<Exercises> {
           child: TextButton(
             onPressed: () {
               if(_controller.text.isNotEmpty) {
-                onSubmitUpdate(anExercise.name);
+                onSubmitUpdate(anExercise);
               }
             }, 
             child: Styles().saveTextButton(),
@@ -404,53 +404,55 @@ class _ExercisesState extends State<Exercises> {
 
 //        ***** ONSUBMIT FUNCTIONS DATABASE REQUESTS HELPER FUNCTIONS *****
 
-  /*
-    onSubmitAdd function handles the users input with the TextEditingContoller class to
-    get the users input and passes that as a parameter to add a new exercise into the 
-    database.
-  */
+  // Communicates with database to add a new exercise
   void onSubmitAdd() async {
     bool add = await _dbHelper.insertExercise(_controller.text);
 
-    handleRequest(add, 0);
+    handleAddRequest(add);
   }
 
-  /*
-    onSubmitUpdate function handles the users input with the TextEditingContoller class to
-    get the users input and passes that as a parameter to update an exercise in the 
-    database.
-  */
-  void onSubmitUpdate(String name) async {
-    bool update = await _dbHelper.updateExercise(name, _controller.text);
-
-    handleRequest(update, 1);
+  // Handles the state after attempting to add a new exercise
+  void handleAddRequest(bool flag) {
+    if(flag) {
+      _refreshExercises();
+      Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
+    }
+    else {
+      failedDialog(0);
+    }
   }
-  
-  // onSubmitDelete function handles the users input to delete an exercise from the database.
+
+  // Communicates with database to update an exercise 
+  void onSubmitUpdate(Exercise anExercise) async {
+    bool update = await _dbHelper.updateExercise(anExercise.name, _controller.text);
+    Exercise? updatedExercise = await _dbHelper.getAnExercise(anExercise.id);
+
+    handleUpdateRequest(update);
+
+    if(updatedExercise != null) {
+      dialog(0, updatedExercise);
+    }
+  }
+
+  // Handles the state after attempting to update an exercise.
+  void handleUpdateRequest(bool flag) {
+    if(flag) {
+      _refreshExercises();
+      Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
+    }
+    else {
+      failedDialog(1);
+    }
+  }
+
+  // Communicates with database to delete an exercise
   void onSubmitDelete(String name) async {
     await _dbHelper.deleteExercise(name);
 
     handleDeleteRequest();
   }
 
-  /*
-    handleRequest function is a helper function for all onSubmit functions. It will
-    display the appropriate dialog.  
-
-    When a request is successful, it will refresh the layout to keep up to date with the
-    list.
-  */
-  void handleRequest(bool flag, int selection) {
-    if(flag) {
-      _refreshExercises();
-      Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
-    }
-    else {
-      failedDialog(selection);
-    }
-  }
-
-  // refresh users workoutList and popUntil mainLayout()
+  // Handles the state after deleting an exercise
   void handleDeleteRequest() {
     _refreshExercises();
     Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 

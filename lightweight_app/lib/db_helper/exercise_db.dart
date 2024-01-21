@@ -30,7 +30,6 @@ class ExerciseDBHelper {
     return DB().openDB();
   }
 
-
   Future<bool> insertExercise(String name) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
@@ -83,5 +82,17 @@ class ExerciseDBHelper {
     }
 
     return true;
+  }
+
+  Future<Exercise?> getAnExercise(String id) async {
+    List<Exercise> exerciseList = await getAllExercise();
+
+    for(final exercise in exerciseList) {
+      if(exercise.id == id) {
+        return exercise;
+      }
+    }
+
+    return null;
   }
 }

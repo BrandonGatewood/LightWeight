@@ -549,11 +549,7 @@ class _WorkoutsState extends State<Workouts> {
 
 //        ***** ONSUBMIT FUNCTIONS DATABASE REQUESTS HELPER FUNCTIONS *****
   
-  /*
-    onSubmitUpdate function handles the users input with the TextEditingContoller class to
-    get the users input and passes that as a parameter to update the workout in the 
-    database.
-  */
+  // Communicated with database to update a workout 
   void onSubmitUpdate(Workout aWorkout) async {
     bool update = await _dbHelper.updateWorkout(aWorkout.name, _controller.text);
     Workout? updatedWorkout = await _dbHelper.getAWorkout(aWorkout.id);
@@ -564,22 +560,8 @@ class _WorkoutsState extends State<Workouts> {
       workoutDialog(updatedWorkout);
     }
   }
-  
-  /*
-    onSubmitDelete function handles the users input to delete a workout from the database.
-  */
-  void onSubmitDelete(String name) async {
-    await _dbHelper.deleteWorkout(name);
 
-    handleDeleteRequest();
-  }
-
-   /*
-    handleUpdateRequest function is a helper function for onSubmitUpdate functions. It will 
-
-    if the workout was successfully updated, then it will refresh the workoutList and the current
-    workoutDialog.
-  */
+  // Handles the state after attempting to update a workout
   void handleUpdateRequest(bool flag, Workout? updatedWorkout) {
     if(flag) {
       _refreshWorkouts();
@@ -590,7 +572,14 @@ class _WorkoutsState extends State<Workouts> {
     }
   }
 
-  // refresh users workoutList and popuntil mainLayout()
+  // Communicated with database to delete a workout 
+  void onSubmitDelete(String name) async {
+    await _dbHelper.deleteWorkout(name);
+
+    handleDeleteRequest();
+  }
+
+  // Handles the state after deleting a workout
   void handleDeleteRequest() {
     _refreshWorkouts();
     Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
@@ -605,16 +594,11 @@ class _WorkoutsState extends State<Workouts> {
   List<String> getExerciseSets(Workout aWorkout) {
     return aWorkout.setsList.split(';');
   } 
-  
-  /*
-    validateWorkoutName function is called when adding a new Workout. It is
-    called before selecting exercises to save time.
-
-    returns true if new workout name is unique and false otherwise.
-  */
+    
+  // Check whether or not a workout name already exists..
   bool validateWorkoutName(String workoutName) {
-    for(int i = 0; i < workoutList.length; ++i) {
-      if(workoutName == workoutList[i].name) {
+    for(final workout in workoutList) {
+      if(workout.name == workoutName) {
         return false;
       }
     }
