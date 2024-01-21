@@ -9,11 +9,24 @@ class Styles {
     );
   }
 
+  // Textstyle for dialog headers
+  TextStyle largeDialogHeader() {
+    return const TextStyle(
+      fontSize: 18,
+    );
+  }
   // TextStyle for subtitles
   TextStyle subtitle() {
     return const TextStyle(
       fontSize: 12,
       color: Colors.grey ,
+    );
+  }
+
+  // TextStyle for contents
+  TextStyle content() {
+    return const TextStyle(
+      fontSize: 14,
     );
   }
 
@@ -31,7 +44,7 @@ class Styles {
   InputDecoration inputWorkoutName(String name) {
     return InputDecoration(
       border: const OutlineInputBorder(),
-      labelText: name
+      labelText: name,
     );
   } 
 }

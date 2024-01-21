@@ -281,9 +281,7 @@ class _ExercisesState extends State<Exercises> {
           maxLength: 28,
           controller: _controller,
           onSubmitted: (String value) async {
-            if(value.isNotEmpty) {
-              onSubmitUpdate(name);
-            }
+            onSubmitUpdate(name);
           },
           decoration: Styles().inputWorkoutName('New exercise name'),
         ),

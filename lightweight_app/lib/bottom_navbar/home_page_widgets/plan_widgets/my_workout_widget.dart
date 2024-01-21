@@ -6,6 +6,8 @@ import '../../../icons.dart';
 import '../../../styles.dart';
 import './select_exercises.dart';
 
+enum workoutDialogPopupItems { rename, editExerciceList, delete }
+
 class Workouts extends StatefulWidget {
   const Workouts({super.key});
 
@@ -60,7 +62,7 @@ class _WorkoutsState extends State<Workouts> {
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               child: IconButton(
                 onPressed: () {
-                  miniDialog(0, '');
+                  addWorkoutDialog();
                 },
                 icon: icons.addIcon(), 
               ),
@@ -98,9 +100,24 @@ class _WorkoutsState extends State<Workouts> {
         child: ListView.builder(
           itemCount: workoutList.length,
           itemBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              height: 115,
-              child: workoutCards(workoutList[index])
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  largeDialog(workoutList[index]);
+                },
+                  child: ListTile(
+                    title: Text(workoutList[index].name),
+                    trailing: icons.forwardArrowIcon(),
+                  ),
+              ),
             );
           },
         ),
@@ -108,128 +125,87 @@ class _WorkoutsState extends State<Workouts> {
     }
   }
 
-  // getExercises converts the String, exerciseList, to a List<String>
-  List<String> getExercises(Workout aWorkout) {
-    return aWorkout.exerciseList.split(';');
-  }
-
-  // getExerciseSets converts the String, setsList, to a List<String>
-  List<String> getExerciseSets(Workout aWorkout) {
-    return aWorkout.setsList.split(';');
-  }
-
-  /*
-    workoutCards function creates a card for each workout the user added into the
-    database. 
-
-    Each card displays the workout name as the title and a list of the exercises in
-    that workout. ForwardArrowIcon is used to show more information and edit that workout.
-  */ 
-  Card workoutCards(Workout aWorkout) {
-    List<String> exerciseList = getExercises(aWorkout);
-
-    return Card(
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(aWorkout.name),
-              subtitle: IntrinsicHeight(
-              child:Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      left: 10,
-                    ),
-                    child: exerciseColumn1(exerciseList),
-                  ),
-                  if(exerciseList.length > 4)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: VerticalDivider(
-                        thickness: 1,
-                      ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: exerciseColumn2(exerciseList),
-                  ),
-                ],
-              ),
-            ),
-              trailing: IconButton(
-                onPressed: () {
-                  largeDialog(aWorkout);
-                },
-                icon: icons.forwardArrowIcon(),
-              )
-            ),
-          ],
-        ),
-    );
-  }
-
-  // Generate the first Column of exercises for workoutCards
-  Column exerciseColumn1(List<String> exerciseList) {
-    List<String> col1 = [];
-
-    if(exerciseList.length > 3) {
-      for(int i = 0; i < 3; ++i) {
-        col1.add(exerciseList[i]);
-      }
-    }
-    else {
-      for(int i = 0; i < exerciseList.length; ++i) {
-        col1.add(exerciseList[i]);
-      }
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        for(int i = 0; i < col1.length; ++i)
-          Text(
-            col1[i],
-            style: Styles().subtitle(),
-          ),
-      ],
-    );
-  }
-
-  // Generate the second Column of exercises for workoutCards 
-  Column exerciseColumn2(List<String> exerciseList) {
-    List<String> col2 = [];
-    
-    if(exerciseList.length < 3) {
-      col2.add('');
-    }
-    else if(exerciseList.length > 3 && exerciseList.length < 6) {
-      for(int i = 3; i < exerciseList.length; ++i) {
-        col2.add(exerciseList[i]);
-      }
-    }
-    else if(exerciseList.length >= 6) {
-      for(int i = 3; i < 5; ++i) {
-        col2.add(exerciseList[i]);
-      }
-      col2.add('...');
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        for(int i = 0; i < col2.length; ++i)
-          Text(
-            col2[i],
-            style: Styles().subtitle(),
-          ),
-      ],
-    );
-  }
-
 
 //    *** DIALOG FUNCTIONS ***
 
+  /*
+    failedDialog function is the layout dialog for a failed request with the database.
+
+    The String passed in dialog, is used to determine what kind of failed request occurred.
+
+    The failed response will display in the center of the dialog.
+  */
+  void failedDialog(int selection) {
+    String title = '';
+    String content = 'Workout already exists.';
+
+    switch(selection) {
+      case 0: 
+        title = 'Failed to add workout.';
+        break;
+      case 1:
+        title = 'Failed to update workout.';
+        break;
+      case 2:
+        title = 'Failed to delete workout.';
+        content = 'workout not found.';
+        break;
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), 
+        child: SizedBox(
+          height: 215.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const Spacer(),
+              Center(
+                child: Text(
+                  title,
+                  style: Styles().dialogHeader(),
+                ),
+              ),
+              Center(
+                child: Text(
+                  content,
+                ),
+              ),
+              const Spacer(),
+            ]             
+          ),
+        ),
+      ),
+    );
+
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        Navigator.pop(context); 
+      },
+    );
+  }
+  
+  void addWorkoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 215.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: addWorkoutDialogList(),              
+          ),
+        ),
+      ),
+    );
+
+    _controller.clear();
+  }
 
   /*
     miniDialog function is a sizedbox used for when small SizedBox's need to be used.
@@ -237,21 +213,15 @@ class _WorkoutsState extends State<Workouts> {
     functions that use miniDialog are addWorkoutDialog(), updateWorkoutDialog(), 
     deleteWorkoutDialog(), successDialog(), and failedDialog().
   */
-  void miniDialog(int options, String name) {
+  void miniDialog(int options, Workout aWorkout) {
     List<Widget> dialogList = <Widget>[];
 
     switch(options) {
-      case 0:
-        dialogList = addWorkoutDialog();
-        break;
       case 1:
-        dialogList = updateWorkoutDialog(name);
+        dialogList = updateWorkoutDialog(aWorkout);
         break;
       case 2:
-        dialogList = deleteWorkoutDialog(name);
-      case 3:
-        dialogList = failedDialog(name);
-        break;
+        dialogList = deleteWorkoutDialog(aWorkout);
     }
     showDialog(
       context: context,
@@ -259,7 +229,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 210.0,
+          height: 215.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: dialogList,              
@@ -269,15 +239,6 @@ class _WorkoutsState extends State<Workouts> {
     );
 
     _controller.clear();
-
-    if(options == 3) {
-      Future.delayed(
-        const Duration(seconds: 2),
-        () {
-          Navigator.pop(context); 
-        },
-      );
-    }
   }
   
   /*
@@ -295,7 +256,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 210.0,
+          height: 400.0,
           child: Column(
             children: workoutDialog(aWorkout),              
           ),
@@ -304,10 +265,126 @@ class _WorkoutsState extends State<Workouts> {
     );
   }
 
+
+  // getExercises converts the String, exerciseList, to a List<String>
+  List<String> getExercises(Workout aWorkout) {
+    return aWorkout.exerciseList.split(';');
+  }
+
+  // getExerciseSets converts the String, setsList, to a List<String>
+  List<String> getExerciseSets(Workout aWorkout) {
+    return aWorkout.setsList.split(';');
+  }
+
   List<Widget> workoutDialog(Workout aWorkout) {
+    List<String> exerciseList = getExercises(aWorkout);
+
     return <Widget> [
-      Text('aworkout')
-      ];
+      Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon:  icons.backArrowIcon(),
+          ),
+          const Spacer(),
+          Text(
+            aWorkout.name,
+            style: Styles().largeDialogHeader(), 
+          ),
+          const Spacer(),
+          workoutDialogPopupMenu(aWorkout), 
+        ],
+      ),
+      const Padding(
+        padding: EdgeInsets.only(
+          left: 12,
+          right: 12,
+          bottom: 12
+        ),
+        child: Divider(
+          thickness: 2,
+        ),
+      ),
+      SizedBox(
+        height: 300,
+        width: 250,
+        child: ListView.builder(
+          itemCount: exerciseList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    exerciseList[index],
+                    style: Styles().content(),
+                  ),
+                ),
+                const Divider(
+                  thickness: 2,
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    ];
+  }
+  
+  PopupMenuButton<workoutDialogPopupItems> workoutDialogPopupMenu(Workout aWorkout) {
+    workoutDialogPopupItems? selectedMenu;
+
+    return PopupMenuButton<workoutDialogPopupItems>(
+      initialValue: selectedMenu,
+      // Callback that sets the selected popup menu item.
+      onSelected: (workoutDialogPopupItems item) {
+        setState(() {
+          selectedMenu = item;
+        });
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<workoutDialogPopupItems>>[
+        PopupMenuItem<workoutDialogPopupItems>(
+          value: workoutDialogPopupItems.rename,
+          child: const Text('Rename workout',),
+          onTap: () {
+            miniDialog(1, aWorkout);
+          },
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem<workoutDialogPopupItems>(
+          value: workoutDialogPopupItems.editExerciceList,
+          child: const Text('Edit exercises'),
+          onTap: () {
+
+          },
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem<workoutDialogPopupItems>(
+          value: workoutDialogPopupItems.delete,
+          child: const Text('Delete workout'),
+          onTap: () {
+            miniDialog(2, aWorkout);
+          },
+        ),
+      ],
+    );
+  }
+
+  /*
+    validateWorkoutName function is called when adding a new Workout. It is
+    called before selecting exercises to save time.
+
+    returns true if new workout name is unique and false otherwise.
+  */
+  bool validateWorkoutName(String workoutName) {
+    for(int i = 0; i < workoutList.length; ++i) {
+      if(workoutName == workoutList[i].name) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /*
@@ -317,7 +394,7 @@ class _WorkoutsState extends State<Workouts> {
     TextFields onSumitted attribute will navigate user to a new screen to select users exercises
     for that workout.
   */
-  List<Widget> addWorkoutDialog() {
+  List<Widget> addWorkoutDialogList() {
     bool validated; 
 
     return <Widget>[
@@ -344,7 +421,7 @@ class _WorkoutsState extends State<Workouts> {
           bottom: 5,
         ),
         child: TextField(
-          maxLength: 30,
+          maxLength: 28,
           controller: _controller,
           onSubmitted: (String value) async {
             validated = validateWorkoutName(value);
@@ -357,7 +434,7 @@ class _WorkoutsState extends State<Workouts> {
               ).then((value) => _refreshWorkouts());
             }
             else {
-              miniDialog(3, '0');
+              failedDialog(0);
             }
           },
           decoration: Styles().inputWorkoutName('Workout name'),
@@ -382,7 +459,7 @@ class _WorkoutsState extends State<Workouts> {
                   ).then((value) => _refreshWorkouts());
                 }
                 else {
-                  miniDialog(3, '0');
+                  failedDialog(0);
                 }
               }
             },
@@ -394,26 +471,12 @@ class _WorkoutsState extends State<Workouts> {
   }
 
   /*
-    validateWorkoutName function is called when adding a new Workout. It is
-    called before selecting exercises to save time.
-
-    returns true if new workout name is unique and false otherwise.
-  */
-  bool validateWorkoutName(String workoutName) {
-    for(int i = 0; i < workoutList.length; ++i) {
-      if(workoutName == workoutList[i].name) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  /*
     updateWorkoutDialog function is the layout dialog for updating a workout in the database.
     It includes two buttons to exit and save, and a Textfield to update the workout name.
   */
-  List<Widget> updateWorkoutDialog(String name) {
+  List<Widget> updateWorkoutDialog(Workout aWorkout) {
+    bool validated;
+
     return <Widget>[
       Row(
         children: <Widget>[
@@ -422,43 +485,51 @@ class _WorkoutsState extends State<Workouts> {
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
+          const Spacer(),
           Text(
             'Rename Workout',
-            style: Styles().dialogHeader(), 
+            style: Styles().largeDialogHeader(), 
           ),
+          const Spacer(),
           const Spacer(),
           const Spacer(),
         ],
       ),
       Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 10,
+          right: 10,
+          bottom: 5,
+        ),
         child: TextField(
           controller: _controller,
+          maxLength: 30, 
           onSubmitted: (String value) async {
-            
-            // Select exercises for this workout
-            //Map<String, int> exerciseMap = workoutToMap()
-            // String numOfSetsString = setsToString()
-            //onSubmitAdd();
+            validated = validateWorkoutName(value);
+
+            if(validated) {
+              onSubmitUpdate(aWorkout.name);
+            }
           },
-          decoration: Styles().inputWorkoutName('new Workout name'),
+          decoration: Styles().inputWorkoutName('New workout name'),
         ),
       ),
       Align(
-        alignment: Alignment.centerRight,
+        alignment: Alignment.topRight,
         child: Padding(
           padding: const EdgeInsets.only(
             right: 10,
           ), 
-          child: CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
-                //onSubmitAdd();
-              },
-              icon: icons.checkIcon(), 
-            ),
+          child: TextButton(
+            onPressed: () {
+              validated = validateWorkoutName(_controller.text);
+
+              if(validated) {
+                onSubmitUpdate(aWorkout.name);
+              }
+            },
+            child: Styles().saveTextButton(),
           ),
         ),
       ),
@@ -469,7 +540,7 @@ class _WorkoutsState extends State<Workouts> {
     It includes two buttons to exit and save, and a Text Widget stating to confirm deletion of 
     the exercise.
   */ 
-  List<Widget> deleteWorkoutDialog(String name) {
+  List<Widget> deleteWorkoutDialog(Workout aWorkout) {
     return <Widget>[
       Row(
         children: <Widget>[
@@ -509,7 +580,7 @@ class _WorkoutsState extends State<Workouts> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
-                onSubmitDelete(name);
+                onSubmitDelete(aWorkout.name);
               },
               icon: icons.checkIcon(), 
             ),
@@ -519,45 +590,7 @@ class _WorkoutsState extends State<Workouts> {
     ]; 
   }
 
-  /*
-    failedDialog function is the layout dialog for a failed request with the database.
-
-    The String passed in dialog, is used to determine what kind of failed request occurred.
-
-    The failed response will display in the center of the dialog.
-  */
-  List<Widget> failedDialog(String selection) {
-    String title = '';
-    String content = 'Workout already exists.';
-
-    switch(selection) {
-      case '0': 
-        title = 'Failed to add workout.';
-        break;
-      case '1':
-        title = 'Failed to update workout.';
-        break;
-      case '2':
-        title = 'Failed to delete workout.';
-        content = 'workout not found.';
-        break;
-    }
-    return <Widget>[
-      const Spacer(),
-      Center(
-        child: Text(
-          title,
-          style: Styles().dialogHeader(),
-        ),
-      ),
-      Center(
-        child: Text(
-          content,
-        ),
-      ),
-      const Spacer(),
-    ];
-  }
+ 
 
 //    *** ONSUBMIT FUNCTIONS AND DATABASE REQUESTS ***
 
@@ -595,10 +628,11 @@ class _WorkoutsState extends State<Workouts> {
     _controller.clear();
 
     if(flag) {
+      Navigator.pop(context);
       _refreshWorkouts();
     }
     else {
-      miniDialog(3, selection.toString());
+      failedDialog(3);
     }
   }
 }
