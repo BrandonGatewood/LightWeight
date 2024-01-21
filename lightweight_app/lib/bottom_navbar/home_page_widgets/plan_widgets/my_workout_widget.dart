@@ -6,7 +6,7 @@ import '../../../icons.dart';
 import '../../../styles.dart';
 import './select_exercises.dart';
 
-enum workoutDialogPopupItems { rename, editExerciceList, delete }
+enum WorkoutDialogPopupItems { rename, editExerciceList, delete }
 
 class Workouts extends StatefulWidget {
   const Workouts({super.key});
@@ -332,36 +332,36 @@ class _WorkoutsState extends State<Workouts> {
 
     users may rename or delete the workout, and edit the exercises for that workout.
   */ 
-  PopupMenuButton<workoutDialogPopupItems> workoutDialogPopupMenu(Workout aWorkout) {
-    workoutDialogPopupItems? selectedMenu;
+  PopupMenuButton<WorkoutDialogPopupItems> workoutDialogPopupMenu(Workout aWorkout) {
+    WorkoutDialogPopupItems? selectedMenu;
 
-    return PopupMenuButton<workoutDialogPopupItems>(
+    return PopupMenuButton<WorkoutDialogPopupItems>(
       initialValue: selectedMenu,
       // Callback that sets the selected popup menu item.
-      onSelected: (workoutDialogPopupItems item) {
+      onSelected: (WorkoutDialogPopupItems item) {
         setState(() {
           selectedMenu = item;
         });
       },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<workoutDialogPopupItems>>[
-        PopupMenuItem<workoutDialogPopupItems>(
-          value: workoutDialogPopupItems.rename,
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<WorkoutDialogPopupItems>>[
+        PopupMenuItem<WorkoutDialogPopupItems>(
+          value: WorkoutDialogPopupItems.rename,
           child: const Text('Rename workout',),
           onTap: () {
             miniDialog(1, aWorkout);
           },
         ),
         const PopupMenuDivider(),
-        PopupMenuItem<workoutDialogPopupItems>(
-          value: workoutDialogPopupItems.editExerciceList,
+        PopupMenuItem<WorkoutDialogPopupItems>(
+          value: WorkoutDialogPopupItems.editExerciceList,
           child: const Text('Edit exercises'),
           onTap: () {
 
           },
         ),
         const PopupMenuDivider(),
-        PopupMenuItem<workoutDialogPopupItems>(
-          value: workoutDialogPopupItems.delete,
+        PopupMenuItem<WorkoutDialogPopupItems>(
+          value: WorkoutDialogPopupItems.delete,
           child: const Text('Delete workout'),
           onTap: () {
             miniDialog(2, aWorkout);
