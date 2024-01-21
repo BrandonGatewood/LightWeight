@@ -125,8 +125,10 @@ class _WorkoutsState extends State<Workouts> {
 //        ***** DIALOG FUNCTIONS *****
 
   /*
-    workoutDialog function is an AlertDialog for each workoutButtonCard. It is where
-    the user can find information on that workout. User may also edit data on the workout.
+    workoutDialog function is an AlertDialog for each workoutButtonCard in the mainLayout. 
+    This is where users can find and edit data of that Workout object. 
+
+    The passed in Workout is used to edit data on that object.
   */
   void workoutDialog(Workout aWorkout) {
     List<String> exerciseList = getExercises(aWorkout);
@@ -198,7 +200,6 @@ class _WorkoutsState extends State<Workouts> {
 
   /*
     addWorkoutDialog function is an AlertDialog that lets the user add a new workout. 
-    It is the layout dialog for adding a new workout into the database.
   */
   void addWorkoutDialog() {
     bool validated;
@@ -323,7 +324,7 @@ class _WorkoutsState extends State<Workouts> {
       ),
     );
 
-    _controller.clear();
+    clearController();
   }
   
   /*
@@ -437,7 +438,7 @@ class _WorkoutsState extends State<Workouts> {
   }
 
   /*
-    DeleteWorkoutDialog function is the layout for deleting a workout in the database.
+    deleteWorkoutDialogList function is the layout for deleting a workout in the database.
   */ 
   List<Widget> deleteWorkoutDialogList(Workout aWorkout) {
     return <Widget>[
@@ -491,7 +492,7 @@ class _WorkoutsState extends State<Workouts> {
 
   /*
     failedDialog function is an AlertDialog that alerts the user when theres a failed request
-    when communicating with the database. The passed in int is used to determine the error.  
+    when communicating with the database.
 
     Future.delayed is used to close the AlertDialog after 2 seconds.
   */
@@ -572,16 +573,13 @@ class _WorkoutsState extends State<Workouts> {
   }
 
    /*
-    handleRequest function is a helper function for all onSubmit functions. It will clear
-    the TextEditingController and display the appropriate dialog. Whether a request was
-    successful or not. 
+    handleRequest function is a helper function for all onSubmit functions. It will 
+    display the appropriate dialog.
 
     When a request is successful, it will refresh the layout to keep up to date with the
     list.
   */
   void handleRequest(bool flag, int selection) {
-    _controller.clear();
-
     if(flag) {
       Navigator.pop(context);
       _refreshWorkouts();
@@ -615,5 +613,12 @@ class _WorkoutsState extends State<Workouts> {
     }
 
     return true;
+  }
+
+  // clearController clears the text in the TextEditingContoller _controller.
+  void clearController() {
+    if(_controller.text.isNotEmpty) {
+      _controller.clear();
+    }
   }
 }

@@ -3,9 +3,6 @@ import '../../../icons.dart';
 import '../../../db_helper/exercise_db.dart';
 import '../../../styles.dart';
 
-// Enum for exercise card pop up menu
-enum Menu {rename, deleteExercise}
-
 class Exercises extends StatefulWidget {
   const Exercises({super.key});
 
@@ -74,20 +71,14 @@ class _ExercisesState extends State<Exercises> {
 //        ***** MAIN LAYOUT FUNCTIONS *****
 
   /*
-    mainLayout function returns the appropriate Widget depending on the users exercise list.
+    mainLayout function handles the body of my_exercises_widget.
 
-    If the users exercise list is empty, then it will return a Text widget stating that there
-    are no exercies. Otherwise it will return a ListView of the users exercises. 
+    If the user doesnt have any exercises in the database, then it will return
+    a Text Widget stating no exercises
 
-    Each exercise is represented as a card, where the user can view the exercise. 
+    Else the function will return a ListView Widget of all the exercises in the 
+    database.
   */
-  /*
-    exerciseCard function displays each exercise in a card with a ListTile
-    to display information on the exercise.
-
-    Each card displays the exercise name as the title, max weight as the subtitle.
-    and a trailing IconButton to give user more options with the exercise.
-  */ 
   Widget mainLayout() {
     if(exerciseList.isEmpty) {
       return const Center(
@@ -131,8 +122,11 @@ class _ExercisesState extends State<Exercises> {
 //        ***** DIALOG FUNCTIONS *****
 
   /*
-    dialog function selects the appropriate dialog to display. Each selection returns a
-    List<Widget> to display as children for the Column widget in ShowDialog().
+    dialog function is an AlertDialog for each exerciseCard in the mainLayout. 
+    This is where users can find and edit data on that exercise. 
+    
+    The Passed in int selects which List<Widget> to display in the AlertDialog
+    to edit the Exercise object.
   */
   void dialog(int options, Exercise anExercise) {
     List<Widget> dialogList = <Widget>[];
@@ -164,6 +158,8 @@ class _ExercisesState extends State<Exercises> {
   }
 
   /*
+    addExerciseDialog function is an AlertDialog that lets users add a new 
+    workout. 
   */ 
   void addExerciseDialog() {
     showDialog(
@@ -235,8 +231,7 @@ class _ExercisesState extends State<Exercises> {
   }
 
   /*
-    updateExerciseDialog function is the layout dialog for updating an exercise in the database.
-    It includes two buttons to exit and save, and a Textfield to update an exercise name.
+    editExerciseDialogList function is the layout dialog for updating an exercise.
   */ 
   List<Widget> editExerciseWidgetList(Exercise anExercise) {
     return <Widget>[
@@ -297,9 +292,7 @@ class _ExercisesState extends State<Exercises> {
   }
   
   /*
-    DeleteExerciseDialog function is the layout dialog for deleting an exercise in the database.
-    It includes two buttons to exit and save, and a Text Widget stating to confirm deletion of 
-    the exercise.
+    deleteExerciseDialogList function is the layout dialog for deleting an exercise in the database.
   */ 
   List<Widget> deleteExerciseWidgetList(Exercise anExercise) {
     return <Widget>[
@@ -352,11 +345,10 @@ class _ExercisesState extends State<Exercises> {
   }
   
   /*
-    failedDialog function is the layout dialog for a failed request with the database.
+    failedDialog function is an AlertDialog that alerts the user when theres a failed
+    request with the database.  
 
-    The String passed in dialog, is used to determine what kind of failed request occurred.
-
-    The failed response will display in the center of the dialog.
+    Future.delayed is ued to close the AlertDialog after 2 seconds.
   */
   void failedDialog(int selection) {
     String title = '';
@@ -410,7 +402,7 @@ class _ExercisesState extends State<Exercises> {
   }
 
 
-//        ***** ONSUBMIT FUNCTIONS AND DATABASE REQUESTS *****
+//        ***** ONSUBMIT FUNCTIONS DATABASE REQUESTS HELPER FUNCTIONS *****
 
   /*
     onSubmitAdd function handles the users input with the TextEditingContoller class to
@@ -434,24 +426,19 @@ class _ExercisesState extends State<Exercises> {
     handleRequest(update, 1);
   }
   
-  /*
-    onSubmitDelete function handles the users input to delete an exercise from the database.
-  */
+  // onSubmitDelete function handles the users input to delete an exercise from the database.
   void onSubmitDelete(String name) async {
     await _dbHelper.deleteExercise(name);
   }
 
   /*
-    handleRequest function is a helper function for all onSubmit functions. It will clear
-    the TextEditingController and display the appropriate dialog. Whether a request was
-    successful or not. 
+    handleRequest function is a helper function for all onSubmit functions. It will
+    display the appropriate dialog.  
 
     When a request is successful, it will refresh the layout to keep up to date with the
     list.
   */
   void handleRequest(bool flag, int selection) {
-    _controller.clear();
-
     if(flag) {
       _refreshExercises();
       Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
@@ -461,6 +448,7 @@ class _ExercisesState extends State<Exercises> {
     }
   }
   
+  // clearController clears the text in the TextEditingContoller _controller.
   void clearController() {
     if(_controller.text.isNotEmpty) {
       _controller.clear();
