@@ -183,9 +183,10 @@ class _WorkoutsState extends State<Workouts> {
                             style: Styles().content(),
                           ),
                         ),
-                        const Divider(
-                          thickness: 2,
-                        ),
+                        if(exerciseList.length > 1)
+                          const Divider(
+                            thickness: 2,
+                          ),
                       ],
                     );
                   },
@@ -507,10 +508,6 @@ class _WorkoutsState extends State<Workouts> {
       case 1:
         title = 'Failed to update workout.';
         break;
-      case 2:
-        title = 'Failed to delete workout.';
-        content = 'workout not found.';
-        break;
     }
     showDialog(
       context: context,
@@ -560,16 +557,16 @@ class _WorkoutsState extends State<Workouts> {
   void onSubmitUpdate(String name) async {
     bool update = await _dbHelper.updateWorkout(name, _controller.text);
 
-    handleRequest(update, 1);
+    handleUpdateRequest(update);
   }
   
   /*
     onSubmitDelete function handles the users input to delete a workout from the database.
   */
   void onSubmitDelete(String name) async {
-    bool delete = await _dbHelper.deleteWorkout(name);
+    await _dbHelper.deleteWorkout(name);
 
-    handleRequest(delete, 2);
+    handleDeleteRequest();
   }
 
    /*
@@ -579,16 +576,22 @@ class _WorkoutsState extends State<Workouts> {
     When a request is successful, it will refresh the layout to keep up to date with the
     list.
   */
-  void handleRequest(bool flag, int selection) {
+  void handleUpdateRequest(bool flag) {
     if(flag) {
-      Navigator.pop(context);
       _refreshWorkouts();
+      Navigator.pop(context);
     }
     else {
       failedDialog(3);
     }
   }
-  
+
+  // refresh users workoutList and popuntil mainLayout()
+  void handleDeleteRequest() {
+    _refreshWorkouts();
+    Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
+  }
+
   // getExercises converts the String, exerciseList, to a List<String>
   List<String> getExercises(Workout aWorkout) {
     return aWorkout.exerciseList.split(';');

@@ -429,6 +429,8 @@ class _ExercisesState extends State<Exercises> {
   // onSubmitDelete function handles the users input to delete an exercise from the database.
   void onSubmitDelete(String name) async {
     await _dbHelper.deleteExercise(name);
+
+    handleDeleteRequest();
   }
 
   /*
@@ -446,6 +448,12 @@ class _ExercisesState extends State<Exercises> {
     else {
       failedDialog(selection);
     }
+  }
+
+  // refresh users workoutList and popUntil mainLayout()
+  void handleDeleteRequest() {
+    _refreshExercises();
+    Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
   }
   
   // clearController clears the text in the TextEditingContoller _controller.
