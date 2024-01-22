@@ -338,7 +338,7 @@ class _WorkoutsState extends State<Workouts> {
               MaterialPageRoute(
                 builder: (context) => WorkoutSelectExercises(workout: aWorkout, workoutDb: _dbHelper,),
               ),
-            ).then((value) => _refreshWorkouts());
+            ).then((value) => onSubmitUpdateExercises(aWorkout));
           },
         ),
         const PopupMenuDivider(),
@@ -557,7 +557,7 @@ class _WorkoutsState extends State<Workouts> {
     bool update = await _dbHelper.updateWorkoutName(aWorkout.name, _controller.text);
     Workout? updatedWorkout = await _dbHelper.getWorkoutById(aWorkout.id);
 
-    handleUpdateRequest(update, updatedWorkout);
+    handleUpdateNameRequest(update);
 
     if(updatedWorkout != null) {
       workoutDialog(updatedWorkout);
@@ -565,7 +565,7 @@ class _WorkoutsState extends State<Workouts> {
   }
 
   // Handles the state after attempting to update a workout
-  void handleUpdateRequest(bool flag, Workout? updatedWorkout) {
+  void handleUpdateNameRequest(bool flag) {
     if(flag) {
       _refreshWorkouts();
       Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
@@ -573,6 +573,23 @@ class _WorkoutsState extends State<Workouts> {
     else {
       failedDialog(1);
     }
+  }
+
+  // Communicated with database to update a workouts exerciseList
+  void onSubmitUpdateExercises(Workout aWorkout) async {
+    Workout? updatedWorkout = await _dbHelper.getWorkoutById(aWorkout.id);
+
+    handleUpdateExercisesRequest();
+
+    if(updatedWorkout != null) {
+      workoutDialog(updatedWorkout);
+    }
+  }
+
+  // Handles the state after attempting to update a workout
+  void handleUpdateExercisesRequest() {
+    _refreshWorkouts();
+    Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
   }
 
   // Communicated with database to delete a workout 

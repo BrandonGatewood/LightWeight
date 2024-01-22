@@ -257,10 +257,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     );
   }
 
-  /*
-    exerciseSelectionButton function is a button that contains an exercise name. When a button is
-    selected, it will remove that exercise from exerciseList and add it to the selectedList.
-  */
+  // exerciseSelectionItem function is a button that contains an exercise from the exerciseList. 
   Padding selectExerciseItem(int i) {
     return Padding(
       padding: const EdgeInsets.only(left: 20),
@@ -357,6 +354,6 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
   // handles request when users save the exercise.
   void handleRequest() {
-    Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
+    Navigator.pop(context);
   }
 }
