@@ -126,7 +126,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
         buildDefaultDragHandles: true,
         children: <Widget>[
           for(int i = 0; i < selectedList.length; ++i)
-          exerciseCard(selectedList[i], i),
+          selectedExerciseCard(selectedList[i], i),
         ],
         onReorder: (int oldIndex, int newIndex) {
           setState(() {
@@ -148,7 +148,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     , delete icon to remove the selected exercise. 
   */ 
-  SizedBox exerciseCard(String anExercise, int i) {
+  SizedBox selectedExerciseCard(String anExercise, int i) {
     int sets = int.parse(_controller[i].text);
 
     return SizedBox(
@@ -204,13 +204,13 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   }
 
 
-//    *** SELECTING EXERCISE & DATABASE FUNCTIONS
-
+//        ***** SELECTING EXERCISE & DATABASE FUNCTIONS *****
 
   /*
     selectExerciseDialog function is an AlertDialog used when a user wants to add a new 
-    exercise to their workout.
-  */
+    exercise to their workout. This is the layout for selecting a new Exercise to the 
+    users Workout.
+  */  
   void selectExerciseDialog() {
     showDialog(
       context: context,
@@ -220,51 +220,41 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
         child: SizedBox(
           height: 550.0,
           child: Column(
-            children: selectExerciseDialogLayout(),              
+            children: <Widget>[
+              const Spacer(),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon:  icons.backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  Text(
+                    'Select Exercise',
+                    style: Styles().dialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+              SizedBox(
+                height: 450,
+                child: ListView.builder(
+                  itemCount: exerciseList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return selectExerciseItem(index);
+                  }
+                ),
+              ),
+              const Spacer(),
+              const Spacer(),
+            ],
           ),
         ),
       ),
     );
-  }
-  
-  /*
-    selectionLayout function is the layout for selectExerciseDialog for selecting a new workout.
-
-    Function contains a button to return to the exercise list for that workout, and a list of
-    all available exercises.
-  */
-  List<Widget> selectExerciseDialogLayout() {
-    return <Widget>[
-      const Spacer(),
-      Row(
-        children: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon:  icons.backArrowIcon(),
-          ),
-          const Spacer(),
-          const Spacer(),
-          Text(
-            'Select Exercise',
-            style: Styles().dialogHeader(), 
-          ),
-          const Spacer(),
-          const Spacer(),
-          const Spacer(),
-        ],
-      ),
-      SizedBox(
-        height: 450,
-        child: ListView.builder(
-          itemCount: exerciseList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return selectExerciseItem(index);
-          }
-        ),
-      ) ,
-      const Spacer(),
-      const Spacer(),
-    ];
   }
 
   /*
@@ -316,8 +306,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   }
 
 
-//    *** PARSE SUBMIT DATABASE ***
-
+//        ***** PARSE SUBMIT DATABASE *****
 
   // Converts the selected exercises in selectList to string and return it
   String selectedListToString() {
@@ -354,10 +343,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     return sets;
   }
 
-  /*
-    onSubmiteSave function calls both selectedListToString() and controllerListToString() and
-    in
-  */
+  // Save the exerciseList and exerciseSetsList for a workout to the database
   void onSubmitSave() async {
     String exercises = selectedListToString();
     String sets = controllerListToString();
@@ -367,6 +353,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     handleRequest();
   }
 
+  // handles request when users save the exercise.
   void handleRequest() {
     Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
   }
