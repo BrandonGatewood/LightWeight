@@ -263,44 +263,46 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   */
   Padding selectExerciseItem(int i) {
     return Padding(
-      padding: const EdgeInsets.all(0),
-      child: SizedBox(
-        height: 40,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0),
-            ),
-            backgroundColor: Colors.transparent,
-            side: BorderSide( 
-              width: 0.5,
-              color: Colors.transparent.withOpacity(0.6),
-            )
-          ),
-          onPressed: () {
-            selectedList.add(exerciseList[i].name);
-            TextEditingController c = TextEditingController();
-            c.text = '4';
-            _controller.add(c);
+      padding: const EdgeInsets.only(left: 20),
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 40,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                ),
+                backgroundColor: Colors.transparent,
+              ),
+              onPressed: () {
+                selectedList.add(exerciseList[i].name);
+                TextEditingController c = TextEditingController();
+                c.text = '4';
+                _controller.add(c);
 
-            setState(() {
-            });
+                setState(() {
+                });
 
-            Navigator.pop(context);
-          }, 
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              exerciseList[i].name,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-              ), 
+                Navigator.pop(context);
+              }, 
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  exerciseList[i].name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
           ),
-          
-        ),
+          const Divider(
+            thickness: 2,
+          ),
+        ],
       ),
     );
   }
