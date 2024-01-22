@@ -131,7 +131,7 @@ class _WorkoutsState extends State<Workouts> {
     The passed in Workout is used to edit data on that object.
   */
   void workoutDialog(Workout aWorkout) {
-    List<String> exerciseList = getExercises(aWorkout);
+    List<String> exerciseList = aWorkout.getExercises();
 
     showDialog(
       context: context,
@@ -203,8 +203,6 @@ class _WorkoutsState extends State<Workouts> {
     addWorkoutDialog function is an AlertDialog that lets the user add a new workout. 
   */
   void addWorkoutDialog() {
-    bool validated;
-
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
@@ -241,18 +239,7 @@ class _WorkoutsState extends State<Workouts> {
                   maxLength: 28,
                   controller: _controller,
                   onSubmitted: (String value) async {
-                    validated = validateWorkoutName(value);
-
-                    if(validated) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => WorkoutSelectExercises(workoutName: value, workoutDb: _dbHelper,),
-                        ),
-                      ).then((value) => _refreshWorkouts());
-                    }
-                    else {
-                      failedDialog(0);
-                    }
+                    onSubmitAdd();
                   },
                   decoration: Styles().inputWorkoutName('Workout name'),
                 ),
@@ -266,18 +253,7 @@ class _WorkoutsState extends State<Workouts> {
                   child: TextButton(
                     onPressed: () {
                       if(_controller.text.isNotEmpty) {
-                        validated = validateWorkoutName(_controller.text);
-
-                        if(validated) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => WorkoutSelectExercises(workoutName: _controller.text, workoutDb: _dbHelper,),
-                            ),
-                          ).then((value) => _refreshWorkouts());
-                        }
-                        else {
-                          failedDialog(0);
-                        }
+                        onSubmitAdd();
                       }
                     },
                     child: Styles().saveTextButton(),
@@ -358,7 +334,11 @@ class _WorkoutsState extends State<Workouts> {
           value: WorkoutDialogPopupItems.editExerciceList,
           child: const Text('Edit exercises'),
           onTap: () {
-
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => WorkoutSelectExercises(workout: aWorkout, workoutDb: _dbHelper,),
+              ),
+            ).then((value) => _refreshWorkouts());
           },
         ),
         const PopupMenuDivider(),
@@ -411,7 +391,7 @@ class _WorkoutsState extends State<Workouts> {
             validated = validateWorkoutName(value);
 
             if(validated) {
-              onSubmitUpdate(aWorkout);
+              onSubmitUpdateName(aWorkout);
             }
           },
           decoration: Styles().inputWorkoutName('New workout name'),
@@ -428,7 +408,7 @@ class _WorkoutsState extends State<Workouts> {
               validated = validateWorkoutName(_controller.text);
 
               if(validated) {
-                onSubmitUpdate(aWorkout);
+                onSubmitUpdateName(aWorkout);
               }
             },
             child: Styles().saveTextButton(),
@@ -548,11 +528,34 @@ class _WorkoutsState extends State<Workouts> {
 
 
 //        ***** ONSUBMIT FUNCTIONS DATABASE REQUESTS HELPER FUNCTIONS *****
+
+
+  // Communicated with database to update a workout 
+  void onSubmitAdd() async {
+    bool add = await _dbHelper.insertWorkout(_controller.text);
+    Workout newWorkout = await _dbHelper.getWorkoutByName(_controller.text); 
+
+    handleAddRequest(add, newWorkout);
+  }
+
+  // Handles the state after attempting to update a workout
+  void handleAddRequest(bool flag, Workout newWorkout) {
+    if(flag) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => WorkoutSelectExercises(workout: newWorkout, workoutDb: _dbHelper,),
+        ),
+      ).then((value) => _refreshWorkouts());
+    }
+    else {
+      failedDialog(0);
+    }
+  }
   
   // Communicated with database to update a workout 
-  void onSubmitUpdate(Workout aWorkout) async {
-    bool update = await _dbHelper.updateWorkout(aWorkout.name, _controller.text);
-    Workout? updatedWorkout = await _dbHelper.getAWorkout(aWorkout.id);
+  void onSubmitUpdateName(Workout aWorkout) async {
+    bool update = await _dbHelper.updateWorkoutName(aWorkout.name, _controller.text);
+    Workout? updatedWorkout = await _dbHelper.getWorkoutById(aWorkout.id);
 
     handleUpdateRequest(update, updatedWorkout);
 
@@ -568,7 +571,7 @@ class _WorkoutsState extends State<Workouts> {
       Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
     }
     else {
-      failedDialog(3);
+      failedDialog(1);
     }
   }
 
@@ -585,16 +588,6 @@ class _WorkoutsState extends State<Workouts> {
     Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
   }
 
-  // getExercises converts the String, exerciseList, to a List<String>
-  List<String> getExercises(Workout aWorkout) {
-    return aWorkout.exerciseList.split(';');
-  }
-
-  // getExerciseSets converts the String, setsList, to a List<String>
-  List<String> getExerciseSets(Workout aWorkout) {
-    return aWorkout.setsList.split(';');
-  } 
-    
   // Check whether or not a workout name already exists..
   bool validateWorkoutName(String workoutName) {
     for(final workout in workoutList) {

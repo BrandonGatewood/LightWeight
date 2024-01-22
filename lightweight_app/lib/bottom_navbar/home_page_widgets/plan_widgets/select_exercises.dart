@@ -7,11 +7,11 @@ import '../../../styles.dart';
 class WorkoutSelectExercises extends StatefulWidget {
   const WorkoutSelectExercises({
     super.key,
-    required this.workoutName,
+    required this.workout,
     required this.workoutDb
   });
 
-  final String workoutName;
+  final Workout workout;
   final WorkoutsDBHelper workoutDb;
 
   @override
@@ -22,7 +22,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   final List<TextEditingController> _controller = [];
   late ExerciseDBHelper exerciseDb;
   late List<Exercise> exerciseList;
-  List<String> selectedList = [];
+  List<String> selectedList= [];
   MyIcons icons = MyIcons(); 
 
   @override
@@ -30,11 +30,25 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     super.initState();
     exerciseDb = ExerciseDBHelper();
     exerciseDb.openExercise().whenComplete(() async {
-      final data = await exerciseDb.getAllExercise();
-
+      final exercises = await exerciseDb.getAllExercise();
+      
       setState(() {
-        exerciseList = data;
+        exerciseList = exercises;
       });
+    });
+
+    final setsList = widget.workout.getExerciseSets();
+
+    setState(() {
+      selectedList = setsList;
+
+      if(setsList.isNotEmpty) {
+        for(int i = 0; i < setsList.length; ++ i) {
+          TextEditingController c = TextEditingController();
+          c.text = setsList[i];
+          _controller.add(c);
+        }
+      }
     });
   }
 
@@ -344,7 +358,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   void onSubmitSave() async {
     String exercises = selectedListToString();
     String reps = controllerListToString();
-    await widget.workoutDb.insertWorkout(widget.workoutName,exercises, reps);
+    //await widget.workoutDb.insertWorkout(widget.workoutName,exercises, reps);
 
     handleRequest();
   }

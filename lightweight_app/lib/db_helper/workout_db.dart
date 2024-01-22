@@ -29,6 +29,26 @@ class Workout {
       'setsList': setsList,
     };
   }
+
+// getExercises converts the String, exerciseList, to a List<String>
+  List<String> getExercises() {
+    if(exerciseList.isEmpty) {
+      return [];
+    }
+    else {
+      return exerciseList.split(';');
+    }
+  }
+
+  // getExerciseSets converts the String, setsList, to a List<String>
+  List<String> getExerciseSets() {
+    if(setsList.isEmpty) {
+      return [];
+    }
+    else {
+      return setsList.split(';');
+    }
+  } 
 }
 
 class WorkoutsDBHelper {
@@ -44,25 +64,33 @@ class WorkoutsDBHelper {
     return maps.map((e) => Workout.fromMap(e)).toList();
   }
 
-  Future<void> insertWorkout(String name, String exerciseList, String setsList) async {
+  Future<bool> insertWorkout(String name) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
     String id = DB().idGenerator();
 
-    Workout newWorkout = Workout(id: id, name: name, exerciseList: exerciseList, setsList: setsList);
+    Workout newWorkout = Workout(id: id, name: name, exerciseList: '', setsList: '');
 
+  try {
     await db.insert(
       'workouts', 
       newWorkout.toMap(),
       conflictAlgorithm: ConflictAlgorithm.abort, 
     );
+
+    return true;
+  }
+  catch(err) {
+    return false;
+  }
   }
 
-  Future<bool> updateWorkout(String name, String newName) async {
+  Future<bool> updateWorkoutName(String name, String newName) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
 
     try {
       await db.rawUpdate(
-        'UPDATE workouts SET name = ? WHERE name = ?', [newName, name]);
+        'UPDATE workouts SET name = ? WHERE name = ?', [newName, name], 
+      );
     }
     catch(err) {
       return false;
@@ -70,6 +98,11 @@ class WorkoutsDBHelper {
 
     return true;
   }
+/*
+  Future<bool> updateWorkoutExerciseList(String id, String newList) {
+    return false;
+  }
+  */
   
   Future<bool> deleteWorkout(String name) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
@@ -88,7 +121,7 @@ class WorkoutsDBHelper {
     return true;
   }
 
-  Future<Workout?> getAWorkout(String id) async {
+  Future<Workout?> getWorkoutById(String id) async {
     List<Workout> workoutList = await getAllWorkouts();
 
     for(final workout in workoutList) {
@@ -99,5 +132,16 @@ class WorkoutsDBHelper {
 
     return null; 
   }
+  
+  Future<dynamic> getWorkoutByName(String name) async {
+    List<Workout> workoutList = await getAllWorkouts();
 
+    for(final workout in workoutList) {
+      if(workout.name == name){
+        return workout;
+      }
+    }
+
+    return null;
+  }
 }
