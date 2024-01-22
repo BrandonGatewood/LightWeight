@@ -84,12 +84,12 @@ class WorkoutsDBHelper {
   }
   }
 
-  Future<bool> updateWorkoutName(String name, String newName) async {
+  Future<bool> updateWorkoutName(String id, String newName) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
 
     try {
       await db.rawUpdate(
-        'UPDATE workouts SET name = ? WHERE name = ?', [newName, name], 
+        'UPDATE workouts SET name = ? WHERE id = ?', [newName, id], 
       );
     }
     catch(err) {
@@ -107,14 +107,14 @@ class WorkoutsDBHelper {
     );
   }
   
-  Future<bool> deleteWorkout(String name) async {
+  Future<bool> deleteWorkout(String id) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
 
     try {
       await db.delete(
         'workouts',
-        where: "name = ?",
-        whereArgs: [name]
+        where: "id = ?",
+        whereArgs: [id]
       );
     }
     catch(err) {

@@ -487,7 +487,7 @@ class _WorkoutsState extends State<Workouts> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
-                onSubmitDelete(aWorkout.name);
+                onSubmitDelete(aWorkout.id);
               },
               icon: icons.checkIcon(), 
             ),
@@ -583,7 +583,7 @@ class _WorkoutsState extends State<Workouts> {
   
   // Communicated with database to update a workout 
   void onSubmitUpdateName(Workout aWorkout) async {
-    bool update = await _dbHelper.updateWorkoutName(aWorkout.name, _controller.text);
+    bool update = await _dbHelper.updateWorkoutName(aWorkout.id, _controller.text);
     Workout? updatedWorkout = await _dbHelper.getWorkoutById(aWorkout.id);
 
     handleUpdateNameRequest(update);
@@ -622,8 +622,8 @@ class _WorkoutsState extends State<Workouts> {
   }
 
   // Communicated with database to delete a workout 
-  void onSubmitDelete(String name) async {
-    await _dbHelper.deleteWorkout(name);
+  void onSubmitDelete(String id) async {
+    await _dbHelper.deleteWorkout(id);
 
     handleDeleteRequest();
   }
