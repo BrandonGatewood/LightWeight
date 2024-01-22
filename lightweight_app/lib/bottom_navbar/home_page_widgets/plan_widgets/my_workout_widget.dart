@@ -97,7 +97,11 @@ class _WorkoutsState extends State<Workouts> {
           itemCount: workoutList.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.only(
+                left: 5,
+                right: 5,
+                bottom: 10,   
+              ),
               child: ElevatedButton(
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
