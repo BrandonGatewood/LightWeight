@@ -203,6 +203,8 @@ class _WorkoutsState extends State<Workouts> {
     addWorkoutDialog function is an AlertDialog that lets the user add a new workout. 
   */
   void addWorkoutDialog() {
+    bool validated;
+
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
@@ -239,7 +241,16 @@ class _WorkoutsState extends State<Workouts> {
                   maxLength: 28,
                   controller: _controller,
                   onSubmitted: (String value) async {
-                    onSubmitAdd();
+                    if(_controller.text.isNotEmpty) {
+                      validated = validateWorkoutName(value);
+
+                      if(validated) {
+                        onSubmitAdd();
+                      }
+                      else {
+                        failedDialog(0);
+                      }
+                    }
                   },
                   decoration: Styles().inputWorkoutName('Workout name'),
                 ),
@@ -253,7 +264,14 @@ class _WorkoutsState extends State<Workouts> {
                   child: TextButton(
                     onPressed: () {
                       if(_controller.text.isNotEmpty) {
-                        onSubmitAdd();
+                        validated = validateWorkoutName(_controller.text);
+
+                        if(validated) {
+                          onSubmitAdd();
+                        }
+                        else {
+                          failedDialog(0);
+                        }
                       }
                     },
                     child: Styles().saveTextButton(),
@@ -388,10 +406,12 @@ class _WorkoutsState extends State<Workouts> {
           controller: _controller,
           maxLength: 30, 
           onSubmitted: (String value) async {
-            validated = validateWorkoutName(value);
+            if(_controller.text.isNotEmpty) {
+              validated = validateWorkoutName(value);
 
-            if(validated) {
-              onSubmitUpdateName(aWorkout);
+              if(validated) {
+                onSubmitUpdateName(aWorkout);
+              }
             }
           },
           decoration: Styles().inputWorkoutName('New workout name'),
@@ -405,10 +425,12 @@ class _WorkoutsState extends State<Workouts> {
           ), 
           child: TextButton(
             onPressed: () {
-              validated = validateWorkoutName(_controller.text);
+              if(_controller.text.isNotEmpty) {
+                validated = validateWorkoutName(_controller.text);
 
-              if(validated) {
-                onSubmitUpdateName(aWorkout);
+                if(validated) {
+                  onSubmitUpdateName(aWorkout);
+                }
               }
             },
             child: Styles().saveTextButton(),
@@ -545,7 +567,10 @@ class _WorkoutsState extends State<Workouts> {
         MaterialPageRoute(
           builder: (context) => WorkoutSelectExercises(workout: newWorkout, workoutDb: _dbHelper,),
         ),
-      ).then((value) => _refreshWorkouts());
+      ).then((value) {
+        _refreshWorkouts();
+        Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
+      });
     }
     else {
       failedDialog(0);
