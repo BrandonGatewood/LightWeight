@@ -183,7 +183,7 @@ class _WorkoutsState extends State<Workouts> {
                             style: Styles().content(),
                           ),
                         ),
-                        if(exerciseList.length > 1)
+                        if(exerciseList.isNotEmpty)
                           const Divider(
                             thickness: 2,
                           ),
