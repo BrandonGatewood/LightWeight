@@ -40,7 +40,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     final setsList = widget.workout.getExerciseSets();
 
     setState(() {
-      selectedList = setsList;
+      selectedList = widget.workout.getExercises();
 
       if(setsList.isNotEmpty) {
         for(int i = 0; i < setsList.length; ++ i) {
@@ -98,17 +98,14 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   }
 
 
-//    *** MAIN LAYOUT FUNCTIONS ***
+//        ***** MAIN LAYOUT FUNCTIONS *****
 
-
-  /*
-    mainLayout function determines which layout to use by the size of selectedList. 
-  */
+  // determine which layout to use by the size of selectedList. 
   Widget mainLayout() {
-    // Run get all exercises from Workout object
-    // and declare as exerciseList
     if(selectedList.isEmpty){
-      return const Center(child: Text('Workout is empty'),);
+      return const Center(
+        child: Text('Workout is empty'),
+      );
     }
     else {
       return Padding(
@@ -343,9 +340,15 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   String controllerListToString() {
     String sets = '';
 
-    for(final c in _controller) {
-      String set = c.text;
-      sets = '$sets$set;';
+    for(int i = 0; i < _controller.length; ++i) {
+      String set = _controller[i].text;
+
+      if(i == _controller.length - 1) {
+        sets = '$sets$set';
+      }
+      else {
+        sets = '$sets$set;';
+      }
     }
 
     return sets;
@@ -357,7 +360,8 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   */
   void onSubmitSave() async {
     String exercises = selectedListToString();
-    String reps = controllerListToString();
+    String sets = controllerListToString();
+    await widget.workoutDb.updateWorkoutExerciseList(widget.workout, exercises, sets);
     //await widget.workoutDb.insertWorkout(widget.workoutName,exercises, reps);
 
     handleRequest();

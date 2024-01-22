@@ -98,11 +98,14 @@ class WorkoutsDBHelper {
 
     return true;
   }
-/*
-  Future<bool> updateWorkoutExerciseList(String id, String newList) {
-    return false;
+
+  Future<void> updateWorkoutExerciseList(Workout workout, String newExerciseList, String newExerciseSetsList) async {
+    final Database db = await WorkoutsDBHelper().openWorkouts();
+
+    await db.rawUpdate(
+      'UPDATE workouts SET exerciseList = ?, setsList = ? WHERE id = ?', [newExerciseList, newExerciseSetsList, workout.id], 
+    );
   }
-  */
   
   Future<bool> deleteWorkout(String name) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
