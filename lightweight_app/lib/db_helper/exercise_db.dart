@@ -60,22 +60,22 @@ class ExerciseDBHelper {
     return maps.map((e) => Exercise.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
   }
 
-  Future<void> deleteExercise(String name) async {
+  Future<void> deleteExercise(String id) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
       await db.delete(
         'exercises',
-        where: "name = ?",
-        whereArgs: [name]
+        where: "id = ?",
+        whereArgs: [id]
       );
   }
 
-  Future<bool> updateExercise(String name, String newName) async {
+  Future<bool> updateExercise(String id, String newName) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
     try {
       await db.rawUpdate(
-        'UPDATE exercises SET name = ? WHERE name = ?', [newName, name]);
+        'UPDATE exercises SET name = ? WHERE id = ?', [newName, id]);
     }
     catch(err) {
       return false;

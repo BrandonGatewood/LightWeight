@@ -162,6 +162,8 @@ class _ExercisesState extends State<Exercises> {
     workout. 
   */ 
   void addExerciseDialog() {
+    bool validated; 
+
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
@@ -201,7 +203,11 @@ class _ExercisesState extends State<Exercises> {
                   controller: _controller,
                   onSubmitted: (String value) async {
                     if(_controller.text.isNotEmpty) {
-                      onSubmitAdd();
+                      validated = validateExerciseName(value);
+
+                      if(validated) {
+                        onSubmitAdd();
+                      }
                     }
                   },
                   decoration: Styles().inputWorkoutName('Exercise name'),
@@ -216,7 +222,11 @@ class _ExercisesState extends State<Exercises> {
                   child: TextButton(
                     onPressed: () {
                       if(_controller.text.isNotEmpty) {
-                        onSubmitAdd();
+                        validated = validateExerciseName(_controller.text);
+
+                        if(validated) {
+                          onSubmitAdd();
+                        }
                       }
                     }, 
                     child: Styles().saveTextButton(),
@@ -236,6 +246,8 @@ class _ExercisesState extends State<Exercises> {
     editExerciseDialogList function is the layout dialog for updating an exercise.
   */ 
   List<Widget> editExerciseWidgetList(Exercise anExercise) {
+    bool validated;
+
     return <Widget>[
       Row( 
         children: <Widget>[
@@ -270,7 +282,11 @@ class _ExercisesState extends State<Exercises> {
           controller: _controller,
           onSubmitted: (String value) async {
             if(_controller.text.isNotEmpty) {
-              onSubmitUpdate(anExercise);
+              validated = validateExerciseName(value);
+
+              if(validated) {
+                onSubmitUpdate(anExercise);
+              }
             }
           },
           decoration: Styles().inputWorkoutName('New exercise name'),
@@ -285,7 +301,11 @@ class _ExercisesState extends State<Exercises> {
           child: TextButton(
             onPressed: () {
               if(_controller.text.isNotEmpty) {
-                onSubmitUpdate(anExercise);
+                validated = validateExerciseName(_controller.text);
+
+                if(validated) {
+                  onSubmitUpdate(anExercise);
+                }
               }
             }, 
             child: Styles().saveTextButton(),
@@ -338,7 +358,7 @@ class _ExercisesState extends State<Exercises> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
-                onSubmitDelete(anExercise.name);
+                onSubmitDelete(anExercise.id);
               },
               icon: icons.checkIcon(), 
             ),
@@ -428,7 +448,7 @@ class _ExercisesState extends State<Exercises> {
 
   // Communicates with database to update an exercise 
   void onSubmitUpdate(Exercise anExercise) async {
-    bool update = await _dbHelper.updateExercise(anExercise.name, _controller.text);
+    bool update = await _dbHelper.updateExercise(anExercise.id, _controller.text);
     Exercise? updatedExercise = await _dbHelper.getAnExercise(anExercise.id);
 
     handleUpdateRequest(update);
@@ -450,8 +470,8 @@ class _ExercisesState extends State<Exercises> {
   }
 
   // Communicates with database to delete an exercise
-  void onSubmitDelete(String name) async {
-    await _dbHelper.deleteExercise(name);
+  void onSubmitDelete(String id) async {
+    await _dbHelper.deleteExercise(id);
 
     handleDeleteRequest();
   }
@@ -461,7 +481,17 @@ class _ExercisesState extends State<Exercises> {
     _refreshExercises();
     Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
   }
-  
+
+  // Check whether or not a workout name already exists..
+  bool validateExerciseName(String exerciseName) {
+    for(final exercise in exerciseList) {
+      if(exercise.name == exerciseName) {
+        return false;
+      }
+    }
+
+    return true;
+  } 
   // clearController clears the text in the TextEditingContoller _controller.
   void clearController() {
     if(_controller.text.isNotEmpty) {
