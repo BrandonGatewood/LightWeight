@@ -1,52 +1,58 @@
 import 'dart:async';
 import 'package:lightweight_app/db_helper/db.dart';
+import 'package:lightweight_app/db_helper/exercise_db.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Workout {
   final String id; 
   final String name;
-  final String exerciseList;
-  final String setsList;
+  final String exerciseIdString;
+  final String setsString;
+  List<Exercise> exerciseList;
 
-  const Workout({
+  Workout({
     required this.id,
     required this.name,
+    required this.exerciseIdString,
+    required this.setsString,
     required this.exerciseList,
-    required this.setsList,
   });
+
 
   Workout.fromMap(Map<String, dynamic> item):
     id = item['id'],
     name = item['name'], 
-    exerciseList = item['exerciseList'],
-    setsList = item['setsList'];
+    exerciseIdString = item['exerciseList'],
+    setsString = item['setsList'],
+    exerciseList = [];
+
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'exerciseList': exerciseList, 
-      'setsList': setsList,
+      'exerciseList': exerciseIdString, 
+      'setsList': setsString,
     };
   }
 
-// getExercises converts the String, exerciseList, to a List<String>
-  List<String> getExercises() {
-    if(exerciseList.isEmpty) {
+  // getExercises converts the String, exerciseList, to a List<String>
+  List<String> getExerciseIdList() {
+    if(exerciseIdString.isEmpty) {
       return [];
     }
     else {
-      return exerciseList.split(';');
+      return exerciseIdString.split(';');
     }
   }
 
   // getExerciseSets converts the String, setsList, to a List<String>
   List<String> getExerciseSets() {
-    if(setsList.isEmpty) {
+    if(setsString.isEmpty) {
       return [];
     }
     else {
-      return setsList.split(';');
+      return setsString.split(';');
     }
   } 
 }
@@ -58,17 +64,31 @@ class WorkoutsDBHelper {
 
   Future<List<Workout>> getAllWorkouts() async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
+    final ExerciseDBHelper exerciseDb = ExerciseDBHelper();
+    exerciseDb.openExercise();
 
-    final List<Map<String, Object?>> maps = await db.query('workouts');
 
-    return maps.map((e) => Workout.fromMap(e)).toList();
+    final List<Map<String, Object?>> workoutListMap = await db.query('workouts');
+    List<Workout> workoutList = workoutListMap.map((e) => Workout.fromMap(e)).toList();
+
+    for(int i = 0; i < workoutList.length; ++i) {
+      List<String> exerciseIdList = workoutList[i].getExerciseIdList();
+
+      for(int j = 0; j < exerciseIdList.length; ++j) {
+        List<Exercise> anExercise = await exerciseDb.getExercise(exerciseIdList[j]);
+        workoutList[i].exerciseList.add(anExercise[0]);
+      }
+    }
+    return workoutList;
   }
+
+
 
   Future<bool> insertWorkout(String name) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
     String id = DB().idGenerator();
 
-    Workout newWorkout = Workout(id: id, name: name, exerciseList: '', setsList: '');
+    Workout newWorkout = Workout(id: id, name: name, exerciseIdString: '', setsString: '', exerciseList: []);
 
   try {
     await db.insert(

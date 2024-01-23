@@ -40,7 +40,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     final setsList = widget.workout.getExerciseSets();
 
     setState(() {
-      selectedList = widget.workout.getExercises();
+      selectedList = widget.workout.getExerciseIdList();
 
       if(setsList.isNotEmpty) {
         for(int i = 0; i < setsList.length; ++ i) {
@@ -309,19 +309,19 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
   // Converts the selected exercises in selectList to string and return it
   String selectedListToString() {
-    String exercises = '';
+    String id = '';
 
     for(int i = 0; i < selectedList.length; ++i) {
-      String s = selectedList[i];
+      String anId = selectedList[i];
       if(i == selectedList.length - 1) {
-        exercises = '$exercises$s';
+        id = '$id$anId';
       }
       else {
-        exercises = '$exercises$s;';
+        id = '$id$anId;';
       }
     }
 
-    return exercises;
+    return id;
   }
 
   // Converts the sets for each selected exercise in _controllerList to a single string and return it
@@ -347,7 +347,6 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     String exercises = selectedListToString();
     String sets = controllerListToString();
     await widget.workoutDb.updateWorkoutExerciseList(widget.workout, exercises, sets);
-    //await widget.workoutDb.insertWorkout(widget.workoutName,exercises, reps);
 
     handleRequest();
   }

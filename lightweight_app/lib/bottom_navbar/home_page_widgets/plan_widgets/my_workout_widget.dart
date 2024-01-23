@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/workout_db.dart';
+import 'package:lightweight_app/db_helper/exercise_db.dart';
 import '../../../icons.dart';
 import '../../../styles.dart';
 import './select_exercises.dart';
@@ -134,9 +133,7 @@ class _WorkoutsState extends State<Workouts> {
 
     The passed in Workout is used to edit data on that object.
   */
-  void workoutDialog(Workout aWorkout) {
-    List<String> exerciseList = aWorkout.getExercises();
-
+  void workoutDialog(Workout aWorkout) async {
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -175,7 +172,8 @@ class _WorkoutsState extends State<Workouts> {
                 height: 300,
                 width: 250,
                 child: ListView.builder(
-                  itemCount: exerciseList.length,
+                  //itemCount: exerciseList.length,
+                  itemCount: aWorkout.exerciseList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,11 +181,13 @@ class _WorkoutsState extends State<Workouts> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            exerciseList[index],
+                            //exerciseList[index],
+                            aWorkout.exerciseList[index].name,
                             style: Styles().content(),
                           ),
                         ),
-                        if(exerciseList.isNotEmpty)
+                        //if(exerciseList.isNotEmpty)
+                        if(aWorkout.exerciseList.isNotEmpty)
                           const Divider(
                             thickness: 2,
                           ),
@@ -199,7 +199,7 @@ class _WorkoutsState extends State<Workouts> {
             ],
           ),
         ),
-      )
+      ),
     );
   }
 
@@ -606,6 +606,7 @@ class _WorkoutsState extends State<Workouts> {
 
   // Communicated with database to update a workouts exerciseList
   void onSubmitUpdateExercises(Workout aWorkout) async {
+    _refreshWorkouts();
     Workout? updatedWorkout = await _dbHelper.getWorkoutById(aWorkout.id);
 
     handleUpdateExercisesRequest();
@@ -651,4 +652,15 @@ class _WorkoutsState extends State<Workouts> {
       _controller.clear();
     }
   }
+
+/*
+  void getExercisesById(Workout aWorkout) async {
+    List<String> exerciseIdList = aWorkout.getExerciseIdList();
+
+    for(int i = 0; i < exerciseIdList.length; ++i) {
+      Exercise ex = await exerciseDb.getAnExercise(exerciseIdList[i]);
+      currWorkoutExerciseList.add(ex);
+    }
+  }
+  */
 }
