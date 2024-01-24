@@ -84,17 +84,16 @@ class ExerciseDBHelper {
     return true;
   }
 
-  Future<List<Exercise>> getExercise(String id) async {
-    final Database db = await ExerciseDBHelper().openExercise();
+  Future<dynamic> getExercise(String id) async {
+    List<Exercise> exerciseList = await getAllExercise();
 
-    List<Map<String, Object?>> exerciseListMap = await db.query(
-      'exercises',
-      where: 'id = ?',
-      whereArgs: [id],
-      limit: 1,
-    );
+    for(final exercise in exerciseList) {
+      if(exercise.id == id) {
+        return exercise;
+      }
+    }
 
-    return exerciseListMap.map((e) => Exercise.fromMap(e)).toList();
+    return null;
   }
 
   Future<String> getExerciseName(String id) async {

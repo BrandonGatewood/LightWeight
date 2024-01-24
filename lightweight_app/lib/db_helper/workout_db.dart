@@ -8,14 +8,13 @@ class Workout {
   final String name;
   final String exerciseIdString;
   final String setsString;
-  late List<Exercise> exerciseList;
+  final List<String> exerciseList = [];
 
   Workout({
     required this.id,
     required this.name,
     required this.exerciseIdString,
     required this.setsString,
-    required this.exerciseList,
   });
 
 
@@ -23,8 +22,7 @@ class Workout {
     id = item['id'],
     name = item['name'], 
     exerciseIdString = item['exerciseList'],
-    setsString = item['setsList'],
-    exerciseList = [];
+    setsString = item['setsList'];
 
 
   Map<String, dynamic> toMap() {
@@ -42,7 +40,8 @@ class Workout {
       return [];
     }
     else {
-      return exerciseIdString.split(';');
+      List<String> exerciseList = exerciseIdString.split(';');
+      return exerciseList;
     }
   }
 
@@ -52,28 +51,10 @@ class Workout {
       return [];
     }
     else {
-      return setsString.split(';');
+      List<String> setsList = setsString.split(';');
+      return setsList;
     }
   } 
-
-  List<Exercise> getExerciseList() {
-    final ExerciseDBHelper exerciseDb = ExerciseDBHelper();
-    List<Exercise> list = [];
-    exerciseDb.openExercise().whenComplete(() async {
-    List<String> exerciseIdList = getExerciseIdList();
-
-      for(int j = 0; j < exerciseIdList.length; ++j) {
-        List<Exercise> anExercise = await exerciseDb.getExercise(exerciseIdList[j]);
-        if(anExercise.isNotEmpty) {
-          list.add(anExercise[0]);
-        }
-      }
-
-    });
-
-
-    return list;
-  }
 }
 
 class WorkoutsDBHelper {
@@ -83,10 +64,23 @@ class WorkoutsDBHelper {
 
   Future<List<Workout>> getAllWorkouts() async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
-
+    final ExerciseDBHelper exerciseDb = ExerciseDBHelper();
+    exerciseDb.openExercise();
 
     final List<Map<String, Object?>> workoutListMap = await db.query('workouts');
-    return workoutListMap.map((e) => Workout.fromMap(e)).toList();
+    List<Workout> workoutList = workoutListMap.map((e) => Workout.fromMap(e)).toList();
+
+    for(int i = 0; i < workoutList.length; ++i) {
+      List<String> aWorkoutExerciseIdList = workoutList[i].getExerciseIdList();
+
+      for(int j = 0; j < aWorkoutExerciseIdList.length; ++j) {
+
+        String anExerciseName = await exerciseDb.getExerciseName(aWorkoutExerciseIdList[j]);
+        workoutList[i].exerciseList.add(anExerciseName);
+      }
+    }
+
+    return workoutList;
   }
 
 
@@ -95,7 +89,7 @@ class WorkoutsDBHelper {
     final Database db = await WorkoutsDBHelper().openWorkouts();
     String id = DB().idGenerator();
 
-    Workout newWorkout = Workout(id: id, name: name, exerciseIdString: '', setsString: '', exerciseList: []);
+    Workout newWorkout = Workout(id: id, name: name, exerciseIdString: '', setsString: '');
 
   try {
     await db.insert(

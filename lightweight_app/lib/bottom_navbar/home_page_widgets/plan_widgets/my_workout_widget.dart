@@ -133,8 +133,7 @@ class _WorkoutsState extends State<Workouts> {
 
     The passed in Workout is used to edit data on that object.
   */
-  void workoutDialog(Workout aWorkout) async {
-    List<Exercise> exerciseList = getExercisesById(aWorkout);
+  void workoutDialog(Workout aWorkout) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -173,8 +172,8 @@ class _WorkoutsState extends State<Workouts> {
                 height: 300,
                 width: 250,
                 child: ListView.builder(
-                  itemCount: exerciseList.length,
-                  //itemCount: aWorkout.exerciseList.length,
+                  itemCount: aWorkout.exerciseList.length,
+                  //itemCount: exerciseList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,13 +181,12 @@ class _WorkoutsState extends State<Workouts> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            exerciseList[index].name,
-                            //aWorkout.exerciseList[index].name,
+                            //exerciseList[index].name,
+                            aWorkout.exerciseList[index],
                             style: Styles().content(),
                           ),
                         ),
-                        if(exerciseList.isNotEmpty)
-                        //if(aWorkout.exerciseList.isNotEmpty)
+                        if(aWorkout.exerciseList.isNotEmpty)
                           const Divider(
                             thickness: 2,
                           ),
@@ -585,9 +583,9 @@ class _WorkoutsState extends State<Workouts> {
   // Communicated with database to update a workout 
   void onSubmitUpdateName(Workout aWorkout) async {
     bool update = await _dbHelper.updateWorkoutName(aWorkout.id, _controller.text);
+    handleUpdateNameRequest(update);
     Workout? updatedWorkout = await _dbHelper.getWorkoutById(aWorkout.id);
 
-    handleUpdateNameRequest(update);
 
     if(updatedWorkout != null) {
       workoutDialog(updatedWorkout);
@@ -652,10 +650,5 @@ class _WorkoutsState extends State<Workouts> {
     if(_controller.text.isNotEmpty) {
       _controller.clear();
     }
-  }
-
-
-  List<Exercise> getExercisesById(Workout aWorkout) {
-    return aWorkout.getExerciseList();
   }
 }

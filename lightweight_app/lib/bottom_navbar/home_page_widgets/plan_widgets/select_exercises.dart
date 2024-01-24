@@ -22,7 +22,8 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   final List<TextEditingController> _controller = [];
   late ExerciseDBHelper exerciseDb;
   late List<Exercise> exerciseList;
-  List<String> selectedList= [];
+  late List<String> selectedList;
+  late List<String> selectedIdList;
   MyIcons icons = MyIcons(); 
 
   @override
@@ -40,7 +41,8 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     final setsList = widget.workout.getExerciseSets();
 
     setState(() {
-      selectedList = widget.workout.getExerciseIdList();
+      selectedList = widget.workout.exerciseList;
+      selectedIdList = widget.workout.getExerciseIdList();
 
       if(setsList.isNotEmpty) {
         for(int i = 0; i < setsList.length; ++ i) {
@@ -148,7 +150,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     , delete icon to remove the selected exercise. 
   */ 
-  SizedBox selectedExerciseCard(String anExercise, int i) {
+  SizedBox selectedExerciseCard(String anExerciseName, int i) {
     int sets = int.parse(_controller[i].text);
 
     return SizedBox(
@@ -161,7 +163,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
               child: Row( 
                 children: <Widget>[
                   Text(
-                    anExercise,
+                    anExerciseName,
                     style: const TextStyle(
                       fontSize: 14,
                     ),
@@ -274,7 +276,8 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                selectedList.add(exerciseList[i].id);
+                selectedList.add(exerciseList[i].name);
+                selectedIdList.add(exerciseList[i].id);
                 TextEditingController c = TextEditingController();
                 c.text = '4';
                 _controller.add(c);
@@ -311,9 +314,9 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   String selectedListToString() {
     String id = '';
 
-    for(int i = 0; i < selectedList.length; ++i) {
-      String anId = selectedList[i];
-      if(i == selectedList.length - 1) {
+    for(int i = 0; i < selectedIdList.length; ++i) {
+      String anId = selectedIdList[i];
+      if(i == selectedIdList.length - 1) {
         id = '$id$anId';
       }
       else {
