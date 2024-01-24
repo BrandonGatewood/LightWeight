@@ -160,12 +160,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
           direction: DismissDirection.endToStart,
           key: Key(item.id), 
           confirmDismiss: (direction) async {
-            bool dismis = removeExercise(i);
-
-            if(dismis) {
-              
-            }
-
+            bool dismis = confirmRemoveExercise(i);
             return dismis;
           },
           background: Container(
@@ -380,7 +375,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   }
 
   // Remove the exercise from the exerciseList and exerciseSetsList for a workout
-  bool removeExercise(int i) {
+  bool confirmRemoveExercise(int i) {
     String exerciseName = widget.workout.exerciseList[i].name;
 
     bool dismis = false;
@@ -395,55 +390,55 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-      Row(
-        children: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon:  icons.backArrowIcon(),
-          ),
-          const Spacer(),
-          Text(
-            'Delete Exercise',
-            style: Styles().largeDialogHeader(), 
-          ),
-          const Spacer(),
-          const Spacer(),
-        ],
-      ),
-      const Spacer(),
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: Text(
-          'Confirm to delete $exerciseName',
-          style: Styles().content(),
-        ),
-      ),
-      const Spacer(),
-      Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            right: 10,
-            bottom: 10,
-          ), 
-          child: CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: IconButton(
-              onPressed: () {
-                dismis = true;
-                widget.workout.exerciseList.removeAt(i);
-                widget.workout.setsList.removeAt(i);
-                _controller.removeAt(i);
-                _refreshWorkout(i);
-                Navigator.pop(context);
-              },
-              icon: icons.checkIcon(), 
-            ),
-          ),
-        ),
-      ),
-    ]               ,
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon:  icons.backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  Text(
+                    'Delete Exercise',
+                    style: Styles().largeDialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  'Confirm to delete $exerciseName',
+                  style: Styles().content(),
+                ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10,
+                    bottom: 10,
+                  ), 
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                    child: IconButton(
+                      onPressed: () {
+                        dismis = true;
+                        widget.workout.exerciseList.removeAt(i);
+                        widget.workout.setsList.removeAt(i);
+                        _controller.removeAt(i);
+                        _refreshWorkout(i);
+                        Navigator.pop(context);
+                      },
+                      icon: icons.checkIcon(), 
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
