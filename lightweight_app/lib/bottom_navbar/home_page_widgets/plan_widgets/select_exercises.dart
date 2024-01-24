@@ -150,59 +150,68 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     , delete icon to remove the selected exercise. 
   */ 
-  SizedBox selectedExerciseCard(String anExerciseName, int i) {
+  Dismissible selectedExerciseCard(String anExerciseName, int i) {
     int sets = int.parse(_controller[i].text);
+    final item = anExerciseName;
 
-    return SizedBox(
-      key: Key('$i'),
-      height: 80,
-      child: Card(
-        child: 
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row( 
-                children: <Widget>[
-                  Text(
-                    anExerciseName,
-                    style: const TextStyle(
-                      fontSize: 14,
+    return Dismissible(
+      key: Key(item), 
+      onDismissed: (direction) {
+        onSubmitRemove();
+      },
+      child: SizedBox(
+        key: Key('$i'),
+        height: 80,
+        child: Card(
+          child: 
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row( 
+                  children: <Widget>[
+                    Text(
+                      anExerciseName,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    width: 49,
-                    height: 65,
-                    child: TextField(
-                      maxLength: 2,
-                      keyboardType: TextInputType.number,
-                      controller: _controller[i],
-                      decoration: Styles().inputWorkoutName('sets'),
-                      textAlign: TextAlign.center, 
+                    const Spacer(),
+                    SizedBox(
+                      width: 49,
+                      height: 65,
+                      child: TextField(
+                        maxLength: 2,
+                        keyboardType: TextInputType.number,
+                        controller: _controller[i],
+                        decoration: Styles().inputWorkoutName('sets'),
+                        textAlign: TextAlign.center, 
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      ++sets;
+                    IconButton(
+                      onPressed: () {
+                        ++sets;
 
-                      setState(() {
+                        setState(() {
+                          _controller[i].text = sets.toString();
+                        }); 
+                      },
+                      icon: icons.addIcon(),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        --sets;
+                        
                         _controller[i].text = sets.toString();
-                      }); 
-                    },
-                    icon: icons.addIcon(),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      --sets;
-                      
-                      _controller[i].text = sets.toString();
-                    },
-                    icon: icons.minusIcon(),
-                  ),
-                ],
+                      },
+                      icon: icons.minusIcon(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-      ),
-    ); 
+        ),
+      )
+
+    );
+    
   }
 
 
@@ -357,5 +366,10 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   // handles request when users save the exercise.
   void handleRequest() {
     Navigator.pop(context);
+  }
+
+  // Remove the exercise from the exerciseList and exerciseSetsList for a workout
+  void onSubmitRemove() {
+
   }
 }
