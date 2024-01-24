@@ -24,6 +24,12 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   late List<Exercise> allExerciseList;
   MyIcons icons = MyIcons(); 
 
+  _refreshWorkout(int i) {
+    setState(() {
+      widget.workout;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -120,7 +126,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
         buildDefaultDragHandles: true,
         children: <Widget>[
           for(int i = 0; i < widget.workout.exerciseList.length; ++i)
-          selectedExerciseCard(widget.workout.exerciseList[i], i),
+          selectedExerciseCard(i),
         ],
         onReorder: (int oldIndex, int newIndex) {
           setState(() {
@@ -142,14 +148,17 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     , delete icon to remove the selected exercise. 
   */ 
-  Dismissible selectedExerciseCard(Exercise exercise, int i) {
-    int sets = int.parse(_controller[i].text);
-    final item = exercise;
+  Dismissible selectedExerciseCard(int i) {
+    int sets = int.parse(widget.workout.setsList[i]);
+    final item = widget.workout.exerciseList[i];
 
     return Dismissible(
       key: Key(item.id), 
       onDismissed: (direction) {
-        onSubmitRemove();
+        widget.workout.exerciseList.removeAt(i);
+        widget.workout.setsList.removeAt(i);
+        _controller.removeAt(i);
+        _refreshWorkout(i);
       },
       child: SizedBox(
         key: Key('$i'),
@@ -161,7 +170,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 child: Row( 
                   children: <Widget>[
                     Text(
-                      exercise.name,
+                      widget.workout.exerciseList[i].name,
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -278,14 +287,11 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
               ),
               onPressed: () {
                 widget.workout.exerciseList.add(allExerciseList[i]);
-                //selectedIdList.add(exerciseList[i].id);
                 TextEditingController c = TextEditingController();
                 c.text = '4';
                 _controller.add(c);
-
-                setState(() {
-                });
-
+                widget.workout.setsList.add(c.text);
+                _refreshWorkout(i);
                 Navigator.pop(context);
               }, 
               child: Align(
@@ -362,6 +368,5 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
   // Remove the exercise from the exerciseList and exerciseSetsList for a workout
   void onSubmitRemove() {
-
   }
 }
