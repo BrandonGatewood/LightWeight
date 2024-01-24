@@ -8,7 +8,8 @@ class Workout {
   final String name;
   final String exerciseIdString;
   final String setsString;
-  final List<String> exerciseList = [];
+  List<Exercise> exerciseList = [];
+  List<String> setsList = [];
 
   Workout({
     required this.id,
@@ -72,12 +73,8 @@ class WorkoutsDBHelper {
 
     for(int i = 0; i < workoutList.length; ++i) {
       List<String> aWorkoutExerciseIdList = workoutList[i].getExerciseIdList();
-
-      for(int j = 0; j < aWorkoutExerciseIdList.length; ++j) {
-
-        String anExerciseName = await exerciseDb.getExerciseName(aWorkoutExerciseIdList[j]);
-        workoutList[i].exerciseList.add(anExerciseName);
-      }
+      workoutList[i].exerciseList = await exerciseDb.getExerciseList(aWorkoutExerciseIdList);
+      workoutList[i].setsList = workoutList[i].getExerciseSets();
     }
 
     return workoutList;

@@ -21,9 +21,7 @@ class WorkoutSelectExercises extends StatefulWidget {
 class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   final List<TextEditingController> _controller = [];
   late ExerciseDBHelper exerciseDb;
-  late List<Exercise> exerciseList;
-  late List<String> selectedList;
-  late List<String> selectedIdList;
+  late List<Exercise> allExerciseList;
   MyIcons icons = MyIcons(); 
 
   @override
@@ -34,22 +32,16 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
       final exercises = await exerciseDb.getAllExercise();
       
       setState(() {
-        exerciseList = exercises;
+        allExerciseList = exercises;
       });
     });
 
-    final setsList = widget.workout.getExerciseSets();
-
     setState(() {
-      selectedList = widget.workout.exerciseList;
-      selectedIdList = widget.workout.getExerciseIdList();
+      for(int i = 0; i < widget.workout.setsList.length; ++i) {
+        TextEditingController c = TextEditingController();
 
-      if(setsList.isNotEmpty) {
-        for(int i = 0; i < setsList.length; ++ i) {
-          TextEditingController c = TextEditingController();
-          c.text = setsList[i];
-          _controller.add(c);
-        }
+        c.text = widget.workout.setsList[i];
+        _controller.add(c);
       }
     });
   }
@@ -104,7 +96,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
   // determine which layout to use by the size of selectedList. 
   Widget mainLayout() {
-    if(selectedList.isEmpty){
+    if(widget.workout.exerciseList.isEmpty){
       return const Center(
         child: Text('Workout is empty'),
       );
@@ -127,17 +119,17 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
       return ReorderableListView(
         buildDefaultDragHandles: true,
         children: <Widget>[
-          for(int i = 0; i < selectedList.length; ++i)
-          selectedExerciseCard(selectedList[i], i),
+          for(int i = 0; i < widget.workout.exerciseList.length; ++i)
+          selectedExerciseCard(widget.workout.exerciseList[i], i),
         ],
         onReorder: (int oldIndex, int newIndex) {
           setState(() {
             if (oldIndex < newIndex) {
               --newIndex;
             }
-            final String item = selectedList.removeAt(oldIndex);
+            final Exercise item = widget.workout.exerciseList.removeAt(oldIndex);
             final TextEditingController c = _controller.removeAt(oldIndex);
-            selectedList.insert(newIndex, item);
+            widget.workout.exerciseList.insert(newIndex, item);
             _controller.insert(newIndex, c);
           });
         },
@@ -150,12 +142,12 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     , delete icon to remove the selected exercise. 
   */ 
-  Dismissible selectedExerciseCard(String anExerciseName, int i) {
+  Dismissible selectedExerciseCard(Exercise exercise, int i) {
     int sets = int.parse(_controller[i].text);
-    final item = anExerciseName;
+    final item = exercise;
 
     return Dismissible(
-      key: Key(item), 
+      key: Key(item.id), 
       onDismissed: (direction) {
         onSubmitRemove();
       },
@@ -169,7 +161,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 child: Row( 
                   children: <Widget>[
                     Text(
-                      anExerciseName,
+                      exercise.name,
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -253,7 +245,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
               SizedBox(
                 height: 450,
                 child: ListView.builder(
-                  itemCount: exerciseList.length,
+                  itemCount: allExerciseList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return selectExerciseItem(index);
                   }
@@ -285,8 +277,8 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                selectedList.add(exerciseList[i].name);
-                selectedIdList.add(exerciseList[i].id);
+                widget.workout.exerciseList.add(allExerciseList[i]);
+                //selectedIdList.add(exerciseList[i].id);
                 TextEditingController c = TextEditingController();
                 c.text = '4';
                 _controller.add(c);
@@ -299,7 +291,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  exerciseList[i].name,
+                  allExerciseList[i].name,
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.white,
@@ -323,9 +315,9 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   String selectedListToString() {
     String id = '';
 
-    for(int i = 0; i < selectedIdList.length; ++i) {
-      String anId = selectedIdList[i];
-      if(i == selectedIdList.length - 1) {
+    for(int i = 0; i < widget.workout.exerciseList.length; ++i) {
+      String anId = widget.workout.exerciseList[i].id;
+      if(i == widget.workout.exerciseList.length - 1) {
         id = '$id$anId';
       }
       else {

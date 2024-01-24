@@ -60,6 +60,22 @@ class ExerciseDBHelper {
     return maps.map((e) => Exercise.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
   }
 
+  Future<List<Exercise>> getExerciseList(List<String> exerciseIdList) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+    final List<Map<String, Object?>> maps = await db.query('exercises');
+
+    List<Exercise> exerciseList = [];
+    List<Exercise> allExerciseList = maps.map((e) => Exercise.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
+
+    for(int i = 0; i < allExerciseList.length; ++i) {
+      if(exerciseIdList[i] == allExerciseList[i].id) {
+        exerciseList.add(allExerciseList[i]);
+      }
+    }
+
+    return exerciseList;
+  }
+
   Future<void> deleteExercise(String id) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
