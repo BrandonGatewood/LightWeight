@@ -134,6 +134,7 @@ class _WorkoutsState extends State<Workouts> {
     The passed in Workout is used to edit data on that object.
   */
   void workoutDialog(Workout aWorkout) async {
+    List<Exercise> exerciseList = getExercisesById(aWorkout);
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -172,8 +173,8 @@ class _WorkoutsState extends State<Workouts> {
                 height: 300,
                 width: 250,
                 child: ListView.builder(
-                  //itemCount: exerciseList.length,
-                  itemCount: aWorkout.exerciseList.length,
+                  itemCount: exerciseList.length,
+                  //itemCount: aWorkout.exerciseList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,13 +182,13 @@ class _WorkoutsState extends State<Workouts> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            //exerciseList[index],
-                            aWorkout.exerciseList[index].name,
+                            exerciseList[index].name,
+                            //aWorkout.exerciseList[index].name,
                             style: Styles().content(),
                           ),
                         ),
-                        //if(exerciseList.isNotEmpty)
-                        if(aWorkout.exerciseList.isNotEmpty)
+                        if(exerciseList.isNotEmpty)
+                        //if(aWorkout.exerciseList.isNotEmpty)
                           const Divider(
                             thickness: 2,
                           ),
@@ -653,14 +654,8 @@ class _WorkoutsState extends State<Workouts> {
     }
   }
 
-/*
-  void getExercisesById(Workout aWorkout) async {
-    List<String> exerciseIdList = aWorkout.getExerciseIdList();
 
-    for(int i = 0; i < exerciseIdList.length; ++i) {
-      Exercise ex = await exerciseDb.getAnExercise(exerciseIdList[i]);
-      currWorkoutExerciseList.add(ex);
-    }
+  List<Exercise> getExercisesById(Workout aWorkout) {
+    return aWorkout.getExerciseList();
   }
-  */
 }

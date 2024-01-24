@@ -274,7 +274,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                selectedList.add(exerciseList[i].name);
+                selectedList.add(exerciseList[i].id);
                 TextEditingController c = TextEditingController();
                 c.text = '4';
                 _controller.add(c);
