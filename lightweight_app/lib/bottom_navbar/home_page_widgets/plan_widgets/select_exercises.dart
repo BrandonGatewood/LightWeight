@@ -148,71 +148,84 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     , delete icon to remove the selected exercise. 
   */ 
-  Dismissible selectedExerciseCard(int i) {
+  SizedBox selectedExerciseCard(int i) {
     int sets = int.parse(widget.workout.setsList[i]);
     final item = widget.workout.exerciseList[i];
 
-    return Dismissible(
-      key: Key(item.id), 
-      onDismissed: (direction) {
-        widget.workout.exerciseList.removeAt(i);
-        widget.workout.setsList.removeAt(i);
-        _controller.removeAt(i);
-        _refreshWorkout(i);
-      },
-      child: SizedBox(
-        key: Key('$i'),
-        height: 80,
-        child: Card(
-          child: 
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row( 
-                  children: <Widget>[
-                    Text(
-                      widget.workout.exerciseList[i].name,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      width: 49,
-                      height: 65,
-                      child: TextField(
-                        maxLength: 2,
-                        keyboardType: TextInputType.number,
-                        controller: _controller[i],
-                        decoration: Styles().inputWorkoutName('sets'),
-                        textAlign: TextAlign.center, 
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        ++sets;
+    return SizedBox(
+      key: Key('$i'),
+      height: 80,
+      child: Card(
+        child: Dismissible(
+          direction: DismissDirection.endToStart,
+          key: Key(item.id), 
+          confirmDismiss: (direction) async {
+            bool dismis = removeExercise(i);
 
-                        setState(() {
-                          _controller[i].text = sets.toString();
-                        }); 
-                      },
-                      icon: icons.addIcon(),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        --sets;
-                        
-                        _controller[i].text = sets.toString();
-                      },
-                      icon: icons.minusIcon(),
-                    ),
-                  ],
+            if(dismis) {
+              
+            }
+
+            return dismis;
+          },
+          background: Container(
+            color: Colors.red,
+            child: Row(
+              children: <Widget>[
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: icons.deleteIcon(),
                 ),
-              ),
-        ),
-      )
+              ],
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row( 
+              children: <Widget>[
+                Text(
+                  widget.workout.exerciseList[i].name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: 49,
+                  height: 65,
+                  child: TextField(
+                    maxLength: 2,
+                    keyboardType: TextInputType.number,
+                    controller: _controller[i],
+                    decoration: Styles().inputWorkoutName('sets'),
+                    textAlign: TextAlign.center, 
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    ++sets;
 
+                    setState(() {
+                      _controller[i].text = sets.toString();
+                    }); 
+                  },
+                  icon: icons.addIcon(),
+                ),
+                IconButton(
+                  onPressed: () {
+                    --sets;
+                    
+                    _controller[i].text = sets.toString();
+                  },
+                  icon: icons.minusIcon(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
-    
   }
 
 
@@ -367,6 +380,75 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   }
 
   // Remove the exercise from the exerciseList and exerciseSetsList for a workout
-  void onSubmitRemove() {
+  bool removeExercise(int i) {
+    String exerciseName = widget.workout.exerciseList[i].name;
+
+    bool dismis = false;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 215.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+      Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon:  icons.backArrowIcon(),
+          ),
+          const Spacer(),
+          Text(
+            'Delete Exercise',
+            style: Styles().largeDialogHeader(), 
+          ),
+          const Spacer(),
+          const Spacer(),
+        ],
+      ),
+      const Spacer(),
+      Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          'Confirm to delete $exerciseName',
+          style: Styles().content(),
+        ),
+      ),
+      const Spacer(),
+      Align(
+        alignment: Alignment.centerRight,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            right: 10,
+            bottom: 10,
+          ), 
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            child: IconButton(
+              onPressed: () {
+                dismis = true;
+                widget.workout.exerciseList.removeAt(i);
+                widget.workout.setsList.removeAt(i);
+                _controller.removeAt(i);
+                _refreshWorkout(i);
+                Navigator.pop(context);
+              },
+              icon: icons.checkIcon(), 
+            ),
+          ),
+        ),
+      ),
+    ]               ,
+          ),
+        ),
+      ),
+    );
+
+    return dismis;
   }
 }
