@@ -68,8 +68,10 @@ class ExerciseDBHelper {
     List<Exercise> allExerciseList = maps.map((e) => Exercise.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
 
     for(int i = 0; i < allExerciseList.length; ++i) {
-      if(exerciseIdList[i] == allExerciseList[i].id) {
-        exerciseList.add(allExerciseList[i]);
+      for(int j = 0; j < exerciseIdList.length; ++j) {
+        if(exerciseIdList[j] == allExerciseList[i].id) {
+          exerciseList.add(allExerciseList[i]);
+        }
       }
     }
 

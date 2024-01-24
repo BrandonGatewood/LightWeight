@@ -52,8 +52,7 @@ class Workout {
       return [];
     }
     else {
-      List<String> setsList = setsString.split(';');
-      return setsList;
+      return setsString.split(';');
     }
   } 
 }

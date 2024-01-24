@@ -18,13 +18,13 @@ class _WorkoutsState extends State<Workouts> {
   late TextEditingController _controller;
   late WorkoutsDBHelper _dbHelper;
   MyIcons icons = MyIcons();
-  List<Workout> workoutList = [];
+  List<Workout> allWorkoutList = [];
 
   void _refreshWorkouts() async {
     final data = await _dbHelper.getAllWorkouts();
 
     setState(() {
-      workoutList = data;
+      allWorkoutList = data;
     });
   }
 
@@ -82,7 +82,7 @@ class _WorkoutsState extends State<Workouts> {
     Else the function will return a ListView widget of all the workouts in the database.
   */
   Widget mainLayout() {
-    if(workoutList.isEmpty) {
+    if(allWorkoutList.isEmpty) {
       return const Center(
         child: Text(
           'No Workouts',
@@ -93,7 +93,7 @@ class _WorkoutsState extends State<Workouts> {
       return Padding(
         padding: const EdgeInsets.only(top: 10),
         child: ListView.builder(
-          itemCount: workoutList.length,
+          itemCount: allWorkoutList.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: const EdgeInsets.only(
@@ -110,10 +110,10 @@ class _WorkoutsState extends State<Workouts> {
                   ),
                 ),
                 onPressed: () {
-                  workoutDialog(workoutList[index]);
+                  workoutDialog(allWorkoutList[index]);
                 },
                   child: ListTile(
-                    title: Text(workoutList[index].name),
+                    title: Text(allWorkoutList[index].name),
                     trailing: icons.forwardArrowIcon(),
                   ),
               ),
@@ -182,7 +182,7 @@ class _WorkoutsState extends State<Workouts> {
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
                             //exerciseList[index].name,
-                            aWorkout.exerciseList[index],
+                            aWorkout.exerciseList[index].name,
                             style: Styles().content(),
                           ),
                         ),
@@ -636,7 +636,7 @@ class _WorkoutsState extends State<Workouts> {
 
   // Check whether or not a workout name already exists..
   bool validateWorkoutName(String workoutName) {
-    for(final workout in workoutList) {
+    for(final workout in allWorkoutList) {
       if(workout.name == workoutName) {
         return false;
       }
