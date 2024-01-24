@@ -93,23 +93,31 @@ class _ExercisesState extends State<Exercises> {
         child: ListView.builder(
           itemCount: exerciseList.length,
           itemBuilder: (BuildContext context, int index) {
-            return Card(
-              child: Column(
-                children: <Widget>[
-                  ListTile(
+            return Padding(
+              padding: Styles().listViewPadding(), 
+              child: Dismissible(
+                key: Key(exerciseList[index].id),
+                direction: DismissDirection.endToStart,
+                confirmDismiss: (direction) async {
+                  bool dismis = confirmDeleteDialog(exerciseList[index]);
+
+                  return dismis;
+                },
+                background: Styles().deleteButtonCardBackground(), 
+                child: ElevatedButton(
+                  style: Styles().listViewButtonStyle(),
+                  onPressed: () {
+                    dialog(0, exerciseList[index]);
+                  },
+                  child: ListTile(
                     title: Text(exerciseList[index].name),
                     subtitle: Text(
                       'Max Weight: 140lbs',
                       style: Styles().subtitle()
                     ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        dialog(0, exerciseList[index]);
-                      },
-                      icon: icons.forwardArrowIcon(),
-                    ),
+                    trailing: icons.forwardArrowIcon(),
                   ),
-                ],
+                ),
               ),
             ); 
           },
@@ -368,6 +376,76 @@ class _ExercisesState extends State<Exercises> {
     ]; 
   }
   
+  // Confirm when sliding buttonCard to delete 
+  bool confirmDeleteDialog(Exercise anExercise) {
+    String name = anExercise.name;
+    bool dismis = false;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 210.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon:  icons.backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  Text(
+                    'Delete Exercise',
+                    style: Styles().dialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  'Confirm to delete $name',
+                  style: Styles().subtitle(), 
+                ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10,
+                    bottom: 10,
+                  ), 
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                    child: IconButton(
+                      onPressed: () {
+                        dismis = true;
+                        onSubmitDelete(anExercise.id);
+                      },
+                      icon: icons.checkIcon(), 
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    return dismis;
+  }
+  
   /*
     failedDialog function is an AlertDialog that alerts the user when theres a failed
     request with the database.  
@@ -449,11 +527,8 @@ class _ExercisesState extends State<Exercises> {
   // Communicates with database to update an exercise 
   void onSubmitUpdate(Exercise anExercise) async {
     bool update = await _dbHelper.updateExercise(anExercise.id, _controller.text);
-    List<Exercise> updatedExercise = await _dbHelper.getExercise(anExercise.id);
 
     handleUpdateRequest(update);
-
-    dialog(0, updatedExercise[0]);
   }
 
   // Handles the state after attempting to update an exercise.

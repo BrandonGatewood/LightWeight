@@ -96,26 +96,16 @@ class _WorkoutsState extends State<Workouts> {
           itemCount: allWorkoutList.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.only(
-                left: 5,
-                right: 5,
-                bottom: 10,   
-              ),
+              padding: Styles().listViewPadding(),
               child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
+                style: Styles().listViewButtonStyle(), 
                 onPressed: () {
                   workoutDialog(allWorkoutList[index]);
                 },
-                  child: ListTile(
-                    title: Text(allWorkoutList[index].name),
-                    trailing: icons.forwardArrowIcon(),
-                  ),
+                child: ListTile(
+                  title: Text(allWorkoutList[index].name),
+                  trailing: icons.forwardArrowIcon(),
+                ),
               ),
             );
           },

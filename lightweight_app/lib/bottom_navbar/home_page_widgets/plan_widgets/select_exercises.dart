@@ -163,18 +163,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
             bool dismis = confirmRemoveExercise(i);
             return dismis;
           },
-          background: Container(
-            color: Colors.red,
-            child: Row(
-              children: <Widget>[
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: icons.deleteIcon(),
-                ),
-              ],
-            ),
-          ),
+          background: Styles().deleteButtonCardBackground(), 
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Row( 
@@ -377,7 +366,6 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   // Remove the exercise from the exerciseList and exerciseSetsList for a workout
   bool confirmRemoveExercise(int i) {
     String exerciseName = widget.workout.exerciseList[i].name;
-
     bool dismis = false;
 
     showDialog(
@@ -398,7 +386,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                   ),
                   const Spacer(),
                   Text(
-                    'Delete Exercise',
+                    'Remove Exercise',
                     style: Styles().largeDialogHeader(), 
                   ),
                   const Spacer(),
@@ -409,7 +397,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
-                  'Confirm to delete $exerciseName',
+                  'Confirm to delete $exerciseName from workout',
                   style: Styles().content(),
                 ),
               ),

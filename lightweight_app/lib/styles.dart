@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:path/path.dart";
+import "package:lightweight_app/icons.dart";
 
 class Styles {
   // Textstyle for dialog headers
@@ -47,4 +47,39 @@ class Styles {
       labelText: name,
     );
   } 
+
+  // Padding for ListView that builds ButtonCards
+  EdgeInsets listViewPadding() {
+    return const EdgeInsets.only(
+      left: 5,
+      right: 5,
+      bottom: 10,
+    );
+  }
+
+  // Button style for buttonCards in ListView
+  ButtonStyle listViewButtonStyle() {
+    return ButtonStyle(
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
+  Container deleteButtonCardBackground() {
+    return Container(
+      color: Colors.red,
+      child: Row(
+        children: <Widget>[
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: MyIcons().deleteIcon(),
+          ),
+        ],
+      ),
+    );
+  }
 }
