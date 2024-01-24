@@ -155,15 +155,15 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     return SizedBox(
       key: Key('$i'),
       height: 80,
-      child: Card(
-        child: Dismissible(
-          direction: DismissDirection.endToStart,
-          key: Key(item.id), 
-          confirmDismiss: (direction) async {
-            bool dismis = confirmRemoveExercise(i);
-            return dismis;
-          },
-          background: Styles().deleteButtonCardBackground(), 
+      child: Dismissible(
+        direction: DismissDirection.endToStart,
+        key: Key(item.id), 
+        background: Styles().deleteButtonCardBackground(), 
+        confirmDismiss: (direction) async {
+          bool dismis = confirmRemoveExercise(i);
+          return dismis;
+        },
+        child: Card(
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Row( 
@@ -397,7 +397,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
-                  'Confirm to delete $exerciseName from workout',
+                  'Confirm to Remove $exerciseName from workout',
                   style: Styles().content(),
                 ),
               ),

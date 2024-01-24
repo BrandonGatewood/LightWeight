@@ -97,14 +97,24 @@ class _WorkoutsState extends State<Workouts> {
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: Styles().listViewPadding(),
-              child: ElevatedButton(
-                style: Styles().listViewButtonStyle(), 
-                onPressed: () {
-                  workoutDialog(allWorkoutList[index]);
+              child: Dismissible(
+                key: Key(allWorkoutList[index].id),
+                direction: DismissDirection.endToStart,
+                background: Styles().deleteButtonCardBackground(),
+                confirmDismiss: (direction) async {
+                  bool dismiss = confirmDeleteDialog(allWorkoutList[index]);
+
+                  return dismiss;
                 },
-                child: ListTile(
-                  title: Text(allWorkoutList[index].name),
-                  trailing: icons.forwardArrowIcon(),
+                child: ElevatedButton(
+                  style: Styles().listViewButtonStyle(), 
+                  onPressed: () {
+                    workoutDialog(allWorkoutList[index]);
+                  },
+                  child: ListTile(
+                    title: Text(allWorkoutList[index].name),
+                    trailing: icons.forwardArrowIcon(),
+                  ),
                 ),
               ),
             );
@@ -315,6 +325,74 @@ class _WorkoutsState extends State<Workouts> {
     clearController();
   }
   
+  bool confirmDeleteDialog(Workout aWorkout) {
+    bool dismiss = false;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 215.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon:  icons.backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  Text(
+                    'Delete Workout',
+                    style: Styles().dialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+              const Spacer(),
+              const Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'Confirm to delete workout',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10,
+                    bottom: 10,
+                  ), 
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                    child: IconButton(
+                      onPressed: () {
+                        dismiss = true;
+                        onSubmitDelete(aWorkout.id);
+                      },
+                      icon: icons.checkIcon(), 
+                    ),
+                  ),
+                ),
+              ),
+            ] 
+          ),
+        ),
+      ),
+    );
+
+    return dismiss;
+  }
+  
   /*
     workoutDialogPopupMenu function is the button used in the workoutDialog to modify 
     the workout. 
@@ -437,6 +515,8 @@ class _WorkoutsState extends State<Workouts> {
     deleteWorkoutDialogList function is the layout for deleting a workout in the database.
   */ 
   List<Widget> deleteWorkoutDialogList(Workout aWorkout) {
+    String name = aWorkout.name;
+
     return <Widget>[
       Row(
         children: <Widget>[
@@ -454,13 +534,11 @@ class _WorkoutsState extends State<Workouts> {
         ],
       ),
       const Spacer(),
-      const Padding(
-        padding: EdgeInsets.all(20),
+      Padding(
+        padding: const EdgeInsets.all(20),
         child: Text(
-          'Confirm to delete workout',
-          style: TextStyle(
-            fontSize: 16,
-          ),
+          'Confirm to delete $name',
+          style: Styles().content(),
         ),
       ),
       const Spacer(),

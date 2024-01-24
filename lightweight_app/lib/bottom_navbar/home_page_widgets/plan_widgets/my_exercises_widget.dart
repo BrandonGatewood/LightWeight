@@ -98,12 +98,12 @@ class _ExercisesState extends State<Exercises> {
               child: Dismissible(
                 key: Key(exerciseList[index].id),
                 direction: DismissDirection.endToStart,
-                confirmDismiss: (direction) async {
-                  bool dismis = confirmDeleteDialog(exerciseList[index]);
-
-                  return dismis;
-                },
                 background: Styles().deleteButtonCardBackground(), 
+                confirmDismiss: (direction) async {
+                  bool dismiss = confirmDeleteDialog(exerciseList[index]);
+
+                  return dismiss;
+                },
                 child: ElevatedButton(
                   style: Styles().listViewButtonStyle(),
                   onPressed: () {
@@ -250,9 +250,77 @@ class _ExercisesState extends State<Exercises> {
     clearController(); 
   }
 
-  /*
-    editExerciseDialogList function is the layout dialog for updating an exercise.
-  */ 
+  // Confirm when sliding buttonCard to delete 
+  bool confirmDeleteDialog(Exercise anExercise) {
+    String name = anExercise.name;
+    bool dismiss = false;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 210.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon:  icons.backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  Text(
+                    'Delete Exercise',
+                    style: Styles().dialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  'Confirm to delete $name',
+                  style: Styles().subtitle(), 
+                ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10,
+                    bottom: 10,
+                  ), 
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                    child: IconButton(
+                      onPressed: () {
+                        dismiss = true;
+                        onSubmitDelete(anExercise.id);
+                      },
+                      icon: icons.checkIcon(), 
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    return dismiss;
+  }
+  
+  // editExerciseDialogList function is the layout dialog for updating an exercise.
   List<Widget> editExerciseWidgetList(Exercise anExercise) {
     bool validated;
 
@@ -374,76 +442,6 @@ class _ExercisesState extends State<Exercises> {
         ),
       ),
     ]; 
-  }
-  
-  // Confirm when sliding buttonCard to delete 
-  bool confirmDeleteDialog(Exercise anExercise) {
-    String name = anExercise.name;
-    bool dismis = false;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => Dialog(
-        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
-        child: SizedBox(
-          height: 210.0,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon:  icons.backArrowIcon(),
-                  ),
-                  const Spacer(),
-                  const Spacer(),
-                  Text(
-                    'Delete Exercise',
-                    style: Styles().dialogHeader(), 
-                  ),
-                  const Spacer(),
-                  const Spacer(),
-                  const Spacer(),
-                ],
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Text(
-                  'Confirm to delete $name',
-                  style: Styles().subtitle(), 
-                ),
-              ),
-              const Spacer(),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    right: 10,
-                    bottom: 10,
-                  ), 
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                    child: IconButton(
-                      onPressed: () {
-                        dismis = true;
-                        onSubmitDelete(anExercise.id);
-                      },
-                      icon: icons.checkIcon(), 
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    return dismis;
   }
   
   /*
