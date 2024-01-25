@@ -135,8 +135,11 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
             }
             final Exercise item = widget.workout.exerciseList.removeAt(oldIndex);
             final TextEditingController c = _controller.removeAt(oldIndex);
+            final String s = widget.workout.setsList.removeAt(oldIndex);
+
             widget.workout.exerciseList.insert(newIndex, item);
             _controller.insert(newIndex, c);
+            widget.workout.setsList.insert(newIndex, s);
           });
         },
     );
@@ -149,11 +152,10 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     , delete icon to remove the selected exercise. 
   */ 
   SizedBox selectedExerciseCard(int i) {
-    int sets = int.parse(widget.workout.setsList[i]);
     final item = widget.workout.exerciseList[i];
 
     return SizedBox(
-      key: Key('$i'),
+      key: Key(item.id),
       height: 80,
       child: Dismissible(
         direction: DismissDirection.endToStart,
@@ -169,7 +171,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
             child: Row( 
               children: <Widget>[
                 Text(
-                  widget.workout.exerciseList[i].name,
+                  item.name,
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -188,10 +190,9 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 ),
                 IconButton(
                   onPressed: () {
-                    ++sets;
-
                     setState(() {
-                      _controller[i].text = sets.toString();
+                      int sets = int.parse(_controller[i].text) + 1; 
+                      _controller[i].text = sets.toString();  
                       widget.workout.setsList.insert(i, sets.toString());
                     }); 
                   },
@@ -199,10 +200,9 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 ),
                 IconButton(
                   onPressed: () {
-                    --sets;
-
                    setState(() {
-                    _controller[i].text = sets.toString();
+                      int sets = int.parse(_controller[i].text) - 1; 
+                      _controller[i].text = sets.toString();  
                       widget.workout.setsList.insert(i, sets.toString());
                    }); 
                   },
