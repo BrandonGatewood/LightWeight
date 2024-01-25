@@ -60,7 +60,6 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    //return planYourWorkoutsWidget(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Current Split'),
