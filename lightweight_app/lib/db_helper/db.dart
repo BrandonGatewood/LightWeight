@@ -31,7 +31,7 @@ class DB {
         await database.execute(
           '''CREATE TABLE currentSplit(
             id TEXT PRIMARY KEY NOT NULL,
-            workoutString Text NOT NULL
+            workoutIdString Text NOT NULL
           )'''
         );
 

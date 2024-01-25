@@ -171,7 +171,6 @@ class _WorkoutsState extends State<Workouts> {
                 width: 250,
                 child: ListView.builder(
                   itemCount: aWorkout.exerciseList.length,
-                  //itemCount: exerciseList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,7 +178,6 @@ class _WorkoutsState extends State<Workouts> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            //exerciseList[index].name,
                             aWorkout.exerciseList[index].name,
                             style: Styles().content(),
                           ),

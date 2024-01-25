@@ -269,7 +269,10 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   // exerciseSelectionItem function is a button that contains an exercise from the exerciseList. 
   Padding selectExerciseItem(int i) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(
+        left: 20, 
+        right: 20,
+      ),
       child: Column(
         children: <Widget>[
           SizedBox(
