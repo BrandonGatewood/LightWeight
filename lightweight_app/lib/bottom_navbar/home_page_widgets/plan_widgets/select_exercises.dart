@@ -64,7 +64,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Exercises'),
+        title: Text(widget.workout.name),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(5),
