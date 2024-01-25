@@ -24,7 +24,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   late List<Exercise> allExerciseList;
   MyIcons icons = MyIcons(); 
 
-  _refreshWorkout(int i) {
+  _refreshWorkout() {
     setState(() {
       widget.workout;
     });
@@ -140,6 +140,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
             widget.workout.exerciseList.insert(newIndex, item);
             _controller.insert(newIndex, c);
             widget.workout.setsList.insert(newIndex, s);
+            _refreshWorkout();
           });
         },
     );
@@ -152,14 +153,12 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     , delete icon to remove the selected exercise. 
   */ 
   SizedBox selectedExerciseCard(int i) {
-    final item = widget.workout.exerciseList[i];
-
     return SizedBox(
-      key: Key(item.id),
+      key: Key('$i'),
       height: 80,
       child: Dismissible(
         direction: DismissDirection.endToStart,
-        key: Key(item.id), 
+        key: Key('$i'), 
         background: Styles().deleteButtonCardBackground(), 
         confirmDismiss: (direction) async {
           bool dismis = confirmRemoveExercise(i);
@@ -171,7 +170,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
             child: Row( 
               children: <Widget>[
                 Text(
-                  item.name,
+                  widget.workout.exerciseList[i].name,
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -192,8 +191,9 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                   onPressed: () {
                     setState(() {
                       int sets = int.parse(_controller[i].text) + 1; 
+
                       _controller[i].text = sets.toString();  
-                      widget.workout.setsList.insert(i, sets.toString());
+                      widget.workout.setsList[i] = sets.toString();
                     }); 
                   },
                   icon: icons.addIcon(),
@@ -203,7 +203,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                    setState(() {
                       int sets = int.parse(_controller[i].text) - 1; 
                       _controller[i].text = sets.toString();  
-                      widget.workout.setsList.insert(i, sets.toString());
+                      widget.workout.setsList[i] = sets.toString();
                    }); 
                   },
                   icon: icons.minusIcon(),
@@ -307,7 +307,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 c.text = '4';
                 _controller.add(c);
                 widget.workout.setsList.add(c.text);
-                _refreshWorkout(i);
+                _refreshWorkout();
                 Navigator.pop(context);
               }, 
               child: Align(
@@ -354,10 +354,10 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   String controllerListToString() {
     String sets = '';
 
-    for(int i = 0; i < _controller.length; ++i) {
-      String set = _controller[i].text;
+    for(int i = 0; i < widget.workout.setsList.length; ++i) {
+      String set = widget.workout.setsList[i];
 
-      if(i == _controller.length - 1) {
+      if(i == widget.workout.setsList.length - 1) {
         sets = '$sets$set';
       }
       else {
@@ -437,7 +437,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                         widget.workout.exerciseList.removeAt(i);
                         widget.workout.setsList.removeAt(i);
                         _controller.removeAt(i);
-                        _refreshWorkout(i);
+                        _refreshWorkout();
                         Navigator.pop(context);
                       },
                       icon: icons.checkIcon(), 

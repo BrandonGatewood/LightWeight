@@ -65,12 +65,12 @@ class ExerciseDBHelper {
     final List<Map<String, Object?>> maps = await db.query('exercises');
 
     List<Exercise> exerciseList = [];
-    List<Exercise> allExerciseList = maps.map((e) => Exercise.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
+    List<Exercise> allExerciseList = maps.map((e) => Exercise.fromMap(e)).toList();
 
-    for(int i = 0; i < allExerciseList.length; ++i) {
-      for(int j = 0; j < exerciseIdList.length; ++j) {
-        if(exerciseIdList[j] == allExerciseList[i].id) {
-          exerciseList.add(allExerciseList[i]);
+    for(int i = 0; i < exerciseIdList.length; ++i) {
+      for(int j = 0; j < allExerciseList.length; ++j) {
+        if(exerciseIdList[i] == allExerciseList[j].id) {
+          exerciseList.add(allExerciseList[j]);
         }
       }
     }
