@@ -261,6 +261,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
     );
   }
 
+  // returns a widget depending on the exercises available in the db
   Widget availableExercises() {
     if(allExerciseList.isEmpty) {
       return const Center(

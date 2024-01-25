@@ -18,6 +18,17 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   late CurrentSplit myCurrentSplit;
   late List<Workout> allWorkoutsList;
 
+  _refreshCurrentSplit() async {
+
+    setState(() {
+      myCurrentSplit;
+    });
+   
+
+    
+  }
+
+  
   @override
   void initState() {
     super.initState();
@@ -41,6 +52,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
 
       setState(() {
         allWorkoutsList = workouts;
+        allWorkoutsList.insert(0, Workout.restDay());
       });
     });
   }
@@ -118,16 +130,6 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   }
 
   Column tabViewBody(int dayIndex) {
-    String name = '';
-    List<String> l = myCurrentSplit.getWorkoutsIdList();
-
-    if(l[dayIndex] == 'RestDay') {
-      name = 'RestDay';
-    }
-    else {
-      name = myCurrentSplit.workoutList[dayIndex].name;
-    }
-
     return Column(
       children: <Widget> [
         Padding(
@@ -139,7 +141,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
           child: Column(
             children: <Widget>[
               Text(
-                name,
+                myCurrentSplit.workoutList[dayIndex].name,
                 style: Styles().largeDialogHeader(),
               ),
               const Divider(
@@ -152,7 +154,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
     );
   } 
 
-  void editCurrentSplitDialog(int i) {
+  void editCurrentSplitDialog(int dayIndex) {
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
@@ -182,7 +184,12 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
               ),
               SizedBox(
                 height: 450,
-                child: availableWorkouts(),
+                child: ListView.builder(
+                  itemCount: allWorkoutsList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return selectAWorkoutItem(dayIndex, index);
+                  }
+                ),
               ),
               const Spacer(),
               const Spacer(),
@@ -193,23 +200,8 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
     );
   }
 
-  Widget availableWorkouts() {
-    if(allWorkoutsList.isEmpty) {
-      return const Center(
-        child: Text('No workouts available'),
-      );
-    }
-    else {
-      return ListView.builder(
-        itemCount: allWorkoutsList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return selectAWorkoutItem(index);
-        }
-      );
-    }
-  }
-
-  Padding selectAWorkoutItem(int i) {
+  // adds the selected workout to the users current split. 
+  Padding selectAWorkoutItem(int dayIndex, int itemIndex) {
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,
@@ -228,12 +220,15 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                //myCurrentSplit[i]
+                myCurrentSplit.workoutList[dayIndex] = allWorkoutsList[itemIndex];
+                _refreshCurrentSplit();
+                onSubmitUpdate();
+                Navigator.pop(context);
               }, 
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  allWorkoutsList[i].name,
+                  allWorkoutsList[itemIndex].name,
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.white,
@@ -249,4 +244,29 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
       ),
     );
   }
+
+
+//        ***** UPDATING A WORKOUT IN CURRENTSPLIT *****
+  String updatedIdListToString() {
+    String id = '';
+
+    for(int i = 0; i < 7; ++i) {
+      String anId = myCurrentSplit.workoutList[i].id;
+      if(i == 6) {
+        id = '$id$anId';
+      } 
+      else {
+        id = '$id$anId;';
+      }
+    }
+
+    return id;
+  }
+
+  void onSubmitUpdate() async {
+    String workoutId = updatedIdListToString();
+
+    await currentSplitDb.updateCurrentSplit(workoutId);
+  }
+
 }

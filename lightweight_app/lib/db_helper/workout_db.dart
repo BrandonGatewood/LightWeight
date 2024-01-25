@@ -25,6 +25,11 @@ class Workout {
     exerciseIdString = item['exerciseIdString'],
     setsString = item['setsString'];
 
+  Workout.restDay():
+    id = 'RestDay',
+    name = 'Rest Day',
+    exerciseIdString = '',
+    setsString = '';
 
   Map<String, dynamic> toMap() {
     return {
