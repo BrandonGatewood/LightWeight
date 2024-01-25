@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
 import 'package:lightweight_app/icons.dart';
 import 'package:lightweight_app/styles.dart';
@@ -12,7 +13,9 @@ class MyCurrentSplit extends StatefulWidget {
 
 class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStateMixin{
   late final TabController _tabController;
-  late WorkoutsDBHelper workoutDb;
+  //late WorkoutsDBHelper workoutDb;
+  late CurrentSplitDBHelper currentSplitDb;
+  late CurrentSplit myCurrentSplit;
   List<Workout> allWorkoutsList = [];
   Workout offDay = Workout(id: 'offDay', name: 'Off', exerciseIdString: '', setsString: '');
 
@@ -20,6 +23,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   void initState() {
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
+  /* 
     workoutDb = WorkoutsDBHelper();
     workoutDb.openWorkouts().whenComplete(() async {
       final data = await workoutDb.getAllWorkouts();
@@ -27,6 +31,20 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
 
       setState(() {
         allWorkoutsList = data;
+      });
+    });
+  */
+
+    myCurrentSplit = CurrentSplit();
+    currentSplitDb = CurrentSplitDBHelper();
+    currentSplitDb.openCurrentSplit().whenComplete(() async {
+
+      final data = await currentSplitDb.getCurrentSplit('currSplit');
+
+      setState(() {
+        setState(() {
+          myCurrentSplit = data;
+        });
       });
     });
   }
@@ -91,23 +109,26 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
       body: TabBarView(
         controller: _tabController,
         children: [
-        tabViewBody(),
-        Text('hi'),
-        Text('hi'),
-        Text('hi'),
-        Text('hi'),
-        Text('hi'),
-        Text('hi'),
+        tabViewBody(0),
+        tabViewBody(1),
+        tabViewBody(2),
+        tabViewBody(3),
+        tabViewBody(4),
+        tabViewBody(5),
+        tabViewBody(6),
         ],
       )
     );
   }
 
-  Column tabViewBody() {
-    return const Column(
+  Column tabViewBody(int dayIndex) {
+    return Column(
       children: <Widget> [
-        Text('workoutname'),
-         Divider(
+        Text(
+          myCurrentSplit.workoutList[dayIndex].name,
+          style: Styles().largeDialogHeader(),
+        ),
+        const Divider(
           thickness: 2,
         ),
       ]
@@ -178,7 +199,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-               
+                //myCurrentSplit[i]
               }, 
               child: Align(
                 alignment: Alignment.centerLeft,
