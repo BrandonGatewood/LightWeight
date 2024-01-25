@@ -72,18 +72,18 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               child: IconButton(
                 onPressed: () {
-                  editCurrentSplitDialog(_tabController.index);
+                  changeWorkoutDialog(_tabController.index);
                 },
-                icon: MyIcons().addIcon(), 
+                icon: MyIcons().editIcon(), 
               ),
             ),
           )
         ],
         bottom: TabBar(
           controller: _tabController,
-          labelColor: Colors.blue,
+          labelColor: Theme.of(context).colorScheme.inversePrimary,
           unselectedLabelColor: Colors.white,
-          indicatorColor: Colors.blue,
+          indicatorColor: Theme.of(context).colorScheme.inversePrimary,
           tabs: const <Widget>[
             Tab(
               text: 'M',
@@ -124,6 +124,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
     );
   }
 
+// display workout information based on dayIndex
   Column tabViewBody(int dayIndex) {
     return Column(
       children: <Widget> [
@@ -145,11 +146,30 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
             ],
           ),
         ),
-      ]
+        SizedBox(
+          height: MediaQuery.of(context).size.height - 210,
+          child:
+           ListView.builder(
+            itemCount: myCurrentSplit.workoutList[dayIndex].exerciseList.length,
+            itemBuilder: (BuildContext context, int index) {
+              String num = myCurrentSplit.workoutList[dayIndex].setsList[index];
+              String sub = '$num Reps';
+
+              return Card(
+                child: ListTile(
+                  title: Text(myCurrentSplit.workoutList[dayIndex].exerciseList[index].name),
+                  subtitle: Text(sub),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   } 
 
-  void editCurrentSplitDialog(int dayIndex) {
+  // change workout based on dayIndex 
+  void changeWorkoutDialog(int dayIndex) {
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(

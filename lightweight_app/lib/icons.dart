@@ -48,4 +48,13 @@ class MyIcons {
       size: 25,
     );
   }
+  
+  Icon editIcon() {
+    return const Icon( 
+      Icons.edit_rounded,
+      color: Colors.white,
+      size: 25,
+    );
+  }
+
 }
