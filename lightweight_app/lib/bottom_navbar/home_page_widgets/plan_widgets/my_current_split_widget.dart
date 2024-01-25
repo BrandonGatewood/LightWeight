@@ -83,27 +83,28 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
           labelColor: Theme.of(context).colorScheme.inversePrimary,
           unselectedLabelColor: Colors.white,
           indicatorColor: Theme.of(context).colorScheme.inversePrimary,
+          labelPadding: EdgeInsets.symmetric(horizontal: 10),
           tabs: const <Widget>[
             Tab(
-              text: 'M',
+              text: 'Mon',
             ),
             Tab(
-              text: 'T',
+              text: 'Tues',
             ),
             Tab(
-              text: 'W',
+              text: 'Wed',
             ),
             Tab(
-              text: 'T',
+              text: 'Thur',
             ),
             Tab(
-              text: 'F',
+              text: 'Fri',
             ),
             Tab(
-              text: 'S',
+              text: 'Sat',
             ),
             Tab(
-              text: 'S',
+              text: 'Sun',
             ),
           ],
         ),
@@ -139,9 +140,10 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
                 myCurrentSplit.workoutList[dayIndex].name,
                 style: Styles().largeDialogHeader(),
               ),
-              const Divider(
-                thickness: 2,
-              ),
+              if(myCurrentSplit.workoutList[dayIndex].id != 'RestDay')
+                const Divider(
+                  thickness: 2,
+                ),
             ],
           ),
         ),
