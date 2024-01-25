@@ -58,9 +58,16 @@ class CurrentSplitDBHelper {
     final Database db = await CurrentSplitDBHelper().openCurrentSplit();
     String query = 'SELECT * FROM currentSplit WHERE id = ?';
     
+    CurrentSplit currSplit;
     List<Map<String, Object?>> currSplitListMap = await db.rawQuery(query, ['currSplit']);
     List<CurrentSplit> currSplitList = currSplitListMap.map((e) => CurrentSplit.fromMap(e)).toList();
-    CurrentSplit currSplit = currSplitList[0];
+    if(currSplitList.isEmpty) {
+      currSplit = CurrentSplit(); 
+      await insertToSplit(currSplit);
+    }
+    else {
+      currSplit = currSplitList[0];
+    }
 
     List<String> workoutIdList = currSplit.getWorkoutsIdList(); 
 
