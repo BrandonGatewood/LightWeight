@@ -192,6 +192,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
                     setState(() {
                       _controller[i].text = sets.toString();
+                      widget.workout.setsList.insert(i, sets.toString());
                     }); 
                   },
                   icon: icons.addIcon(),
@@ -199,8 +200,11 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 IconButton(
                   onPressed: () {
                     --sets;
-                    
+
+                   setState(() {
                     _controller[i].text = sets.toString();
+                      widget.workout.setsList.insert(i, sets.toString());
+                   }); 
                   },
                   icon: icons.minusIcon(),
                 ),
