@@ -136,7 +136,7 @@ class _WorkoutsState extends State<Workouts> {
       context: context,
       builder: (context) => Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         child: SizedBox(
           height: 400.0,
           child: Column(
