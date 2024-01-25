@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/workout_db.dart';
-import 'package:lightweight_app/db_helper/exercise_db.dart';
 import '../../../icons.dart';
 import '../../../styles.dart';
 import './select_exercises.dart';
@@ -86,7 +85,7 @@ class _WorkoutsState extends State<Workouts> {
       return const Center(
         child: Text(
           'No Workouts',
-        )
+        ),
       );
     }
     else {
@@ -103,7 +102,6 @@ class _WorkoutsState extends State<Workouts> {
                 background: Styles().deleteButtonCardBackground(),
                 confirmDismiss: (direction) async {
                   bool dismiss = confirmDeleteDialog(allWorkoutList[index]);
-
                   return dismiss;
                 },
                 child: ElevatedButton(

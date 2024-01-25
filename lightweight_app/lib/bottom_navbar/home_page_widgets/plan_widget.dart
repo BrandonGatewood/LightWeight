@@ -69,7 +69,7 @@ class Plan extends StatelessWidget {
           }
           else {
             // Open new page to current workouts
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CurrentSplit()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MyCurrentSplit()));
           }
         }, 
         child: buttonSizedBox(title)

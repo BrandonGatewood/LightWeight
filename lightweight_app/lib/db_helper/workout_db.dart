@@ -22,16 +22,16 @@ class Workout {
   Workout.fromMap(Map<String, dynamic> item):
     id = item['id'],
     name = item['name'], 
-    exerciseIdString = item['exerciseList'],
-    setsString = item['setsList'];
+    exerciseIdString = item['exerciseIdString'],
+    setsString = item['setsString'];
 
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'exerciseList': exerciseIdString, 
-      'setsList': setsString,
+      'exerciseIdString': exerciseIdString, 
+      'setsString': setsString,
     };
   }
 
@@ -116,11 +116,11 @@ class WorkoutsDBHelper {
     return true;
   }
 
-  Future<void> updateWorkoutExerciseList(Workout workout, String newExerciseList, String newExerciseSetsList) async {
+  Future<void> updateWorkoutExerciseList(Workout workout, String newExerciseIdString, String newExerciseSetsString) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
 
     await db.rawUpdate(
-      'UPDATE workouts SET exerciseList = ?, setsList = ? WHERE id = ?', [newExerciseList, newExerciseSetsList, workout.id], 
+      'UPDATE workouts SET exerciseIdString = ?, setsString = ? WHERE id = ?', [newExerciseIdString, newExerciseSetsString, workout.id], 
     );
   }
   

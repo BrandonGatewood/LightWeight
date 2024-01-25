@@ -23,24 +23,23 @@ class DB {
           '''CREATE TABLE workouts(
             id TEXT PRIMARY KEY NOT NULL,
             name TEXT NOT NULL,
-            exerciseList TEXT NOT NULL,
-            setsList TEXT NOT NULL
+            exerciseIdString TEXT NOT NULL,
+            setsString TEXT NOT NULL
           )'''
         );
 
         await database.execute(
           '''CREATE TABLE currentSplit(
             id TEXT PRIMARY KEY NOT NULL,
-            name TEXT NOT NULL,
-            workoutList Text NOT NULL
+            workoutString Text NOT NULL
           )'''
         );
 
         await database.execute(
           '''CREATE TABLE progress(
             id Text PRIMARY KEY NOT NULL,
-            exerciseId TEXT NOT NULL,
-            workoutList Text NOT NULL
+            exerciseIdString TEXT NOT NULL,
+            workoutString Text NOT NULL
           )'''
         );
 
