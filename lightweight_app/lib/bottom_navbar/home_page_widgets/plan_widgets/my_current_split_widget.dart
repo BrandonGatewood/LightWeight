@@ -13,11 +13,10 @@ class MyCurrentSplit extends StatefulWidget {
 
 class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStateMixin{
   late final TabController _tabController;
-  //late WorkoutsDBHelper workoutDb;
+  late WorkoutsDBHelper workoutDb;
   late CurrentSplitDBHelper currentSplitDb;
   late CurrentSplit myCurrentSplit;
-  List<Workout> allWorkoutsList = [];
-  Workout offDay = Workout(id: 'offDay', name: 'Off', exerciseIdString: '', setsString: '');
+  late List<Workout> allWorkoutsList;
 
   @override
   void initState() {
@@ -33,6 +32,15 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
         setState(() {
           myCurrentSplit = data;
         });
+      });
+    });
+
+    workoutDb = WorkoutsDBHelper();
+    workoutDb.openWorkouts().whenComplete(() async {
+      final workouts = await workoutDb.getAllWorkouts();
+
+      setState(() {
+        allWorkoutsList = workouts;
       });
     });
   }
@@ -138,30 +146,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
                 thickness: 2,
               ),
             ],
-          )
-          
-        ),
-      ]
-    );
-  } 
-  Column tuesTabViewBody(int dayIndex) {
-    String name = '';
-    List<String> l = myCurrentSplit.getWorkoutsIdList();
-
-    if(l[dayIndex] == 'RestDay') {
-      name = 'RestDay';
-    }
-    else {
-      name = myCurrentSplit.workoutList[dayIndex].name;
-    }
-    return Column(
-      children: <Widget> [
-        Text(
-          name,
-          style: Styles().largeDialogHeader(),
-        ),
-        const Divider(
-          thickness: 2,
+          ),
         ),
       ]
     );
@@ -197,12 +182,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
               ),
               SizedBox(
                 height: 450,
-                child: ListView.builder(
-                  itemCount: allWorkoutsList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return selectWorkoutItem(index);
-                  }
-                ),
+                child: availableWorkouts(),
               ),
               const Spacer(),
               const Spacer(),
@@ -212,7 +192,24 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
       ),
     );
   }
-  Padding selectWorkoutItem(int i) {
+
+  Widget availableWorkouts() {
+    if(allWorkoutsList.isEmpty) {
+      return const Center(
+        child: Text('No workouts available'),
+      );
+    }
+    else {
+      return ListView.builder(
+        itemCount: allWorkoutsList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return selectAWorkoutItem(index);
+        }
+      );
+    }
+  }
+
+  Padding selectAWorkoutItem(int i) {
     return Padding(
       padding: const EdgeInsets.only(
         left: 20,

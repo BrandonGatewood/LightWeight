@@ -250,12 +250,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
               ),
               SizedBox(
                 height: 450,
-                child: ListView.builder(
-                  itemCount: allExerciseList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return selectExerciseItem(index);
-                  }
-                ),
+                child: availableExercises(),
               ),
               const Spacer(),
               const Spacer(),
@@ -264,6 +259,22 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
         ),
       ),
     );
+  }
+
+  Widget availableExercises() {
+    if(allExerciseList.isEmpty) {
+      return const Center(
+        child: Text('No exercises available'),
+      );
+    }
+    else {
+      return ListView.builder(
+        itemCount: allExerciseList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return selectExerciseItem(index);
+        }
+      );
+    }
   }
 
   // exerciseSelectionItem function is a button that contains an exercise from the exerciseList. 
