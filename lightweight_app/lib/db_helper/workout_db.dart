@@ -73,7 +73,7 @@ class WorkoutsDBHelper {
     exerciseDb.openExercise();
 
     final List<Map<String, Object?>> workoutListMap = await db.query('workouts');
-    List<Workout> workoutList = workoutListMap.map((e) => Workout.fromMap(e)).toList();
+    List<Workout> workoutList = workoutListMap.map((e) => Workout.fromMap(e)).toList()..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),);
 
     for(int i = 0; i < workoutList.length; ++i) {
       List<String> aWorkoutExerciseIdList = workoutList[i].getExerciseIdList();
