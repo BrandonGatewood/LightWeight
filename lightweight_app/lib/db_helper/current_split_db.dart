@@ -11,7 +11,7 @@ class CurrentSplit {
   CurrentSplit() {
     id = 'currSplit';
     workoutIdString = 'RestDay;RestDay;RestDay;RestDay;RestDay;RestDay;RestDay';
-    for(int i = 0; i < 7; ++i){
+    for(int i = 0; i < workoutIdString.length; ++i){
       workoutList.add(Workout.restDay());
     }
 
@@ -74,7 +74,7 @@ class CurrentSplitDBHelper {
     final WorkoutsDBHelper workoutDb = WorkoutsDBHelper();
     workoutDb.openWorkouts();
 
-    for(int i = 0; i < 7; ++i) {
+    for(int i = 0; i < workoutIdList.length; ++i) {
       if(workoutIdList[i] == 'RestDay') {
         currSplit.workoutList.add(Workout.restDay());
       }
@@ -83,6 +83,9 @@ class CurrentSplitDBHelper {
 
         if(aWorkout != null) {
           currSplit.workoutList.add(aWorkout);
+        }
+        else {
+          currSplit.workoutList.add(Workout.restDay());
         }
       }
     }

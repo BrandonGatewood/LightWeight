@@ -32,7 +32,6 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
     myCurrentSplit = CurrentSplit();
     currentSplitDb = CurrentSplitDBHelper();
     currentSplitDb.openCurrentSplit().whenComplete(() async {
-      //await currentSplitDb.insertToSplit(myCurrentSplit);
       final CurrentSplit data = await currentSplitDb.getCurrentSplit();
 
       setState(() {
