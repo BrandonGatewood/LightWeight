@@ -31,22 +31,22 @@ class DB {
         await database.execute(
           '''CREATE TABLE currentSplit(
             id TEXT PRIMARY KEY NOT NULL,
-            workoutIdString Text NOT NULL
+            workoutIdString TEXT NOT NULL
           )'''
         );
 
         await database.execute(
           '''CREATE TABLE progress(
-            id Text PRIMARY KEY NOT NULL,
+            id TEXT PRIMARY KEY NOT NULL,
             exerciseIdString TEXT NOT NULL,
-            workoutString Text NOT NULL
+            workoutString TEXT NOT NULL
           )'''
         );
 
         await database.execute(
           '''CREATE TABLE user(
-            name Text PRIMARY KEY NOT NULL,
-            bodyWeight Text NOT NULL
+            name TEXT PRIMARY KEY NOT NULL,
+            bodyWeight TEXT NOT NULL
           )'''
         );
       },

@@ -23,23 +23,11 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   void initState() {
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
-  /* 
-    workoutDb = WorkoutsDBHelper();
-    workoutDb.openWorkouts().whenComplete(() async {
-      final data = await workoutDb.getAllWorkouts();
-      data.insert(0, offDay);
-
-      setState(() {
-        allWorkoutsList = data;
-      });
-    });
-  */
-
     myCurrentSplit = CurrentSplit();
     currentSplitDb = CurrentSplitDBHelper();
     currentSplitDb.openCurrentSplit().whenComplete(() async {
-
-      final data = await currentSplitDb.getCurrentSplit('currSplit');
+      await currentSplitDb.insertToSplit(myCurrentSplit);
+      final CurrentSplit data = await currentSplitDb.getCurrentSplit();
 
       setState(() {
         setState(() {
@@ -122,10 +110,54 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   }
 
   Column tabViewBody(int dayIndex) {
+    String name = '';
+    List<String> l = myCurrentSplit.getWorkoutsIdList();
+
+    if(l[dayIndex] == 'RestDay') {
+      name = 'RestDay';
+    }
+    else {
+      name = myCurrentSplit.workoutList[dayIndex].name;
+    }
+
+    return Column(
+      children: <Widget> [
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 10,
+            left: 10,
+            top: 20,
+          ),
+          child: Column(
+            children: <Widget>[
+              Text(
+                name,
+                style: Styles().largeDialogHeader(),
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+            ],
+          )
+          
+        ),
+      ]
+    );
+  } 
+  Column tuesTabViewBody(int dayIndex) {
+    String name = '';
+    List<String> l = myCurrentSplit.getWorkoutsIdList();
+
+    if(l[dayIndex] == 'RestDay') {
+      name = 'RestDay';
+    }
+    else {
+      name = myCurrentSplit.workoutList[dayIndex].name;
+    }
     return Column(
       children: <Widget> [
         Text(
-          myCurrentSplit.workoutList[dayIndex].name,
+          name,
           style: Styles().largeDialogHeader(),
         ),
         const Divider(

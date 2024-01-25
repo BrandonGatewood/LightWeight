@@ -9,11 +9,6 @@ class CurrentSplit {
   List<Workout> workoutList = [];
 
   CurrentSplit() {
-    id = '';
-    workoutIdString = '';
-  }
-
-  CurrentSplit.emptySplit() {
     id = 'currSplit';
     workoutIdString = 'RestDay;RestDay;RestDay;RestDay;RestDay;RestDay;RestDay';
   }
@@ -45,69 +40,28 @@ class CurrentSplitDBHelper {
     return DB().openDB();
   }
 
-  Future<bool> checkDbForSplit() async {
+  Future<void> insertToSplit(CurrentSplit aSplit) async {
     final Database db = await CurrentSplitDBHelper().openCurrentSplit();
 
-    try{
-      await db.rawQuery('SELECT * FROM currentSplit WHERE id = ?', ['currSplit']);
-
-      return true;
-    }
-    catch(err) {
-      return false;
-    }
+    await db.insert(
+      'currentSplit',
+      aSplit.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
   }
 
-  Future<void> insertToSplit() async {
-    final Database db = await CurrentSplitDBHelper().openCurrentSplit();
-
-      CurrentSplit aSplit = CurrentSplit.emptySplit();
-
-      await db.insert(
-        'currentSplit',
-        aSplit.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.abort,
-      );
-  }
-
-  Future<CurrentSplit> getCurrentSplit(String id) async {
+  Future<CurrentSplit> getCurrentSplit() async {
     final Database db = await CurrentSplitDBHelper().openCurrentSplit();
     String query = 'SELECT * FROM currentSplit WHERE id = ?';
-    CurrentSplit currSplit;
-
-    final List<Map<String, Object?>> currSplitListMap = await db.rawQuery(query, ['currSplit']);
+    
+    List<Map<String, Object?>> currSplitListMap = await db.rawQuery(query, ['currSplit']);
 
     if(currSplitListMap.isNotEmpty) {
       final WorkoutsDBHelper workoutDb = WorkoutsDBHelper();
       workoutDb.openWorkouts();
 
-      final List<Map<String, Object?>> currSplitListMap = await db.query('currentSplit');
-      List<CurrentSplit> currentSplitList = currSplitListMap.map((e) => CurrentSplit.fromMap(e)).toList();
-      currSplit = currentSplitList[0];
-      List<String> workoutIdList = currSplit.getWorkoutsIdList();
-
-
-      for(int i = 0; i < workoutIdList.length; ++i) {
-        if(workoutIdList[i] == 'RestDay') {
-          Workout restDay = Workout(id: 'RestDay', name: 'Rest Day', exerciseIdString: '', setsString: '');
-
-          currSplit.workoutList.add(restDay);
-        }
-        else {
-          dynamic aWorkout = await workoutDb.getWorkoutById(workoutIdList[i]);
-
-          if(aWorkout != null) {
-            currSplit.workoutList.add(aWorkout);
-          }
-        }
-      }
-       
     }
-    else {
-      await insertToSplit();
-
-      return CurrentSplit.emptySplit();
-    }
-    return currSplit;
+    List<CurrentSplit> l = currSplitListMap.map((e) => CurrentSplit.fromMap(e)).toList();
+    return l[0];
   }
 }
