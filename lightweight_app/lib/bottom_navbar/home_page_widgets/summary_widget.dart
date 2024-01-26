@@ -74,7 +74,7 @@ class Summary extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
                   '190lbs',
-                  style: Styles().content(),
+                  style: Styles().cardInfo(),
                 ),
               ),
             ],
@@ -98,7 +98,7 @@ class Summary extends StatelessWidget {
             children: <Widget>[
               Text(
                 title,
-                style: Styles().content(),
+                style: Styles().cardTitle(),
               ),
               const Spacer(),
               Padding(

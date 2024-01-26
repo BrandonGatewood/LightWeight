@@ -2,6 +2,24 @@ import "package:flutter/material.dart";
 import "package:lightweight_app/icons.dart";
 
 class Styles {
+  // TextStyle for titles in homepage
+  TextStyle cardTitle() {
+    return const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    );
+  }
+
+  // TextStyle for info in homepage
+  TextStyle cardInfo() {
+    return const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      color: Colors.white,
+    );
+  }
+
   // Textstyle for dialog headers
   TextStyle dialogHeader() {
     return const TextStyle(
