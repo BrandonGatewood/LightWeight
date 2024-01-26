@@ -1,12 +1,20 @@
 import "package:flutter/material.dart";
+import "package:lightweight_app/icons.dart";
+import "package:lightweight_app/styles.dart";
 
 class Summary extends StatelessWidget {
-  const Summary({super.key});
+  const Summary({
+    super.key,
+    required this.workoutName,
+  });
+
+  final String workoutName;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return 
+       Column(
+      //crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 5),
@@ -14,18 +22,125 @@ class Summary extends StatelessWidget {
             children: <Widget>[
               // Todays Workout
               Expanded(
-                child: getMissedWorkouts(context),
+                child: summaryCard(context, 'Today\'s Workout', workoutName),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(5)
               ),
               // Weight
               Expanded(
-                child: getWeight(context),
+                child: healthButtonCard(context),
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
+
+  // Function to generate buttonCard
+  ElevatedButton healthButtonCard(BuildContext context) {
+    return ElevatedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.inversePrimary),
+        padding: MaterialStateProperty.all(EdgeInsets.zero),
+      ),
+      onPressed: () {
+      }, 
+      child: SizedBox(
+        height: 70,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Current Weight',
+                    style: Styles().content(), 
+                  ),
+                  const Spacer(),
+                  MyIcons().forwardArrowIcon(),
+                ],
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  '190lbs',
+                  style: Styles().content(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Function to generate a card for the summary section
+  Card summaryCard(BuildContext context, String title, String content) {
+    return Card( 
+      elevation: 0,
+      color: Theme.of(context).colorScheme.inversePrimary,
+      child: SizedBox(
+        height: 70,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                title,
+                style: Styles().content(),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  content,
+                  style: Styles().content(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   /* 
     Function to find users weight and returns a summaryCard.
@@ -45,52 +160,5 @@ class Summary extends StatelessWidget {
     String content = '0';
 
     return summaryCard(context, 'Workouts Missed', content);
-  }
-
-  /*
-    Function to generate a card for the summary section
-  */
-  Widget summaryCard(BuildContext context, String title, String content) {
-    return Card( 
-      elevation: 0,
-      color: Theme.of(context).colorScheme.inversePrimary,
-      child: SizedBox(
-        height: 80,
-        child: Column(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: 
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    title,
-                    style: titleStyle(),
-                  ),
-                ),
-            ),
-            Text(
-              content,
-              style: contentStyle(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /*
-    Reusable Function to style texts
-  */
-  TextStyle contentStyle() {
-    return const TextStyle(
-      fontSize: 40,
-      fontWeight: FontWeight.bold,
-    );
-  }
-  TextStyle titleStyle() {
-    return const TextStyle(
-      fontSize: 14,
-    );
   }
 }

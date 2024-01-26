@@ -126,9 +126,7 @@ class Plan extends StatelessWidget {
             style: Styles().content(),
           ),
           const Spacer(),
-          const Icon(Icons.arrow_forward_ios_rounded,
-            color: Colors.white, 
-          ),
+          MyIcons().forwardArrowIcon(), 
         ],
       ),
     );
