@@ -1,11 +1,48 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_current_split_widget.dart';
+import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'home_page_widgets/summary_widget.dart';
 import 'home_page_widgets/plan_widget.dart';
 import 'home_page_widgets/highlight_widget.dart';
 import 'home_page_widgets/workout_overview_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage> {
+  late CurrentSplit myCurrentSplit;
+  late CurrentSplitDBHelper currentSplitDb;
+
+  callback(CurrentSplit newCurrentSplit) {
+    setState(() {
+      myCurrentSplit = newCurrentSplit;
+      todaysWorkoutOverviewSection();
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    myCurrentSplit = CurrentSplit();
+    currentSplitDb = CurrentSplitDBHelper();
+    currentSplitDb.openCurrentSplit().whenComplete(() async {
+      final CurrentSplit data = await currentSplitDb.getCurrentSplit();
+
+      setState(() {
+        myCurrentSplit = data;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +52,53 @@ class HomePage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             homepageSections('Summary', 0),
-            homepageSections('Today\'s Workout', 1),
-            homepageSections('Plan', 2),
+            todaysWorkoutOverviewSection(),
+            planSection(),
+            //homepageSections('Today\'s Workout', 1),
+            //homepageSections('Plan', 2),
             homepageSections('Highlights', 3),
           ],
         ),
       ),
+    );
+  }
+
+  Widget todaysWorkoutOverviewSection() {
+    int todayIndex = DateTime.now().weekday - 1;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              'Today\'s Workout',
+              style: header(), 
+            ),
+          ),
+          WorkoutOverview(todaysWorkout: myCurrentSplit.workoutList[todayIndex]),
+        ],
+      )
+    );
+  }
+
+  Widget planSection() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              'Plan',
+              style: header(), 
+            ),
+          ),
+          Plan(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: this.callback,),
+
+        ],
+      )
     );
   }
 
@@ -32,12 +110,6 @@ class HomePage extends StatelessWidget {
 
     if(selection == 0) {
       section = const Summary();
-    }
-    else if(selection == 1) {
-      section = const WorkoutOverview();
-    }
-    else if(selection == 2) {
-      section = const Plan();
     }
     else {
       section = const Highlight();
@@ -71,44 +143,3 @@ class HomePage extends StatelessWidget {
   }
 }
 
-  /*
-    findDay function uses DateTime class to find the current day.
-
-    The function returns a String containing the day.
-  */
-  /*
-  String findDay() {
-    const Map<int, String> weekdayName = {1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday", 7: "Sunday"};
-    return weekdayName[DateTime.now().weekday].toString();
-  } 
- */ 
-
-  /*
-  ListView workoutOverview() {
-    String day = findDay();
-    String workout = 'hi';
-
-    if(workout.isEmpty) {
-      return ListView(
-            children: const <Widget>[
-              Card(
-                child: ListTile(
-                  title: Text('No workouts today'),
-                ),
-              ),
-            ],
-      );
-    }
-    else {
-      return ListView(
-            children: const <Widget>[
-              Card(
-                child: ListTile(
-                  title: Text('No workouts today'),
-                ),
-              ),
-            ],
-      );
-    }
-  }
-  */

@@ -1,12 +1,22 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/styles.dart';
 import 'plan_widgets/my_exercises_widget.dart';
 import 'plan_widgets/my_workout_widget.dart';
 import 'plan_widgets/my_current_split_widget.dart';
 
 class Plan extends StatelessWidget {
-  const Plan({super.key});
+  const Plan({
+    super.key,
+    required this.myCurrentSplit,
+    required this.currentSplitDb,
+    required this.callback,
+  });
 
+  final Function callback;
+  final CurrentSplit myCurrentSplit;
+  final CurrentSplitDBHelper currentSplitDb;
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,7 +45,9 @@ class Plan extends StatelessWidget {
       child: ElevatedButton(
         style: currentSplitButtonStyle(context),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MyCurrentSplit()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
+            MyCurrentSplit(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: this.callback,),
+          ));
         }, 
         child: currentSplitButtonSizedBox(),
       ),

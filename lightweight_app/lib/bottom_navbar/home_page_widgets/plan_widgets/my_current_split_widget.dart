@@ -5,7 +5,16 @@ import 'package:lightweight_app/icons.dart';
 import 'package:lightweight_app/styles.dart';
 
 class MyCurrentSplit extends StatefulWidget {
-  const MyCurrentSplit({super.key});
+  const MyCurrentSplit({
+    super.key,
+    required this.myCurrentSplit,
+    required this.currentSplitDb,
+    required this.callback,
+  });
+
+  final Function callback;
+  final CurrentSplit myCurrentSplit;
+  final CurrentSplitDBHelper currentSplitDb;
 
   @override
   State<MyCurrentSplit> createState() => _MyCurrentSplitState();
@@ -14,14 +23,14 @@ class MyCurrentSplit extends StatefulWidget {
 class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStateMixin{
   late final TabController _tabController;
   late WorkoutsDBHelper workoutDb;
-  late CurrentSplitDBHelper currentSplitDb;
-  late CurrentSplit myCurrentSplit;
   late List<Workout> allWorkoutsList;
 
   _refreshCurrentSplit() async {
     setState(() {
-      myCurrentSplit;
+      widget.myCurrentSplit;
     });
+
+    widget.callback(MyCurrentSplit);
   }
 
   
@@ -29,16 +38,6 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   void initState() {
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
-    myCurrentSplit = CurrentSplit();
-    currentSplitDb = CurrentSplitDBHelper();
-    currentSplitDb.openCurrentSplit().whenComplete(() async {
-      final CurrentSplit data = await currentSplitDb.getCurrentSplit();
-
-      setState(() {
-        myCurrentSplit = data;
-      });
-    });
-
     workoutDb = WorkoutsDBHelper();
     workoutDb.openWorkouts().whenComplete(() async {
       final workouts = await workoutDb.getAllWorkouts();
@@ -135,10 +134,10 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
           child: Column(
             children: <Widget>[
               Text(
-                myCurrentSplit.workoutList[dayIndex].name,
+                widget.myCurrentSplit.workoutList[dayIndex].name,
                 style: Styles().largeDialogHeader(),
               ),
-              if(myCurrentSplit.workoutList[dayIndex].id != 'RestDay')
+              if(widget.myCurrentSplit.workoutList[dayIndex].id != 'RestDay')
                 const Divider(
                   thickness: 2,
                 ),
@@ -149,14 +148,14 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
           height: MediaQuery.of(context).size.height - 210,
           child:
            ListView.builder(
-            itemCount: myCurrentSplit.workoutList[dayIndex].exerciseList.length,
+            itemCount: widget.myCurrentSplit.workoutList[dayIndex].exerciseList.length,
             itemBuilder: (BuildContext context, int index) {
-              String num = myCurrentSplit.workoutList[dayIndex].setsList[index];
+              String num = widget.myCurrentSplit.workoutList[dayIndex].setsList[index];
               String sub = '$num Reps';
 
               return Card(
                 child: ListTile(
-                  title: Text(myCurrentSplit.workoutList[dayIndex].exerciseList[index].name),
+                  title: Text(widget.myCurrentSplit.workoutList[dayIndex].exerciseList[index].name),
                   subtitle: Text(sub),
                 ),
               );
@@ -234,7 +233,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                myCurrentSplit.workoutList[dayIndex] = allWorkoutsList[itemIndex];
+                widget.myCurrentSplit.workoutList[dayIndex] = allWorkoutsList[itemIndex];
                 _refreshCurrentSplit();
                 onSubmitUpdate();
                 Navigator.pop(context);
@@ -265,7 +264,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
     String id = '';
 
     for(int i = 0; i < 7; ++i) {
-      String anId = myCurrentSplit.workoutList[i].id;
+      String anId = widget.myCurrentSplit.workoutList[i].id;
       if(i == 6) {
         id = '$id$anId';
       } 
@@ -280,7 +279,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   void onSubmitUpdate() async {
     String workoutId = updatedIdListToString();
 
-    await currentSplitDb.updateCurrentSplit(workoutId);
+    await widget.currentSplitDb.updateCurrentSplit(workoutId);
   }
 
 }
