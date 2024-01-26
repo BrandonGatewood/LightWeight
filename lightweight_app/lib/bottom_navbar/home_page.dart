@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: ListView(
           children: <Widget>[
             homepageSections('Summary', 0),

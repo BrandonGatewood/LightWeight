@@ -1,49 +1,72 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/db_helper/current_split_db.dart';
+import 'package:lightweight_app/styles.dart';
 
-class WorkoutOverview extends StatelessWidget {
+class WorkoutOverview extends StatefulWidget {
   const WorkoutOverview({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return planDummyData(context);
+  State<WorkoutOverview> createState() => _WorkoutOverviewState();
+}
+
+class _WorkoutOverviewState extends State<WorkoutOverview> {
+  late CurrentSplitDBHelper currentSplitDb;
+  late CurrentSplit todaysWorkout;
+  int todayIndex = DateTime.now().weekday - 1; 
+
+
+  @override
+  void initState() {
+    super.initState();
+    todaysWorkout = CurrentSplit();
+    currentSplitDb = CurrentSplitDBHelper();
+    currentSplitDb.openCurrentSplit().whenComplete(() async {
+      final CurrentSplit data = await currentSplitDb.getCurrentSplit();
+      setState(() {
+        todaysWorkout = data;
+      });
+    });
   }
 
-  Widget planDummyData(BuildContext context) {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
-        // SizedBox Styling 
-        height: 350,
-        child: ListView(
-          children: workouts(),
+      height: 350,
+      child: checkForRestDay(),
+    );
+  }
+
+  Widget checkForRestDay() {
+    if(todaysWorkout.workoutList[todayIndex].id == 'RestDay') {
+      return Center(
+        child: Card(
+          child: Text(
+            'Rest Day',
+            style: Styles().largeDialogHeader(),
+          ),
         ),
       );
-  }
-
-  /*
-    workouts will generate a list of the users workouts for the day.
-  */
-  List<Widget> workouts() {
-    // find todays workouts
-    List<Widget> workoutList = [];
-
-    List<String> name = ['incline Bench', 'flat bench', 'incline dumbbell bench', 'seated flies', 'standing flies'];
-    List<String> reps = ['4', '3', '4', '2', '3'];
-
-    for(int i = 0; i < name.length; ++i) {
-      workoutList.add(workoutCard(name[i], reps[i]));
     }
-    return workoutList;
-  }
-  /*
-    workoutCard generates a Generic workout card with the workout name 
-    and the number of reps.
-  */
-  Card workoutCard(String title, String reps) {
-    String sub = '$reps reps';
-    return Card(
-      child: ListTile(
-        title: Text(title),
-        subtitle: Text(sub),
-      ),
-    );
+    else {
+      return ListView.builder(
+        itemCount: todaysWorkout.workoutList[todayIndex].exerciseList.length,
+        itemBuilder: (BuildContext context, int index) {
+          String num = todaysWorkout.workoutList[todayIndex].setsList[index];
+          String sub = '$num Reps';
+
+          return Card(
+            child: ListTile(
+              title: Text(todaysWorkout.workoutList[todayIndex].exerciseList[index].name),
+              subtitle: Text(sub),
+            ),
+          );
+        },
+      );
+    }
   }
 }

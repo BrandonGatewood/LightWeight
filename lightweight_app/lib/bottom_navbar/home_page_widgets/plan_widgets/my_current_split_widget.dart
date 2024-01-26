@@ -35,9 +35,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
       final CurrentSplit data = await currentSplitDb.getCurrentSplit();
 
       setState(() {
-        setState(() {
-          myCurrentSplit = data;
-        });
+        myCurrentSplit = data;
       });
     });
 
