@@ -232,10 +232,12 @@ class _WorkoutsState extends State<Workouts> {
                     icon:  icons.backArrowIcon(),
                   ),
                   const Spacer(),
+                  const Spacer(),
                   Text(
                     'Add Workout',
-                    style: Styles().dialogHeader(), 
+                    style: Styles().largeDialogHeader(), 
                   ),
+                  const Spacer(),
                   const Spacer(),
                   const Spacer(),
                 ],

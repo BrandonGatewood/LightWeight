@@ -170,8 +170,6 @@ class _ExercisesState extends State<Exercises> {
     workout. 
   */ 
   void addExerciseDialog() {
-    bool validated; 
-
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
