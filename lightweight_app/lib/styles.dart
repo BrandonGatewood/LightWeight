@@ -13,6 +13,7 @@ class Styles {
   TextStyle largeDialogHeader() {
     return const TextStyle(
       fontSize: 18,
+      color: Colors.white,
     );
   }
   // TextStyle for subtitles

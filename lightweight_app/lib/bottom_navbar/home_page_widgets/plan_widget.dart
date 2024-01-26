@@ -54,19 +54,16 @@ class Plan extends StatelessWidget {
     }
 
   SizedBox currentSplitButtonSizedBox() {
-    return const SizedBox(
-      height: 50,
+    return SizedBox(
+      height: 80,
       child: Row(
         children: <Widget>[
           Text(
             'My Current Split',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-            ), 
+            style: Styles().largeDialogHeader(), 
           ),
-          Spacer(),
-          Icon(Icons.arrow_forward_ios_rounded,
+          const Spacer(),
+          const Icon(Icons.arrow_forward_ios_rounded,
             color: Colors.white, 
           ),
         ],
@@ -110,14 +107,11 @@ class Plan extends StatelessWidget {
 
   SizedBox minibuttonSizedBox(BuildContext context, String title) {
     return SizedBox(
-      height: 60,
+      height: 80,
       child: Row(
         children: <Widget>[
           Text(title,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-            ), 
+            style: Styles().largeDialogHeader(),
           ),
           const Spacer(),
           const Icon(Icons.arrow_forward_ios_rounded,
