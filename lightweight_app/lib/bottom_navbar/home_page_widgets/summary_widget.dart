@@ -22,7 +22,7 @@ class Summary extends StatelessWidget {
             children: <Widget>[
               // Todays Workout
               Expanded(
-                child: summaryCard(context, 'Today\'s Workout', workoutName),
+                child: todaysWorkoutCard(context, 'Today\'s Workout', workoutName),
               ),
               const Padding(
                 padding: EdgeInsets.all(5)
@@ -85,7 +85,7 @@ class Summary extends StatelessWidget {
   }
 
   // Function to generate a card for the summary section
-  Card summaryCard(BuildContext context, String title, String content) {
+  Card todaysWorkoutCard(BuildContext context, String title, String content) {
     return Card( 
       elevation: 0,
       color: Theme.of(context).colorScheme.inversePrimary,
@@ -113,52 +113,5 @@ class Summary extends StatelessWidget {
         ),
       ),
     );
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /* 
-    Function to find users weight and returns a summaryCard.
-  */
-  Widget getWeight(BuildContext context) {
-    // Find Weight
-    String content = '190 lbs';
-
-    return summaryCard(context, 'Weight', content);
-  }
-
-  /*
-    Function to find the number of missed entries and returns a summaryCard.
-  */
-  Widget getMissedWorkouts(BuildContext context) {
-    // Find missed entries 
-    String content = '0';
-
-    return summaryCard(context, 'Workouts Missed', content);
   }
 }
