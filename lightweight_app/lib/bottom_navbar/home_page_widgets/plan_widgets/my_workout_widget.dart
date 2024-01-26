@@ -138,7 +138,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         child: SizedBox(
-          height: 400.0,
+          height: 550.0,
           child: Column(
             children: <Widget> [
               Row(
@@ -167,7 +167,7 @@ class _WorkoutsState extends State<Workouts> {
                 ),
               ),
               SizedBox(
-                height: 300,
+                height: 450,
                 width: 300,
                 child: ListView.builder(
                   itemCount: aWorkout.exerciseList.length,
