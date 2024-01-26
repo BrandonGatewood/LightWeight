@@ -94,26 +94,5 @@ class ExerciseDBHelper {
     exerciseList = e.map((e) => Exercise.fromMap(e)).toList();
 
     return exerciseList;
-    /*
-    for(final exercise in exerciseList) {
-      if(exercise.id == id) {
-        return exercise;
-      }
-    }
-
-    return null;
-    */
-  }
-
-  Future<String> getExerciseName(String id) async {
-    List<Exercise> exerciseList = await getAllExercise();
-
-    for(final exercise in exerciseList) {
-      if(exercise.id == id) {
-        return exercise.name;
-      }
-    }
-
-    return '';
   }
 }
