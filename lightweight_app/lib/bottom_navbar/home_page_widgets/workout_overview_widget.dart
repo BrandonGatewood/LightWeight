@@ -43,9 +43,28 @@ class WorkoutOverview extends StatelessWidget {
           String sub = '$num Sets';
 
           return Card(
-            child: ListTile(
-              title: Text(todaysWorkout.exerciseList[index].name),
-              subtitle: Text(sub),
+            child: SizedBox(
+              height: 60,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      todaysWorkout.exerciseList[index].name,
+                      style: Styles().content(),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        sub,
+                        style: Styles().subtitle(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         },

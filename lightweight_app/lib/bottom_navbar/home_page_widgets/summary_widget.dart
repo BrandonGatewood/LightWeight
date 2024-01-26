@@ -53,7 +53,7 @@ class Summary extends StatelessWidget {
       onPressed: () {
       }, 
       child: SizedBox(
-        height: 70,
+        height: 60,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
           child: Column(
@@ -90,7 +90,7 @@ class Summary extends StatelessWidget {
       elevation: 0,
       color: Theme.of(context).colorScheme.inversePrimary,
       child: SizedBox(
-        height: 70,
+        height: 60,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
           child: Column(
