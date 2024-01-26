@@ -81,7 +81,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
           labelColor: Theme.of(context).colorScheme.inversePrimary,
           unselectedLabelColor: Colors.white,
           indicatorColor: Theme.of(context).colorScheme.inversePrimary,
-          labelPadding: EdgeInsets.symmetric(horizontal: 10),
+          labelPadding: const EdgeInsets.symmetric(horizontal: 10),
           tabs: const <Widget>[
             Tab(
               text: 'Mon',
