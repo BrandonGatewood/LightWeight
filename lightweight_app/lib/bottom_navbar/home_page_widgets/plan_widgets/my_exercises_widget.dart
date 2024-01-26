@@ -211,11 +211,7 @@ class _ExercisesState extends State<Exercises> {
                   controller: _controller,
                   onSubmitted: (String value) async {
                     if(_controller.text.isNotEmpty) {
-                      validated = validateExerciseName(value);
-
-                      if(validated) {
-                        onSubmitAdd();
-                      }
+                      onSubmitAdd();
                     }
                   },
                   decoration: Styles().inputWorkoutName('Exercise name'),
@@ -230,11 +226,7 @@ class _ExercisesState extends State<Exercises> {
                   child: TextButton(
                     onPressed: () {
                       if(_controller.text.isNotEmpty) {
-                        validated = validateExerciseName(_controller.text);
-
-                        if(validated) {
-                          onSubmitAdd();
-                        }
+                        onSubmitAdd();
                       }
                     }, 
                     child: Styles().saveTextButton(),
@@ -358,11 +350,7 @@ class _ExercisesState extends State<Exercises> {
           controller: _controller,
           onSubmitted: (String value) async {
             if(_controller.text.isNotEmpty) {
-              validated = validateExerciseName(value);
-
-              if(validated) {
-                onSubmitUpdate(anExercise);
-              }
+              onSubmitUpdate(anExercise);
             }
           },
           decoration: Styles().inputWorkoutName('New exercise name'),
@@ -377,11 +365,7 @@ class _ExercisesState extends State<Exercises> {
           child: TextButton(
             onPressed: () {
               if(_controller.text.isNotEmpty) {
-                validated = validateExerciseName(_controller.text);
-
-                if(validated) {
-                  onSubmitUpdate(anExercise);
-                }
+                onSubmitUpdate(anExercise);
               }
             }, 
             child: Styles().saveTextButton(),
@@ -475,19 +459,23 @@ class _ExercisesState extends State<Exercises> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Center(
+                  child: Text(
+                    title,
+                    style: Styles().largeDialogHeader(),
+                  ),
+                ),
+              ),
               const Spacer(),
               Center(
                 child: Text(
-                  title,
+                  content,
                   style: Styles().dialogHeader(),
                 ),
               ),
-              Center(
-                child: Text(
-                  content,
-                  style: Styles().subtitle(),
-                ),
-              ),
+              const Spacer(),
               const Spacer(),
             ]
           ),
@@ -508,27 +496,30 @@ class _ExercisesState extends State<Exercises> {
 
   // Communicates with database to add a new exercise
   void onSubmitAdd() async {
-    bool add = await _dbHelper.insertExercise(_controller.text);
-
-    handleAddRequest(add);
-  }
-
-  // Handles the state after attempting to add a new exercise
-  void handleAddRequest(bool flag) {
-    if(flag) {
-      _refreshExercises();
-      Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
+    if(validateExerciseName(_controller.text)) {
+      bool add = await _dbHelper.insertExercise(_controller.text);
+      handleAddRequest();
     }
     else {
       failedDialog(0);
     }
   }
 
+  // Handles the state after attempting to add a new exercise
+  void handleAddRequest() {
+      _refreshExercises();
+      Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
+  }
+
   // Communicates with database to update an exercise 
   void onSubmitUpdate(Exercise anExercise) async {
-    bool update = await _dbHelper.updateExercise(anExercise.id, _controller.text);
-
-    handleUpdateRequest(update);
+    if(validateExerciseName(anExercise.name)) {
+      bool update = await _dbHelper.updateExercise(anExercise.id, _controller.text);
+      handleUpdateRequest(update);
+    }
+    else {
+      failedDialog(1);
+    }
   }
 
   // Handles the state after attempting to update an exercise.
