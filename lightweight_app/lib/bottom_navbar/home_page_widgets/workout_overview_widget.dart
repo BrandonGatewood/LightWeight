@@ -12,8 +12,33 @@ class WorkoutOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = 65;
+    // select height depending on workout length
+    switch(todaysWorkout.exerciseList.length) {
+      case 0:
+        break;
+      case 1:
+        break;
+      case 2:
+        height *= 2;
+        break;
+      case 3:
+        height *= 3;
+        break;
+      case 4:
+        height *= 4;
+        break;
+      case 5:
+        height *= 5;
+        break;
+      default:
+        height = 375;
+        break;
+    }
+
     return SizedBox(
-      height: 375,
+      height: height,
+      //height: 65,
       child: checkForRestDay(),
     );
   }
