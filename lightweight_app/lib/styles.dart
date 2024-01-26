@@ -6,6 +6,7 @@ class Styles {
   TextStyle dialogHeader() {
     return const TextStyle(
       fontSize: 16,
+      color: Colors.white,
     );
   }
 
@@ -28,6 +29,7 @@ class Styles {
   TextStyle content() {
     return const TextStyle(
       fontSize: 14,
+      color: Colors.white,
     );
   }
 

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/current_split_db.dart';
+import 'package:lightweight_app/icons.dart';
 import 'package:lightweight_app/styles.dart';
 import 'plan_widgets/my_exercises_widget.dart';
 import 'plan_widgets/my_workout_widget.dart';
@@ -73,12 +74,10 @@ class Plan extends StatelessWidget {
         children: <Widget>[
           Text(
             'My Current Split',
-            style: Styles().largeDialogHeader(), 
+            style: Styles().content(), 
           ),
           const Spacer(),
-          const Icon(Icons.arrow_forward_ios_rounded,
-            color: Colors.white, 
-          ),
+          MyIcons().forwardArrowIcon(),
         ],
       ),
     );
@@ -124,7 +123,7 @@ class Plan extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Text(title,
-            style: Styles().largeDialogHeader(),
+            style: Styles().content(),
           ),
           const Spacer(),
           const Icon(Icons.arrow_forward_ios_rounded,

@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_current_split_widget.dart';
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'home_page_widgets/summary_widget.dart';
 import 'home_page_widgets/plan_widget.dart';
