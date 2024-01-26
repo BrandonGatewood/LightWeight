@@ -192,7 +192,7 @@ class _ExercisesState extends State<Exercises> {
                   const Spacer(),
                   Text(
                     'Add Exercise',
-                    style: Styles().dialogHeader(), 
+                    style: Styles().largeDialogHeader(), 
                   ),
                   const Spacer(),
                   const Spacer(),
@@ -275,7 +275,7 @@ class _ExercisesState extends State<Exercises> {
                   const Spacer(),
                   Text(
                     'Delete Exercise',
-                    style: Styles().dialogHeader(), 
+                    style: Styles().largeDialogHeader(), 
                   ),
                   const Spacer(),
                   const Spacer(),
@@ -334,7 +334,7 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
           Text(
             anExercise.name,
-            style: Styles().dialogHeader(), 
+            style: Styles().largeDialogHeader(), 
           ),
           const Spacer(),
           IconButton(
@@ -395,6 +395,8 @@ class _ExercisesState extends State<Exercises> {
     deleteExerciseDialogList function is the layout dialog for deleting an exercise in the database.
   */ 
   List<Widget> deleteExerciseWidgetList(Exercise anExercise) {
+    String name = anExercise.name;
+
     return <Widget>[
       Row(
         children: <Widget>[
@@ -406,7 +408,7 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
           Text(
             'Delete Exercise',
-            style: Styles().dialogHeader(), 
+            style: Styles().largeDialogHeader(), 
           ),
           const Spacer(),
           const Spacer(),
@@ -417,7 +419,7 @@ class _ExercisesState extends State<Exercises> {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Text(
-          'Confirm to delete exercise',
+          'Confirm to delete $name',
           style: Styles().subtitle(), 
         ),
       ),
