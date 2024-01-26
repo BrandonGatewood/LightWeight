@@ -30,26 +30,18 @@ class ExerciseDBHelper {
     return DB().openDB();
   }
 
-  Future<bool> insertExercise(String name) async {
+  Future<void> insertExercise(String name) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
     String id = DB().idGenerator(); 
 
     Exercise newExercise = Exercise(id: id, name: name, numOfTimesEntered: 0);
 
-    // insert new exercise into db and abort if primary key (name) already exists
-    try{
-      await db.insert(
-        'exercises', 
-        newExercise.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.abort,
-      );
-
-      return true;
-    }
-    catch(err) {
-      return false;
-    }
+    await db.insert(
+      'exercises', 
+      newExercise.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.abort,
+    );
   }
 
   Future<List<Exercise>> getAllExercise() async {
@@ -88,18 +80,10 @@ class ExerciseDBHelper {
       );
   }
 
-  Future<bool> updateExercise(String id, String newName) async {
+  Future<void> updateExercise(String id, String newName) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
-    try {
-      await db.rawUpdate(
-        'UPDATE exercises SET name = ? WHERE id = ?', [newName, id]);
-    }
-    catch(err) {
-      return false;
-    }
-
-    return true;
+    await db.rawUpdate('UPDATE exercises SET name = ? WHERE id = ?', [newName, id]);
   }
 
   Future<dynamic> getExercise(String id) async {

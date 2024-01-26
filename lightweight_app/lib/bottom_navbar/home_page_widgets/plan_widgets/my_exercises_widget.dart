@@ -279,7 +279,7 @@ class _ExercisesState extends State<Exercises> {
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Text(
                   'Confirm to delete $name',
-                  style: Styles().subtitle(), 
+                  style: Styles().dialogHeader(), 
                 ),
               ),
               const Spacer(),
@@ -314,8 +314,6 @@ class _ExercisesState extends State<Exercises> {
   
   // editExerciseDialogList function is the layout dialog for updating an exercise.
   List<Widget> editExerciseWidgetList(Exercise anExercise) {
-    bool validated;
-
     return <Widget>[
       Row( 
         children: <Widget>[
@@ -404,7 +402,7 @@ class _ExercisesState extends State<Exercises> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Text(
           'Confirm to delete $name',
-          style: Styles().subtitle(), 
+          style: Styles().dialogHeader(), 
         ),
       ),
       const Spacer(),
@@ -497,7 +495,7 @@ class _ExercisesState extends State<Exercises> {
   // Communicates with database to add a new exercise
   void onSubmitAdd() async {
     if(validateExerciseName(_controller.text)) {
-      bool add = await _dbHelper.insertExercise(_controller.text);
+      await _dbHelper.insertExercise(_controller.text);
       handleAddRequest();
     }
     else {
@@ -514,8 +512,8 @@ class _ExercisesState extends State<Exercises> {
   // Communicates with database to update an exercise 
   void onSubmitUpdate(Exercise anExercise) async {
     if(validateExerciseName(anExercise.name)) {
-      bool update = await _dbHelper.updateExercise(anExercise.id, _controller.text);
-      handleUpdateRequest(update);
+      await _dbHelper.updateExercise(anExercise.id, _controller.text);
+      handleUpdateRequest();
     }
     else {
       failedDialog(1);
@@ -523,14 +521,9 @@ class _ExercisesState extends State<Exercises> {
   }
 
   // Handles the state after attempting to update an exercise.
-  void handleUpdateRequest(bool flag) {
-    if(flag) {
-      _refreshExercises();
-      Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
-    }
-    else {
-      failedDialog(1);
-    }
+  void handleUpdateRequest() {
+    _refreshExercises();
+    Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
   }
 
   // Communicates with database to delete an exercise
