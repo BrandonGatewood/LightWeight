@@ -323,6 +323,7 @@ class _WorkoutsState extends State<Workouts> {
   
   bool confirmDeleteDialog(Workout aWorkout) {
     bool dismiss = false;
+    String name = aWorkout.name;
 
     showDialog(
       context: context,
@@ -341,22 +342,22 @@ class _WorkoutsState extends State<Workouts> {
                     icon:  icons.backArrowIcon(),
                   ),
                   const Spacer(),
+                  const Spacer(),
                   Text(
                     'Delete Workout',
-                    style: Styles().dialogHeader(), 
+                    style: Styles().largeDialogHeader(), 
                   ),
+                  const Spacer(),
                   const Spacer(),
                   const Spacer(),
                 ],
               ),
               const Spacer(),
-              const Padding(
-                padding: EdgeInsets.all(20),
+              Padding(
+                padding: const EdgeInsets.all(20),
                 child: Text(
-                  'Confirm to delete workout',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
+                  'Confirm to delete $name',
+                  style: Styles().dialogHeader(),
                 ),
               ),
               const Spacer(),
@@ -442,8 +443,6 @@ class _WorkoutsState extends State<Workouts> {
     updateWorkoutDialogList function is the layout for updating a workout in the database.
   */
   List<Widget> updateWorkoutDialogList(Workout aWorkout) {
-    bool validated;
-
     return <Widget>[
       Row(
         children: <Widget>[
@@ -474,11 +473,7 @@ class _WorkoutsState extends State<Workouts> {
           maxLength: 30, 
           onSubmitted: (String value) async {
             if(_controller.text.isNotEmpty) {
-              validated = validateWorkoutName(value);
-
-              if(validated) {
-                onSubmitUpdateName(aWorkout);
-              }
+              onSubmitUpdateName(aWorkout);
             }
           },
           decoration: Styles().inputWorkoutName('New workout name'),
@@ -493,11 +488,7 @@ class _WorkoutsState extends State<Workouts> {
           child: TextButton(
             onPressed: () {
               if(_controller.text.isNotEmpty) {
-                validated = validateWorkoutName(_controller.text);
-
-                if(validated) {
-                  onSubmitUpdateName(aWorkout);
-                }
+                onSubmitUpdateName(aWorkout);
               }
             },
             child: Styles().saveTextButton(),
@@ -521,10 +512,12 @@ class _WorkoutsState extends State<Workouts> {
             icon:  icons.backArrowIcon(),
           ),
           const Spacer(),
+          const Spacer(),
           Text(
             'Delete Workout',
-            style: Styles().dialogHeader(), 
+            style: Styles().largeDialogHeader(), 
           ),
+          const Spacer(),
           const Spacer(),
           const Spacer(),
         ],
@@ -534,7 +527,7 @@ class _WorkoutsState extends State<Workouts> {
         padding: const EdgeInsets.all(20),
         child: Text(
           'Confirm to delete $name',
-          style: Styles().content(),
+          style: Styles().dialogHeader(),
         ),
       ),
       const Spacer(),
@@ -584,22 +577,27 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), 
         child: SizedBox(
-          height: 215.0,
+          height: 210.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Center(
+                child: Text(
+                  title,
+                  style: Styles().largeDialogHeader(),
+                ),
+              ),
+              ),
               const Spacer(),
               Center(
                 child: Text(
-                  title,
+                  content,
                   style: Styles().dialogHeader(),
                 ),
               ),
-              Center(
-                child: Text(
-                  content,
-                ),
-              ),
+              const Spacer(),
               const Spacer(),
             ]             
           ),
@@ -646,25 +644,23 @@ class _WorkoutsState extends State<Workouts> {
   
   // Communicated with database to update a workout 
   void onSubmitUpdateName(Workout aWorkout) async {
-    bool update = await _dbHelper.updateWorkoutName(aWorkout.id, _controller.text);
-    handleUpdateNameRequest(update);
-    Workout? updatedWorkout = await _dbHelper.getWorkoutById(aWorkout.id);
+    if(!validateWorkoutName(aWorkout.name)) {
+      await _dbHelper.updateWorkoutName(aWorkout.id, _controller.text);
+      handleUpdateNameRequest();
 
+      Workout updatedWorkout = await _dbHelper.getWorkoutById(aWorkout.id);
 
-    if(updatedWorkout != null) {
       workoutDialog(updatedWorkout);
-    }
-  }
-
-  // Handles the state after attempting to update a workout
-  void handleUpdateNameRequest(bool flag) {
-    if(flag) {
-      _refreshWorkouts();
-      Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
     }
     else {
       failedDialog(1);
     }
+  }
+
+  // Handles the state after attempting to update a workout
+  void handleUpdateNameRequest() {
+      _refreshWorkouts();
+      Navigator.popUntil(context, (route) => route.settings.name == '/workouts');
   }
 
   // Communicated with database to update a workouts exerciseList

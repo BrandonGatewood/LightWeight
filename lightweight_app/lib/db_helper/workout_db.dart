@@ -106,19 +106,10 @@ class WorkoutsDBHelper {
   }
   }
 
-  Future<bool> updateWorkoutName(String id, String newName) async {
+  Future<void> updateWorkoutName(String id, String newName) async {
     final Database db = await WorkoutsDBHelper().openWorkouts();
 
-    try {
-      await db.rawUpdate(
-        'UPDATE workouts SET name = ? WHERE id = ?', [newName, id], 
-      );
-    }
-    catch(err) {
-      return false;
-    }
-
-    return true;
+    await db.rawUpdate('UPDATE workouts SET name = ? WHERE id = ?', [newName, id], );
   }
 
   Future<void> updateWorkoutExerciseList(Workout workout, String newExerciseIdString, String newExerciseSetsString) async {
@@ -146,7 +137,7 @@ class WorkoutsDBHelper {
     return true;
   }
 
-  Future<Workout?> getWorkoutById(String id) async {
+  Future<dynamic> getWorkoutById(String id) async {
     List<Workout> workoutList = await getAllWorkouts();
 
     for(final workout in workoutList) {
