@@ -69,6 +69,15 @@ class Styles {
     );
   } 
 
+  // InputDecoration for TextField sets
+  InputDecoration inputSets() {
+    return const InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'sets',
+      counterText: '',
+    );
+  } 
+
   // Padding for ListView that builds ButtonCards
   EdgeInsets listViewPadding() {
     return const EdgeInsets.only(

@@ -177,18 +177,21 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 ),
                 const Spacer(),
                 SizedBox(
-                  width: 49,
-                  height: 65,
+                  width: 52,
+                  height: 50,
                   child: TextField(
                     maxLength: 2,
                     keyboardType: TextInputType.number,
                     controller: _controller[i],
-                    decoration: Styles().inputWorkoutName('sets'),
+                    decoration: Styles().inputSets(),
                     textAlign: TextAlign.center, 
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
+                const Padding(
+                  padding: EdgeInsets.all(5),
+                ),
+                GestureDetector(
+                  onTap: () {
                     setState(() {
                       int sets = int.parse(_controller[i].text) + 1; 
 
@@ -196,17 +199,20 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                       widget.workout.setsList[i] = sets.toString();
                     }); 
                   },
-                  icon: icons.addIcon(),
+                  child: icons.incrementIcon(),
                 ),
-                IconButton(
-                  onPressed: () {
+                const Padding(
+                  padding: EdgeInsets.all(5),
+                ),
+                GestureDetector(
+                  onTap: () {
                    setState(() {
                       int sets = int.parse(_controller[i].text) - 1; 
                       _controller[i].text = sets.toString();  
                       widget.workout.setsList[i] = sets.toString();
                    }); 
                   },
-                  icon: icons.minusIcon(),
+                  child: icons.decrementIcon(),
                 ),
               ],
             ),

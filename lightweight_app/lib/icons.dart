@@ -9,9 +9,17 @@ class MyIcons {
     );
   }
 
-  Icon minusIcon() {
+  Icon decrementIcon() {
     return const Icon( 
       Icons.remove_rounded,
+      color: Colors.white,
+      size: 25,
+    );
+  }
+
+  Icon incrementIcon() {
+    return const Icon(
+      Icons.add_rounded,
       color: Colors.white,
       size: 25,
     );
