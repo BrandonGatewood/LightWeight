@@ -511,7 +511,7 @@ class _ExercisesState extends State<Exercises> {
 
   // Communicates with database to update an exercise 
   void onSubmitUpdate(Exercise anExercise) async {
-    if(validateExerciseName(anExercise.name)) {
+    if(!validateExerciseName(anExercise.name)) {
       await _dbHelper.updateExercise(anExercise.id, _controller.text);
       handleUpdateRequest();
     }

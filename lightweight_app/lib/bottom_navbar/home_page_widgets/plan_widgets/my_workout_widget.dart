@@ -168,18 +168,29 @@ class _WorkoutsState extends State<Workouts> {
               ),
               SizedBox(
                 height: 300,
-                width: 250,
+                width: 300,
                 child: ListView.builder(
                   itemCount: aWorkout.exerciseList.length,
                   itemBuilder: (BuildContext context, int index) {
+                    String sets = aWorkout.setsList[index];
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Text(
-                            aWorkout.exerciseList[index].name,
-                            style: Styles().content(),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                aWorkout.exerciseList[index].name,
+                                style: Styles().content(),
+                              ),
+                              const Spacer(),
+                              Text(
+                                '$sets Sets',
+                                style: Styles().content(),
+                              ),
+                            ],
                           ),
                         ),
                         if(aWorkout.exerciseList.isNotEmpty)
