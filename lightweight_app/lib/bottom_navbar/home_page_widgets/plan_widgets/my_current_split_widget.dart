@@ -37,7 +37,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 7, vsync: this);
+    _tabController = TabController(length: 7, vsync: this, initialIndex: DateTime.now().weekday - 1);
     workoutDb = WorkoutsDBHelper();
     workoutDb.openWorkouts().whenComplete(() async {
       final workouts = await workoutDb.getAllWorkouts();
