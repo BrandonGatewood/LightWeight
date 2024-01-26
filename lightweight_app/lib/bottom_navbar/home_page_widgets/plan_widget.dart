@@ -55,7 +55,7 @@ class Plan extends StatelessWidget {
 
   SizedBox currentSplitButtonSizedBox() {
     return SizedBox(
-      height: 80,
+      height: 50,
       child: Row(
         children: <Widget>[
           Text(
@@ -107,7 +107,7 @@ class Plan extends StatelessWidget {
 
   SizedBox minibuttonSizedBox(BuildContext context, String title) {
     return SizedBox(
-      height: 80,
+      height: 50,
       child: Row(
         children: <Widget>[
           Text(title,
