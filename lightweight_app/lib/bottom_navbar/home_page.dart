@@ -17,9 +17,9 @@ class _HomePage extends State<HomePage> {
   late CurrentSplit myCurrentSplit;
   late CurrentSplitDBHelper currentSplitDb;
 
-  callback(CurrentSplit newCurrentSplit) {
+  callback(CurrentSplit currentSplit) {
     setState(() {
-      myCurrentSplit = newCurrentSplit;
+      myCurrentSplit = currentSplit;
       todaysWorkoutOverviewSection();
     });
   }
@@ -95,7 +95,7 @@ class _HomePage extends State<HomePage> {
               style: header(), 
             ),
           ),
-          Plan(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: this.callback,),
+          Plan(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,),
 
         ],
       )

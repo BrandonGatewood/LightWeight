@@ -30,7 +30,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
       widget.myCurrentSplit;
     });
 
-    widget.callback(MyCurrentSplit);
+    widget.callback(widget.myCurrentSplit);
   }
 
   

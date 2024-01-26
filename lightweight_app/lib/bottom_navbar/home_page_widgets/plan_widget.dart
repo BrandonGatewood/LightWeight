@@ -46,8 +46,9 @@ class Plan extends StatelessWidget {
         style: currentSplitButtonStyle(context),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
-            MyCurrentSplit(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: this.callback,),
+            MyCurrentSplit(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,),
           ));
+          callback(myCurrentSplit);
         }, 
         child: currentSplitButtonSizedBox(),
       ),
