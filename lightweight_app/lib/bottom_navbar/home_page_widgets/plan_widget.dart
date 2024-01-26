@@ -42,7 +42,7 @@ class Plan extends StatelessWidget {
 
   Widget currentSplitButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: ElevatedButton(
         style: currentSplitButtonStyle(context),
         onPressed: () {
