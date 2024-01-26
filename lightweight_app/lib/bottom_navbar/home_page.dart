@@ -88,7 +88,21 @@ class _HomePage extends State<HomePage> {
   Widget todaysWorkoutOverviewSection() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: WorkoutOverview(todaysWorkout: getTodaysWorkout()),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              'Workout Overview',
+              style: header(), 
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: WorkoutOverview(todaysWorkout: getTodaysWorkout()),
+          ),
+        ],
+      ),
     );
   }
 
@@ -105,9 +119,8 @@ class _HomePage extends State<HomePage> {
             ),
           ),
           Plan(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,),
-
         ],
-      )
+      ),
     );
   }
 

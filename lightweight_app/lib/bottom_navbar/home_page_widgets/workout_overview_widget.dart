@@ -13,7 +13,7 @@ class WorkoutOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 350,
+      height: 375,
       child: checkForRestDay(),
     );
   }
@@ -21,12 +21,18 @@ class WorkoutOverview extends StatelessWidget {
   Widget checkForRestDay() {
     if(todaysWorkout.id == 'RestDay') {
       return Center(
-        child: Card(
           child: Text(
             'Rest Day',
             style: Styles().largeDialogHeader(),
           ),
-        ),
+      );
+    }
+    else if(todaysWorkout.exerciseList.isEmpty) {
+      return Center(
+          child: Text(
+            'No exercises in workout',
+            style: Styles().largeDialogHeader(),
+          ),
       );
     }
     else {
