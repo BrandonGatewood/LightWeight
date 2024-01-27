@@ -29,58 +29,12 @@ class Summary extends StatelessWidget {
               ),
               // Weight
               Expanded(
-                child: healthButtonCard(context),
+                child: bodyWeightButtonCard(context),
               ),
             ],
           ),
         ),
       ],
-    );
-  }
-
-  // Function to generate buttonCard
-  ElevatedButton healthButtonCard(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.inversePrimary),
-        padding: MaterialStateProperty.all(EdgeInsets.zero),
-      ),
-      onPressed: () {
-      }, 
-      child: SizedBox(
-        height: 60,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text(
-                    'Current Weight',
-                    style: Styles().content(), 
-                  ),
-                  const Spacer(),
-                  MyIcons().forwardArrowIcon(),
-                ],
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  '190lbs',
-                  style: Styles().cardInfo(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -92,7 +46,7 @@ class Summary extends StatelessWidget {
       child: SizedBox(
         height: 60,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -114,4 +68,87 @@ class Summary extends StatelessWidget {
       ),
     );
   }
+
+  // Function to generate buttonCard
+  ElevatedButton bodyWeightButtonCard(BuildContext context) {
+    return ElevatedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.inversePrimary),
+        padding: MaterialStateProperty.all(EdgeInsets.zero),
+      ),
+      onPressed: () {
+        showBodyWeightDialog(context);
+      }, 
+      child: SizedBox(
+        height: 60,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Body Weight',
+                    style: Styles().content(), 
+                  ),
+                  const Spacer(),
+                  MyIcons().forwardArrowIcon(),
+                ],
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  '190lbs',
+                  style: Styles().cardInfo(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showBodyWeightDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        child: SizedBox(
+          height: 215.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: MyIcons().backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  Text(
+                    'Body Weight',
+                    style: Styles().largeDialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+            ],              
+          ),
+        ),
+      ),
+    );
+  }
+  
 }
