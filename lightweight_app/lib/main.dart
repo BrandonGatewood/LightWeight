@@ -69,6 +69,17 @@ class _NavigationState extends State<Navigation> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        onPressed: () {
+        },
+        label: const Text('Track',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white, 
+          ) 
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
