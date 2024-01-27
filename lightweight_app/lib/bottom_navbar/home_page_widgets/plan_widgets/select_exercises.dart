@@ -114,7 +114,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
       return Padding(
         padding: const EdgeInsets.only(
           top: 5,
-          bottom: 120,
+          bottom: 80,
         ),
         child: selectedExercises(),
       );
