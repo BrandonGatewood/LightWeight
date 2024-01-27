@@ -22,6 +22,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   final List<TextEditingController> _controller = [];
   late ExerciseDBHelper exerciseDb;
   late List<Exercise> allExerciseList;
+  late List<bool?> isCheckedList;
   MyIcons icons = MyIcons(); 
 
   _refreshWorkout() {
@@ -33,12 +34,14 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   @override
   void initState() {
     super.initState();
+    isCheckedList = [];
     exerciseDb = ExerciseDBHelper();
     exerciseDb.openExercise().whenComplete(() async {
       final exercises = await exerciseDb.getAllExercise();
       
       setState(() {
         allExerciseList = exercises;
+        isCheckedList = List<bool>.filled(allExerciseList.length, false, growable: true);
       });
     });
 
@@ -233,7 +236,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   void selectExerciseDialog() {
     showDialog(
       context: context,
-      builder: (BuildContext context) => Dialog(
+      builder: (context) => Dialog(
         insetPadding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
@@ -251,7 +254,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                   const Spacer(),
                   Text(
                     'Select Exercise',
-                    style: Styles().dialogHeader(), 
+                    style: Styles().largeDialogHeader(), 
                   ),
                   const Spacer(),
                   const Spacer(),
@@ -263,7 +266,20 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                 child: availableExercises(),
               ),
               const Spacer(),
-              const Spacer(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10,
+                  ), 
+                  child: TextButton(
+                    onPressed: () {
+                      onSubmitSaveCheckButton();
+                    },
+                    child: Styles().saveTextButton(),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -289,52 +305,72 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   }
 
   // exerciseSelectionItem function is a button that contains an exercise from the exerciseList. 
-  Padding selectExerciseItem(int i) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 20, 
-        right: 20,
-      ),
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 40,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0),
-                ),
-                backgroundColor: Colors.transparent,
-              ),
-              onPressed: () {
-                widget.workout.exerciseList.add(allExerciseList[i]);
-                TextEditingController c = TextEditingController();
-                c.text = '4';
-                _controller.add(c);
-                widget.workout.setsList.add(c.text);
-                _refreshWorkout();
-                Navigator.pop(context);
-              }, 
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  allExerciseList[i].name,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
+  StatefulBuilder selectExerciseItem(int i) {
+    isCheckedList[i] = false;
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 20, 
+            right: 20,
+          ),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0),
+                        ),
+                        backgroundColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        widget.workout.exerciseList.add(allExerciseList[i]);
+                        TextEditingController c = TextEditingController();
+                        c.text = '4';
+                        _controller.add(c);
+                        widget.workout.setsList.add(c.text);
+                        _refreshWorkout();
+                        Navigator.pop(context);
+                      }, 
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          allExerciseList[i].name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const Spacer(),
+                  Checkbox(
+                    checkColor: Colors.white,
+                    value: isCheckedList[i], 
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isCheckedList[i] = value;
+                      });
+                    },
+                  ),
+                ],
               ),
-            ),
+              const Divider(
+                thickness: 2,
+              ),
+            ],
           ),
-          const Divider(
-            thickness: 2,
-          ),
-        ],
-      ),
-    );
+        );
+      },
+    );  
   }
+    
 
 
 //        ***** PARSE SUBMIT DATABASE *****
@@ -385,6 +421,22 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
   // handles request when users save the exercise.
   void handleRequest() {
+    Navigator.pop(context);
+  }
+
+  // Save the exercises picked using CheckBox
+  onSubmitSaveCheckButton() {
+    for(int i = 0; i < isCheckedList.length; ++i) {
+      if(isCheckedList[i] == true) {
+        widget.workout.exerciseList.add(allExerciseList[i]);
+        TextEditingController c = TextEditingController();
+        c.text = '4';
+        _controller.add(c);
+        widget.workout.setsList.add(c.text);
+
+      }
+    }
+    _refreshWorkout();
     Navigator.pop(context);
   }
 
