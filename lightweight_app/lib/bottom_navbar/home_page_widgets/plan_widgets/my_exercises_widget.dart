@@ -289,7 +289,7 @@ class _ExercisesState extends State<Exercises> {
                     bottom: 10,
                   ), 
                   child: CircleAvatar(
-                    radius: 25,
+                    radius: 20,
                     backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                     child: IconButton(
                       onPressed: () {
@@ -412,7 +412,7 @@ class _ExercisesState extends State<Exercises> {
             bottom: 10,
           ), 
           child: CircleAvatar(
-            radius: 25,
+            radius: 20,
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {

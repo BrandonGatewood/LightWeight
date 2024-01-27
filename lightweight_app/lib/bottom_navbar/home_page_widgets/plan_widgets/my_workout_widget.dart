@@ -344,7 +344,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 215.0,
+          height: 210.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -382,7 +382,7 @@ class _WorkoutsState extends State<Workouts> {
                     bottom: 10,
                   ), 
                   child: CircleAvatar(
-                    radius: 30,
+                    radius: 20,
                     backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                     child: IconButton(
                       onPressed: () {
@@ -483,7 +483,7 @@ class _WorkoutsState extends State<Workouts> {
         ),
         child: TextField(
           controller: _controller,
-          maxLength: 30, 
+          maxLength: 20, 
           onSubmitted: (String value) async {
             if(_controller.text.isNotEmpty) {
               onSubmitUpdateName(aWorkout);
@@ -552,7 +552,7 @@ class _WorkoutsState extends State<Workouts> {
             bottom: 10,
           ), 
           child: CircleAvatar(
-            radius: 30,
+            radius: 20,
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             child: IconButton(
               onPressed: () {
