@@ -5,7 +5,7 @@ class MyIcons {
     return const Icon( 
       Icons.delete_rounded,
       color: Colors.white,
-      size: 25,
+      size: 20,
     );
   }
 
