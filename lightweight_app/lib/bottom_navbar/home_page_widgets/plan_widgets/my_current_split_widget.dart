@@ -64,7 +64,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
           Padding(
             padding: const EdgeInsets.all(5),
             child: CircleAvatar(
-              radius: 30,
+              radius: 20,
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               child: IconButton(
                 onPressed: () {

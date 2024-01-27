@@ -29,7 +29,7 @@ class MyIcons {
     return const Icon(
       Icons.arrow_back_ios_new_rounded,
       color: Colors.white,
-      size: 25,
+      size: 20,
     );
   }
   
@@ -45,7 +45,7 @@ class MyIcons {
     return const Icon(
       Icons.add_rounded,
       color: Colors.white,
-      size: 25,
+      size: 20,
     );
   }
 
@@ -53,7 +53,7 @@ class MyIcons {
     return const Icon(
       Icons.check_rounded,
       color: Colors.white,
-      size: 25,
+      size: 20,
     );
   }
   
@@ -61,7 +61,14 @@ class MyIcons {
     return const Icon( 
       Icons.edit_rounded,
       color: Colors.white,
-      size: 25,
+      size: 20,
+    );
+  }
+  Icon settingsIcon() {
+    return const Icon( 
+      Icons.settings_rounded,
+      color: Colors.white,
+      size: 20,
     );
   }
 

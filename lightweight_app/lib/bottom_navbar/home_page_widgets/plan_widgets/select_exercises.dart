@@ -72,7 +72,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
           Padding(
             padding: const EdgeInsets.all(5),
             child: CircleAvatar(
-              radius: 25,
+              radius: 20,
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               child: IconButton(
                 onPressed: () {

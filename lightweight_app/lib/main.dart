@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/icons.dart';
 import 'bottom_navbar/home_page.dart';
 import './bottom_navbar/progress_page.dart';
 import './bottom_navbar/settings_page.dart';
@@ -36,7 +37,6 @@ class _NavigationState extends State<Navigation> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     ProgressPage(),
-    SettingsPage(), 
   ];
 
   void _onItemTapped(int index) {
@@ -50,6 +50,21 @@ class _NavigationState extends State<Navigation> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('LightWeight'),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              child: IconButton(
+                onPressed: () {
+                  const SettingsPage();
+                },
+                icon: MyIcons().settingsIcon(), 
+              ),
+            ),
+          )
+        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -64,11 +79,6 @@ class _NavigationState extends State<Navigation> {
             icon: Icon(Icons.bar_chart_rounded),
             label: 'Progress',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Settings',
-          ),
-          
         ],
         currentIndex: _selectedIndex,
         showUnselectedLabels: false,
