@@ -495,6 +495,7 @@ class _ExercisesState extends State<Exercises> {
     if(validateExerciseName(_controller.text)) {
       await _dbHelper.insertExercise(_controller.text);
       handleAddRequest();
+      addExerciseDialog();
     }
     else {
       failedDialog(0);
@@ -504,7 +505,8 @@ class _ExercisesState extends State<Exercises> {
   // Handles the state after attempting to add a new exercise
   void handleAddRequest() {
       _refreshExercises();
-      Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
+      Navigator.pop(context);
+      //Navigator.popUntil(context, (route) => route.settings.name == '/exercises'); 
   }
 
   // Communicates with database to update an exercise 
