@@ -436,6 +436,7 @@ class _WorkoutsState extends State<Workouts> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => WorkoutSelectExercises(workout: aWorkout, workoutDb: _dbHelper,),
+                settings: const RouteSettings(name: '/select_exercises'),
               ),
             ).then((value) => onSubmitUpdateExercises(aWorkout));
           },

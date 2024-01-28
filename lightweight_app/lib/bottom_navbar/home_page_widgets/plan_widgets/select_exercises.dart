@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_exercises_widget.dart';
 import '../../../db_helper/exercise_db.dart';
 import '../../../db_helper/workout_db.dart';
 import '../../../icons.dart';
@@ -20,6 +21,7 @@ class WorkoutSelectExercises extends StatefulWidget {
 
 class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   final List<TextEditingController> _controller = [];
+  final TextEditingController _textController = TextEditingController();
   late ExerciseDBHelper exerciseDb;
   late List<Exercise> allExerciseList;
   late List<bool?> isCheckedList;
@@ -34,6 +36,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   @override
   void initState() {
     super.initState();
+    //_textController = TextEditingController();
     isCheckedList = [];
     exerciseDb = ExerciseDBHelper();
     exerciseDb.openExercise().whenComplete(() async {
@@ -261,6 +264,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                   TextButton(
                     onPressed: () {
                       // add new exercise 
+                      addExerciseDialog();
                     },
                     child: Styles().addTextButton(), 
                   ),
@@ -516,4 +520,151 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     return dismis;
   }
+
+  /*
+    addExerciseDialog function is an AlertDialog that lets users add a new 
+    workout. 
+  */ 
+  void addExerciseDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 210.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon:  icons.backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  Text(
+                    'Add Exercise',
+                    style: Styles().largeDialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  left: 10,
+                  right: 10,
+                  bottom: 5, 
+                ),
+                child: TextField(
+                  maxLength: 28,
+                  controller: _textController,
+                  onSubmitted: (String value) async {
+                    if(_textController.text.isNotEmpty) {
+                      onSubmitAdd();
+                    }
+                  },
+                  decoration: Styles().inputWorkoutName('Exercise name'),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10,
+                  ), 
+                  child: TextButton(
+                    onPressed: () {
+                      if(_textController.text.isNotEmpty) {
+                        onSubmitAdd();
+                      }
+                    }, 
+                    child: Styles().saveTextButton(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    
+    _textController.clear();
+  }
+
+  // Communicates with database to add a new exercise
+  void onSubmitAdd() async {
+    if(validateExerciseName(_textController.text)) {
+      Exercise newExercise = await exerciseDb.insertExerciseInSelectExercise(_textController.text);
+      handleAddRequest(newExercise);
+    }
+    else {
+      showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
+        child: SizedBox(
+          height: 210.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Center(
+                  child: Text(
+                    'Exercise already exists',
+                    style: Styles().largeDialogHeader(),
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Center(
+                child: Text(
+                  'Failed to add exercise',
+                  style: Styles().dialogHeader(),
+                ),
+              ),
+              const Spacer(),
+              const Spacer(),
+            ]
+          ),
+        ),
+      ),
+    );
+
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        Navigator.pop(context); 
+      },
+    );
+    }
+  } 
+  
+  // Handles the state after attempting to add a new exercise
+  void handleAddRequest(Exercise newExercise) {
+      widget.workout.exerciseList.add(newExercise);
+      TextEditingController c = TextEditingController();
+      c.text = '4';
+      _controller.add(c);
+      widget.workout.setsList.add(c.text);
+      _refreshWorkout();
+      Navigator.popUntil(context, (route) => route.settings.name == '/select_exercises'); 
+  }
+
+  // Check whether or not a workout name already exists..
+  bool validateExerciseName(String exerciseName) {
+    for(final exercise in allExerciseList) {
+      if(exercise.name == exerciseName) {
+        return false;
+      }
+    }
+
+    return true;
+  } 
 }

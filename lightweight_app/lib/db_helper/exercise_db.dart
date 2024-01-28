@@ -43,6 +43,24 @@ class ExerciseDBHelper {
       conflictAlgorithm: ConflictAlgorithm.abort,
     );
   }
+  
+  Future<dynamic> insertExerciseInSelectExercise(String name) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+
+    String id = DB().idGenerator(); 
+
+    Exercise newExercise = Exercise(id: id, name: name, numOfTimesEntered: 0);
+
+    await db.insert(
+      'exercises', 
+      newExercise.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.abort,
+    );
+
+    return newExercise;
+  }
+
+
 
   Future<List<Exercise>> getAllExercise() async {
     final Database db = await ExerciseDBHelper().openExercise();
