@@ -7,36 +7,26 @@ import 'home_page_widgets/highlight_widget.dart';
 import 'home_page_widgets/workout_overview_widget.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({
+    super.key,
+    required this.myCurrentSplit,   
+    required this. currentSplitDb,
+    required this.callback,
+  });
+
+  final CurrentSplit myCurrentSplit;
+  final CurrentSplitDBHelper currentSplitDb;
+  final Function callback;
 
   @override
   State<HomePage> createState() => _HomePage();
 }
 
 class _HomePage extends State<HomePage> {
-  late CurrentSplit myCurrentSplit;
-  late CurrentSplitDBHelper currentSplitDb;
-
-  callback(CurrentSplit currentSplit) {
-    setState(() {
-      myCurrentSplit = currentSplit;
-      todaysWorkoutOverviewSection();
-    });
-  }
-
 
   @override
   void initState() {
     super.initState();
-    myCurrentSplit = CurrentSplit();
-    currentSplitDb = CurrentSplitDBHelper();
-    currentSplitDb.openCurrentSplit().whenComplete(() async {
-      final CurrentSplit data = await currentSplitDb.getCurrentSplit();
-
-      setState(() {
-        myCurrentSplit = data;
-      });
-    });
   }
 
   @override
@@ -118,7 +108,7 @@ class _HomePage extends State<HomePage> {
               style: header(), 
             ),
           ),
-          Plan(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,),
+          Plan(myCurrentSplit: widget.myCurrentSplit, currentSplitDb: widget.currentSplitDb, callback: widget.callback,),
         ],
       ),
     );
@@ -161,7 +151,7 @@ class _HomePage extends State<HomePage> {
 
   Workout getTodaysWorkout() {
     int todayIndex = DateTime.now().weekday - 1;
-    return myCurrentSplit.workoutList[todayIndex];
+    return widget.myCurrentSplit.workoutList[todayIndex];
   }
 }
 

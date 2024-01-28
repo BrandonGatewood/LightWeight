@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/icons.dart';
 import 'bottom_navbar/home_page.dart';
 import './bottom_navbar/progress_page.dart';
@@ -33,11 +34,38 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   // Always start off on HomePage
   int _selectedIndex = 0;
+  late CurrentSplit myCurrentSplit;
+  late CurrentSplitDBHelper currentSplitDb;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    ProgressPage(),
-  ];
+  callback(CurrentSplit currentSplit) {
+    setState(() {
+      myCurrentSplit = currentSplit;
+      HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    myCurrentSplit = CurrentSplit();
+    currentSplitDb = CurrentSplitDBHelper();
+    currentSplitDb.openCurrentSplit().whenComplete(() async {
+      final CurrentSplit data = await currentSplitDb.getCurrentSplit();
+
+      setState(() {
+        myCurrentSplit = data;
+      });
+    });
+  }
+
+  Widget selectedNavbar() {
+    if(_selectedIndex == 0) {
+      return HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,);
+    }
+    else {
+      return const ProgressPage();
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -67,7 +95,7 @@ class _NavigationState extends State<Navigation> {
         ],
       ),
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: selectedNavbar(),
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
