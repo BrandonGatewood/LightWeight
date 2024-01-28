@@ -258,7 +258,12 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                   ),
                   const Spacer(),
                   const Spacer(),
-                  const Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      // add new exercise 
+                    },
+                    child: Styles().addTextButton(), 
+                  ),
                 ],
               ),
               SizedBox(

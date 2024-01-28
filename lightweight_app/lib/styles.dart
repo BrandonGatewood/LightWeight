@@ -60,6 +60,16 @@ class Styles {
       )
     );
   }
+  
+  // TextButton for add new exercise in select_exercises 
+  Text addTextButton() {
+    return  const Text(
+      'Add',
+      style: TextStyle(
+        fontSize: 18,
+      )
+    );
+  }
 
   // InputDecoration for TextField
   InputDecoration inputWorkoutName(String name) {
