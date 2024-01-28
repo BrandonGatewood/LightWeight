@@ -51,6 +51,18 @@ class _HomePage extends State<HomePage> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        onPressed: () {
+        },
+        label: const Text('Track',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white, 
+          ) 
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
