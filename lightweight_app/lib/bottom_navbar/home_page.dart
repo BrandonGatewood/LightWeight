@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_current_split_widget.dart';
+import 'package:lightweight_app/bottom_navbar/home_page_widgets/track.dart';
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
 import 'home_page_widgets/summary_widget.dart';
@@ -10,7 +12,7 @@ class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
     required this.myCurrentSplit,   
-    required this. currentSplitDb,
+    required this.currentSplitDb,
     required this.callback,
   });
 
@@ -54,6 +56,12 @@ class _HomePage extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
+          Workout todaysWorkout = getTodaysWorkout();
+
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Track(todaysWorkout: todaysWorkout),
+            //MyCurrentSplit(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,),
+          ));
         },
         label: const Text('Track',
           style: TextStyle(
@@ -62,7 +70,7 @@ class _HomePage extends State<HomePage> {
           ) 
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 

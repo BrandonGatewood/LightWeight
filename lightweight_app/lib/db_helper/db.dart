@@ -15,7 +15,8 @@ class DB {
           '''CREATE TABLE exercises(
           id TEXT PRIMARY KEY NOT NULL,
           name TEXT NOT NULL,
-          numOfTimesEntered INTEGER NOT NULL
+          repsString TEXT NOT NULL,
+          weightString TEXT NOT NULL
           )'''
         );
 
@@ -32,14 +33,6 @@ class DB {
           '''CREATE TABLE currentSplit(
             id TEXT PRIMARY KEY NOT NULL,
             workoutIdString TEXT NOT NULL
-          )'''
-        );
-
-        await database.execute(
-          '''CREATE TABLE progress(
-            id TEXT PRIMARY KEY NOT NULL,
-            exerciseIdString TEXT NOT NULL,
-            workoutString TEXT NOT NULL
           )'''
         );
 

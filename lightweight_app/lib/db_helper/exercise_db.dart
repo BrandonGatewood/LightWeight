@@ -5,22 +5,25 @@ import 'package:lightweight_app/db_helper/db.dart';
 class Exercise {
   final String id;
   final String name;
-  final int numOfTimesEntered;
+  final String repsString;
+  final String weightString;
 
   const Exercise({
     required this.id,
     required this.name,
-    required this.numOfTimesEntered
+    required this.repsString,
+    required this.weightString,
   });
 
   Exercise.fromMap(Map<String, dynamic> item):
-    id = item['id'], name = item['name'], numOfTimesEntered = item['numOfTimesEntered'];
+    id = item['id'], name = item['name'], repsString = item['repsString'], weightString = item['weightString'];
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'numOfTimesEntered': numOfTimesEntered,
+      'repsString': repsString,
+      'weightString': weightString,
     };
   }
 }
@@ -35,7 +38,7 @@ class ExerciseDBHelper {
 
     String id = DB().idGenerator(); 
 
-    Exercise newExercise = Exercise(id: id, name: name, numOfTimesEntered: 0);
+    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '');
 
     await db.insert(
       'exercises', 
@@ -49,7 +52,7 @@ class ExerciseDBHelper {
 
     String id = DB().idGenerator(); 
 
-    Exercise newExercise = Exercise(id: id, name: name, numOfTimesEntered: 0);
+    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '');
 
     await db.insert(
       'exercises', 

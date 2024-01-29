@@ -38,7 +38,6 @@ class WorkoutOverview extends StatelessWidget {
 
     return SizedBox(
       height: height,
-      //height: 65,
       child: checkForRestDay(),
     );
   }

@@ -88,6 +88,22 @@ class Styles {
     );
   } 
 
+  // InputDecoration for TextField reps
+  InputDecoration inputReps() {
+    return const InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'reps',
+      counterText: '',
+    );
+  } 
+  InputDecoration inputWeight() {
+    return const InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'Weight',
+      counterText: '',
+    );
+  } 
+
   // Padding for ListView that builds ButtonCards
   EdgeInsets listViewPadding() {
     return const EdgeInsets.only(

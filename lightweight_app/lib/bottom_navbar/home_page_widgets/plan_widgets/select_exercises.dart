@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_exercises_widget.dart';
 import '../../../db_helper/exercise_db.dart';
 import '../../../db_helper/workout_db.dart';
 import '../../../icons.dart';
