@@ -18,18 +18,43 @@ class Track extends StatefulWidget {
 
 class _TrackState extends State<Track> {
   late ExerciseDBHelper exerciseDb;
-  
+  late List<Map<int, (TextEditingController, TextEditingController)>> _controller;
 
   @override
   void initState() {
     super.initState();
     exerciseDb = ExerciseDBHelper();
     exerciseDb.openExercise();
+    _controller = [];
+
+    for(int i = 0; i < widget.todaysWorkout.exerciseList.length; ++i) {
+      int sets = int.parse(widget.todaysWorkout.setsList[i]);
+      Map<int, (TextEditingController, TextEditingController)> mapSets = {};
+
+      for(int j = 0; j < sets; ++j) {
+        TextEditingController rc = TextEditingController();
+        TextEditingController wc = TextEditingController();
+
+        rc.text = '0';
+        wc.text = '0';
+
+        // add controller maps
+        mapSets.putIfAbsent(j, () => (rc, wc));
+      }
+      _controller.add(mapSets);
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
+
+    for(int i = 0; i < widget.todaysWorkout.exerciseList.length; ++i) {
+      _controller[i].forEach((k, v) {
+        v.$1.clear();
+        v.$2.clear();
+      });
+    }
   }
 
   @override
@@ -73,36 +98,9 @@ class _TrackState extends State<Track> {
     }
   }
 
-  List<TextEditingController> setUpRepsController(int numOfSets) {
-    List<TextEditingController> repsController = [];
-
-    for(int i = 0; i < numOfSets; ++i) {
-      TextEditingController rc = TextEditingController();
-
-      rc.text = '0';
-
-      repsController.add(rc);
-    }
-
-    return repsController;
-  }
-  List<TextEditingController> setUpWeightController(int numOfSets) {
-    List<TextEditingController> weightController = [];
-
-    for(int i = 0; i < numOfSets; ++i) {
-      TextEditingController wc = TextEditingController();
-      wc.text = '0';
-      weightController.add(wc);
-    }
-
-    return weightController;
-  }
-
   void trackExerciseDialog(int i) {
     Exercise anExercise = widget.todaysWorkout.exerciseList[i];
     int numOfSets = int.parse(widget.todaysWorkout.setsList[i]);
-    List<TextEditingController> repsController = setUpRepsController(numOfSets);
-    List<TextEditingController> weightController =setUpWeightController(numOfSets);
 
     showDialog(
       context: context,
@@ -167,7 +165,7 @@ class _TrackState extends State<Track> {
                                 child: TextField(
                                   maxLength: 3,
                                   keyboardType: TextInputType.number,
-                                  controller: repsController[index],
+                                  controller: _controller[i][index]!.$1,
                                   decoration: Styles().inputReps(),
                                   textAlign: TextAlign.center, 
                                 ),
@@ -176,9 +174,8 @@ class _TrackState extends State<Track> {
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    int sets = int.parse(repsController[index].text) + 1; 
-
-                                    repsController[index].text = sets.toString();  
+                                    int sets = int.parse(_controller[i][index]!.$1.text) + 1; 
+                                    _controller[i][index]!.$1.text = sets.toString();  
                                    // widget.workout.setsList[i] = sets.toString();
                                   }); 
                                 },
@@ -189,13 +186,11 @@ class _TrackState extends State<Track> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  /*
                                   setState(() {
-                                      int sets = int.parse(_controller[i].text) - 1; 
-                                      _controller[i].text = sets.toString();  
-                                      widget.workout.setsList[i] = sets.toString();
+                                      int sets = int.parse(_controller[i][index]!.$1.text) - 1; 
+                                      _controller[i][index]!.$1.text = sets.toString();  
+                                      //widget.workout.setsList[i] = sets.toString();
                                   }); 
-                                  */
                                 },
                                 child: MyIcons().decrementIcon(),
                               ),
@@ -216,7 +211,7 @@ class _TrackState extends State<Track> {
                                 child: TextField(
                                   maxLength: 3,
                                   keyboardType: TextInputType.number,
-                                  controller: weightController[index],
+                                  controller: _controller[i][index]!.$2,
                                   decoration: Styles().inputWeight(),
                                   textAlign: TextAlign.center, 
                                 ),
@@ -225,12 +220,10 @@ class _TrackState extends State<Track> {
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    /*
-                                    int sets = int.parse(_controller[i].text) + 1; 
+                                    int sets = int.parse(_controller[i][index]!.$2.text) + 1; 
 
-                                    _controller[i].text = sets.toString();  
-                                    widget.workout.setsList[i] = sets.toString();
-                                    */
+                                    _controller[i][index]!.$2.text = sets.toString();  
+                                    //widget.workout.setsList[i] = sets.toString();
                                   }); 
                                 },
                                 child: MyIcons().incrementIcon(),
@@ -240,13 +233,12 @@ class _TrackState extends State<Track> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  /*
                                   setState(() {
-                                      int sets = int.parse(_controller[i].text) - 1; 
-                                      _controller[i].text = sets.toString();  
-                                      widget.workout.setsList[i] = sets.toString();
+                                    int sets = int.parse(_controller[i][index]!.$2.text) - 1; 
+
+                                    _controller[i][index]!.$2.text = sets.toString();  
+                                    //widget.workout.setsList[i] = sets.toString();
                                   }); 
-                                  */
                                 },
                                 child: MyIcons().decrementIcon(),
                               ),
