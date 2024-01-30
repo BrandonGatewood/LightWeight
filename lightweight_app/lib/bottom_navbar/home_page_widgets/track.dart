@@ -64,6 +64,18 @@ class _TrackState extends State<Track> {
         title: const Text('Track'),
       ),
       body: checkTodaysWorkout(),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        onPressed: () {
+          onSubmitUpdate();
+        },
+        label: const Text('Save',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white, 
+          ) 
+        ),
+      ),
     );
   }
 
@@ -223,7 +235,6 @@ class _TrackState extends State<Track> {
                                     int sets = int.parse(_controller[i][index]!.$2.text) + 1; 
 
                                     _controller[i][index]!.$2.text = sets.toString();  
-                                    //widget.workout.setsList[i] = sets.toString();
                                   }); 
                                 },
                                 child: MyIcons().incrementIcon(),
@@ -237,7 +248,6 @@ class _TrackState extends State<Track> {
                                     int sets = int.parse(_controller[i][index]!.$2.text) - 1; 
 
                                     _controller[i][index]!.$2.text = sets.toString();  
-                                    //widget.workout.setsList[i] = sets.toString();
                                   }); 
                                 },
                                 child: MyIcons().decrementIcon(),
@@ -259,5 +269,30 @@ class _TrackState extends State<Track> {
         ),
       ),
     );
+  }
+
+  // save exercise reps and weight into the database.
+  void onSubmitUpdate() async {
+    for(int i = 0; i < widget.todaysWorkout.exerciseList.length; ++i) {
+      String delimeter = ';';
+      String reps = widget.todaysWorkout.exerciseList[i].repsString + delimeter;
+      String weight = widget.todaysWorkout.exerciseList[i].weightString + delimeter;
+      for(int j = 0; j < _controller[i].length; ++j) {
+        String r = _controller[i][j]!.$1.text;
+        String w = _controller[i][j]!.$2.text;
+
+        if(j == _controller[i].length - 1)  {
+          reps = '$reps$r';
+          weight = '$weight$w';
+        }
+        else {
+          reps = '$reps$r,';
+          weight = '$weight$w,';
+        }
+      }
+
+      await exerciseDb.updateExerciseReps(widget.todaysWorkout.exerciseList[i].id, reps);
+      await exerciseDb.updateExerciseWeight(widget.todaysWorkout.exerciseList[i].id, weight);
+    }
   }
 }

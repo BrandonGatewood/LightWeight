@@ -116,4 +116,17 @@ class ExerciseDBHelper {
 
     return exerciseList;
   }
+
+  Future<void> updateExerciseReps(String id, String repsString) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+    
+    await db.rawUpdate('UPDATE exercises SET repsString = ? WHERE id = ?', [repsString, id]);
+  }
+
+  Future<void> updateExerciseWeight(String id, String weightString) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+    
+    await db.rawUpdate('UPDATE exercises SET weightString = ? WHERE id = ?', [weightString, id]);
+
+  }
 }
