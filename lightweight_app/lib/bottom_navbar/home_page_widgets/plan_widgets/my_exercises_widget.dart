@@ -1,10 +1,18 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/db_helper/current_split_db.dart';
 import '../../../icons.dart';
 import '../../../db_helper/exercise_db.dart';
 import '../../../styles.dart';
 
 class Exercises extends StatefulWidget {
-  const Exercises({super.key});
+  const Exercises({
+    super.key,
+    required this.callback,
+    required this.currentSplitDb,   
+  });
+
+  final Function callback;
+  final CurrentSplitDBHelper currentSplitDb;
 
   @override
   State<Exercises> createState() => _ExercisesState();
@@ -22,6 +30,9 @@ class _ExercisesState extends State<Exercises> {
     setState(() {
       exerciseList = data;
     });
+
+    final myCurrentSplit = await widget.currentSplitDb.getCurrentSplit();
+    widget.callback(myCurrentSplit);
   }
 
   @override

@@ -97,7 +97,7 @@ class Plan extends StatelessWidget {
           if(selection == 0) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const Workouts(),
+                builder: (context) => Workouts(callback: callback, currentSplitDb: currentSplitDb,),
                 settings: const RouteSettings(name: '/workouts'),
               ),
             );
@@ -105,7 +105,7 @@ class Plan extends StatelessWidget {
           else if(selection == 1) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const Exercises(), 
+                builder: (context) => Exercises(callback: callback, currentSplitDb: currentSplitDb,), 
                 settings: const RouteSettings(name: '/exercises'),
               ),
             );

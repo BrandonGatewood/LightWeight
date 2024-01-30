@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
 import '../../../icons.dart';
 import '../../../styles.dart';
@@ -7,7 +8,14 @@ import './select_exercises.dart';
 enum WorkoutDialogPopupItems { rename, editExerciceList, delete }
 
 class Workouts extends StatefulWidget {
-  const Workouts({super.key});
+  const Workouts({
+    super.key,
+    required this.callback,
+    required this.currentSplitDb,
+  });
+
+  final Function callback;
+  final CurrentSplitDBHelper currentSplitDb;
 
   @override
   State<Workouts> createState() => _WorkoutsState();
@@ -16,6 +24,7 @@ class Workouts extends StatefulWidget {
 class _WorkoutsState extends State<Workouts> {
   late TextEditingController _controller;
   late WorkoutsDBHelper _dbHelper;
+
   MyIcons icons = MyIcons();
   List<Workout> allWorkoutList = [];
 
@@ -25,6 +34,9 @@ class _WorkoutsState extends State<Workouts> {
     setState(() {
       allWorkoutList = data;
     });
+
+    final myCurrentSplit = await widget.currentSplitDb.getCurrentSplit(); 
+    widget.callback(myCurrentSplit);
   }
 
   @override

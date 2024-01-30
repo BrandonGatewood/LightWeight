@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_current_split_widget.dart';
 import 'package:lightweight_app/bottom_navbar/home_page_widgets/track.dart';
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
@@ -44,11 +43,8 @@ class _HomePage extends State<HomePage> {
         child: ListView(
           children: <Widget>[
             summarySection(),
-            //homepageSections('Summary', 0),
             todaysWorkoutOverviewSection(),
             planSection(),
-            //homepageSections('Today\'s Workout', 1),
-            //homepageSections('Plan', 2),
             homepageSections('Highlights', 3),
           ],
         ),
@@ -60,7 +56,6 @@ class _HomePage extends State<HomePage> {
 
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Track(todaysWorkout: todaysWorkout),
-            //MyCurrentSplit(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,),
           ));
         },
         label: const Text('Track',
