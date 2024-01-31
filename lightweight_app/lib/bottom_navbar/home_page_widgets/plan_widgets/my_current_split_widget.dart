@@ -9,10 +9,10 @@ class MyCurrentSplit extends StatefulWidget {
     super.key,
     required this.myCurrentSplit,
     required this.currentSplitDb,
-    required this.callback,
+    required this.callbackCurrentSplit,
   });
 
-  final Function callback;
+  final Function callbackCurrentSplit;
   final CurrentSplit myCurrentSplit;
   final CurrentSplitDBHelper currentSplitDb;
 
@@ -25,14 +25,11 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
   late WorkoutsDBHelper workoutDb;
   late List<Workout> allWorkoutsList;
 
-  _refreshCurrentSplit() async {
+  _refreshCurrentSplit() {
     setState(() {
-      widget.myCurrentSplit;
+      widget.callbackCurrentSplit();
     });
-
-    widget.callback(widget.myCurrentSplit);
   }
-
   
   @override
   void initState() {
@@ -233,9 +230,11 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                widget.myCurrentSplit.workoutList[dayIndex] = allWorkoutsList[itemIndex];
-                _refreshCurrentSplit();
+                setState(() {
+                  widget.myCurrentSplit.workoutList[dayIndex] = allWorkoutsList[itemIndex];
+                });
                 onSubmitUpdate();
+                _refreshCurrentSplit();
                 Navigator.pop(context);
               }, 
               child: Align(

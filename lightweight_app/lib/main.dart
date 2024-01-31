@@ -35,56 +35,54 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   // Always start off on HomePage
   int _selectedIndex = 0;
-
   late CurrentSplit myCurrentSplit;
   late CurrentSplitDBHelper currentSplitDb;
   late User aUser;
   late UserDBHelper userDb;
+  late List<Widget> _widgetOptions;
 
-  callback(CurrentSplit currentSplit) {
+  callbackCurrentSplit() async {
+    final CurrentSplit currentSplitData = await currentSplitDb.getCurrentSplit();
+    final User userData = await userDb.getUser();
+
     setState(() {
-      myCurrentSplit = currentSplit;
-      HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback, aUser: aUser, userDb: userDb, callbackBodyWeight: callbackBodyWeight);
+      aUser.setUser(userData);
+      myCurrentSplit.setCurrentSplit(currentSplitData);
+
+      _widgetOptions = <Widget>[
+        HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callbackCurrentSplit: callbackCurrentSplit, aUser: aUser, userDb: userDb, callbackUser: callbackUser),
+        const ProgressPage(), 
+      ]; 
     });
   }
 
-  callbackBodyWeight(User aUser) {
+  callbackUser() async {
+    final User userData = await userDb.getUser();
+    final CurrentSplit currentSplitData = await currentSplitDb.getCurrentSplit();
+    
     setState(() {
-      aUser = aUser;
-      HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback, aUser: aUser, userDb: userDb, callbackBodyWeight: callbackBodyWeight);
+      aUser.setUser(userData);
+      myCurrentSplit.setCurrentSplit(currentSplitData);
+
+      _widgetOptions = <Widget>[
+        HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callbackCurrentSplit: callbackCurrentSplit, aUser: aUser, userDb: userDb, callbackUser: callbackUser),
+        const ProgressPage(),
+      ];
     });
   }
 
   @override
   void initState() {
     super.initState();
+    aUser = User();
     myCurrentSplit = CurrentSplit();
     currentSplitDb = CurrentSplitDBHelper();
-    currentSplitDb.openCurrentSplit().whenComplete(() async {
-      final CurrentSplit data = await currentSplitDb.getCurrentSplit();
-
-      setState(() {
-        myCurrentSplit = data;
-      });
-    });
-
-    aUser = User();
     userDb = UserDBHelper();
-    userDb.openUser().whenComplete(() async {
-      final User data = await userDb.getUser();
-       setState(() {
-         aUser = data;
-       });
-    });
-  }
 
-  Widget selectedNavbar() {
-    if(_selectedIndex == 0) {
-      return HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback, aUser: aUser, userDb: userDb, callbackBodyWeight: callbackBodyWeight);
-    }
-    else {
-      return const ProgressPage();
-    }
+    _widgetOptions = <Widget>[
+      HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callbackCurrentSplit: callbackCurrentSplit, aUser: aUser, userDb: userDb, callbackUser: callbackUser),
+      const ProgressPage(), 
+    ]; 
   }
 
   void _onItemTapped(int index) {
@@ -115,7 +113,7 @@ class _NavigationState extends State<Navigation> {
         ],
       ),
       body: Center(
-        child: selectedNavbar(),
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

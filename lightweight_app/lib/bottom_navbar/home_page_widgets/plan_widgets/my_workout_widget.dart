@@ -10,11 +10,11 @@ enum WorkoutDialogPopupItems { rename, editExerciceList, delete }
 class Workouts extends StatefulWidget {
   const Workouts({
     super.key,
-    required this.callback,
+    required this.callbackCurrentSplit,
     required this.currentSplitDb,
   });
 
-  final Function callback;
+  final Function callbackCurrentSplit;
   final CurrentSplitDBHelper currentSplitDb;
 
   @override
@@ -33,10 +33,9 @@ class _WorkoutsState extends State<Workouts> {
 
     setState(() {
       allWorkoutList = data;
+      widget.callbackCurrentSplit();
     });
 
-    final myCurrentSplit = await widget.currentSplitDb.getCurrentSplit(); 
-    widget.callback(myCurrentSplit);
   }
 
   @override

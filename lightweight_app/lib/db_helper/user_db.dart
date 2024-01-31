@@ -34,6 +34,13 @@ class User {
       };
     }
 
+    void setUser(User aUser) {
+      id = aUser.id;
+      name = aUser.name;
+      bodyWeightString = aUser.bodyWeightString;
+      date = aUser.date;
+      nextDate = aUser.nextDate;
+    }
     String getCurrentBodyWeight() {
       List<String> bw = bodyWeightString.split(';');
 

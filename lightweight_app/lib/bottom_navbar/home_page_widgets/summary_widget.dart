@@ -2,22 +2,45 @@ import "package:flutter/material.dart";
 import "package:lightweight_app/db_helper/user_db.dart";
 import "package:lightweight_app/icons.dart";
 import "package:lightweight_app/styles.dart";
-import "package:path/path.dart";
 
-class Summary extends StatelessWidget {
-  Summary({
+class Summary extends StatefulWidget {
+  const Summary({
     super.key,
     required this.workoutName,
     required this.aUser,
     required this.userDb,
-    required this.callbackBodyWeight,
+    required this.callbackUser,
   });
 
   final String workoutName;
   final User aUser;
   final UserDBHelper userDb;
-  final Function callbackBodyWeight;
-  final TextEditingController _controller = TextEditingController();
+  final Function callbackUser;
+
+  @override
+  State<Summary> createState() => _SummaryState();
+}
+
+class _SummaryState extends State<Summary> {
+  late TextEditingController _controller; 
+
+  void _refreshUser() async {
+    setState(() {
+      widget.callbackUser();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +54,7 @@ class Summary extends StatelessWidget {
             children: <Widget>[
               // Todays Workout
               Expanded(
-                child: todaysWorkoutCard(context, 'Today\'s Workout', workoutName),
+                child: todaysWorkoutCard(context, 'Today\'s Workout', widget.workoutName),
               ),
               const Padding(
                 padding: EdgeInsets.all(5)
@@ -80,7 +103,7 @@ class Summary extends StatelessWidget {
 
   // Function to generate buttonCard
   ElevatedButton bodyWeightButtonCard(BuildContext context) {
-    String bodyWeight = aUser.getCurrentBodyWeight();
+    String bodyWeight = widget.aUser.getCurrentBodyWeight();
 
     return ElevatedButton(
       style: ButtonStyle(
@@ -128,8 +151,8 @@ class Summary extends StatelessWidget {
   }
 
   void selectDialog(BuildContext context) {
-    //if(aUser.date == 0 || aUser.nextDate == DateTime.now().month) {
-    if(aUser.date == 0 || aUser.nextDate == 2) {
+    if(widget.aUser.date == 0 || widget.aUser.nextDate == DateTime.now().month) {
+    //if(aUser.date == 0 || aUser.nextDate == 2) {
       updateBodyWeightDialog(context);
     }
     else {
@@ -141,7 +164,7 @@ class Summary extends StatelessWidget {
   // Dialog with a Column of widgets .
   void bodyWeightDialog(BuildContext context) {
     const Map<int, String> monthMap = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'};
-    String nextMonth = monthMap[aUser.nextDate].toString();
+    String nextMonth = monthMap[widget.aUser.nextDate].toString();
 
     showDialog(
       context: context,
@@ -224,7 +247,6 @@ class Summary extends StatelessWidget {
                   onSubmitted: (String value) async {
                     if(_controller.text.isNotEmpty) {
                       onSubmitAdd();
-                      callCallback();
                       Navigator.pop(context);
                     }
                   },
@@ -241,7 +263,6 @@ class Summary extends StatelessWidget {
                     onPressed: () {
                       if(_controller.text.isNotEmpty) {
                         onSubmitAdd();
-                        callCallback();
                         Navigator.pop(context);
                       }
                     }, 
@@ -257,19 +278,16 @@ class Summary extends StatelessWidget {
   }
 
   void onSubmitAdd() async {
-
-    String bw = aUser.bodyWeightString;
+    String bw = widget.aUser.bodyWeightString;
     String newBw = _controller.text;
     bw = '$bw;$newBw';
 
     int date = DateTime.now().month;
 
-    await userDb.updateBodyWeight(bw);
-    await userDb.updateDate(date);
-  }
+    await widget.userDb.updateBodyWeight(bw);
+    await widget.userDb.updateDate(date);
 
-  void callCallback() async {
-    User updatedUser = await userDb.getUser();
-    callbackBodyWeight(updatedUser);
+    _controller.clear();
+    _refreshUser();
   }
 }

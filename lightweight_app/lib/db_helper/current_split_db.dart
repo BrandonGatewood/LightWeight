@@ -14,19 +14,24 @@ class CurrentSplit {
     for(int i = 0; i < workoutIdString.length; ++i){
       workoutList.add(Workout.restDay());
     }
-
   }
 
   CurrentSplit.fromMap(Map<String, dynamic> item):
     id = item['id'],
     workoutIdString = item['workoutIdString'];
 
-
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'workoutIdString': workoutIdString,
     };
+  }
+
+  void setCurrentSplit(CurrentSplit aSplit) {
+    id = aSplit.id;
+    workoutIdString = aSplit.workoutIdString;
+    workoutList = aSplit.workoutList; 
+
   }
 
   List<String> getWorkoutsIdList() {
@@ -61,10 +66,9 @@ class CurrentSplitDBHelper {
 
   Future<CurrentSplit> getCurrentSplit() async {
     final Database db = await CurrentSplitDBHelper().openCurrentSplit();
-    String query = 'SELECT * FROM currentSplit WHERE id = ?';
     
     CurrentSplit currSplit;
-    List<Map<String, Object?>> currSplitListMap = await db.rawQuery(query, ['currSplit']);
+    List<Map<String, Object?>> currSplitListMap = await db.query('currentSplit');
     List<CurrentSplit> currSplitList = currSplitListMap.map((e) => CurrentSplit.fromMap(e)).toList();
     if(currSplitList.isEmpty) {
       currSplit = CurrentSplit(); 

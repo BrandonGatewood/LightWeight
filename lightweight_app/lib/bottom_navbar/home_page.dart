@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:lightweight_app/bottom_navbar/home_page_widgets/track.dart';
+import 'package:lightweight_app/bottom_navbar/home_page_widgets/plan_widgets/my_current_split_widget.dart';
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/user_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
@@ -11,36 +11,44 @@ import 'home_page_widgets/workout_overview_widget.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
-    required this.myCurrentSplit,   
+    required this.myCurrentSplit,
     required this.currentSplitDb,
-    required this.callback,
+    required this.callbackCurrentSplit,
     required this.aUser,
     required this.userDb,
-    required this.callbackBodyWeight,
+    required this.callbackUser,
   });
 
   final CurrentSplit myCurrentSplit;
   final CurrentSplitDBHelper currentSplitDb;
-  final Function callback;
-
+  final Function callbackCurrentSplit;
   final User aUser;
   final UserDBHelper userDb;
-  final Function callbackBodyWeight;
+  final Function callbackUser;
 
   @override
   State<HomePage> createState() => _HomePage();
 }
 
 class _HomePage extends State<HomePage> {
-
-  late Workout todaysWorkout;
-
- 
-
   @override
   void initState() {
     super.initState();
-    todaysWorkout = widget.myCurrentSplit.getTodaysWorkout();
+    widget.currentSplitDb.openCurrentSplit().whenComplete(() async {
+      final CurrentSplit data = await widget.currentSplitDb.getCurrentSplit();
+
+      setState(() {
+        widget.myCurrentSplit.setCurrentSplit(data);
+      });
+    });
+    
+    widget.userDb.openUser().whenComplete(() async {
+      final User data = await widget.userDb.getUser();
+
+      setState(() {
+        widget.aUser.setUser(data);
+      });
+    });
   }
 
   @override
@@ -50,7 +58,18 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListView(
+          children: <Widget>[
+            summarySection(),
+            todaysWorkoutOverviewSection(),
+            planSection(),
+            homepageSections('Highlights', 3),
+          ],
+        ),
+      );
+/*
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -66,8 +85,6 @@ class _HomePage extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
-          Workout todaysWorkout = widget.myCurrentSplit.getTodaysWorkout();
-
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Track(todaysWorkout: todaysWorkout),
           ));
@@ -81,6 +98,7 @@ class _HomePage extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
+  */
   }
 
   Widget summarySection() {
@@ -97,7 +115,7 @@ class _HomePage extends State<HomePage> {
               style: header(), 
             ),
           ),
-          Summary(workoutName: name, aUser: widget.aUser, userDb: widget.userDb, callbackBodyWeight: widget.callbackBodyWeight),
+          Summary(workoutName: name, aUser: widget.aUser, userDb: widget.userDb, callbackUser: widget.callbackUser),
         ],
       ),
     );
@@ -137,7 +155,7 @@ class _HomePage extends State<HomePage> {
               style: header(), 
             ),
           ),
-          Plan(myCurrentSplit: widget.myCurrentSplit, currentSplitDb: widget.currentSplitDb, callback: widget.callback,),
+          Plan(myCurrentSplit: widget.myCurrentSplit, currentSplitDb: widget.currentSplitDb, callbackCurrentSplit: widget.callbackCurrentSplit),
         ],
       ),
     );

@@ -11,10 +11,10 @@ class Plan extends StatelessWidget {
     super.key,
     required this.myCurrentSplit,
     required this.currentSplitDb,
-    required this.callback,
+    required this.callbackCurrentSplit,
   });
 
-  final Function callback;
+  final Function callbackCurrentSplit;
   final CurrentSplit myCurrentSplit;
   final CurrentSplitDBHelper currentSplitDb;
   
@@ -47,8 +47,8 @@ class Plan extends StatelessWidget {
         style: currentSplitButtonStyle(context),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => MyCurrentSplit(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,),
-          )).then((value) => callback(myCurrentSplit));
+            builder: (context) => MyCurrentSplit(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callbackCurrentSplit: callbackCurrentSplit,),
+          ));
         }, 
         child: currentSplitButtonSizedBox(),
       ),
@@ -97,7 +97,7 @@ class Plan extends StatelessWidget {
           if(selection == 0) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => Workouts(callback: callback, currentSplitDb: currentSplitDb,),
+                builder: (context) => Workouts(callbackCurrentSplit: callbackCurrentSplit, currentSplitDb: currentSplitDb,),
                 settings: const RouteSettings(name: '/workouts'),
               ),
             );
@@ -105,7 +105,7 @@ class Plan extends StatelessWidget {
           else if(selection == 1) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => Exercises(callback: callback, currentSplitDb: currentSplitDb,), 
+                builder: (context) => const Exercises(), 
                 settings: const RouteSettings(name: '/exercises'),
               ),
             );
