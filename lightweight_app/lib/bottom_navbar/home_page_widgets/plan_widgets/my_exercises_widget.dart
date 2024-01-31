@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:lightweight_app/db_helper/current_split_db.dart';
 import '../../../icons.dart';
 import '../../../db_helper/exercise_db.dart';
 import '../../../styles.dart';
