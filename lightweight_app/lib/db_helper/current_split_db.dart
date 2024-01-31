@@ -37,6 +37,11 @@ class CurrentSplit {
       return workoutIdString.split(';');
     }
   }
+
+  Workout getTodaysWorkout() {
+    int todayIndex = DateTime.now().weekday - 1;
+    return workoutList[todayIndex];
+  }
 }
 
 class CurrentSplitDBHelper {

@@ -6,28 +6,38 @@ class User {
     String id = '';
     String name = '';
     String bodyWeightString = '';
-    String dateString = '';
+    int date = 0;
+    int nextDate = 0;
 
     User() {
       id = 'UserId';
-      name = '';
-      bodyWeightString = '';
-      dateString = '';
+      name = 'username';
+      bodyWeightString = ';--';
+      date = 0;
+      nextDate = 0;
     }
 
     User.fromMap(Map<String, dynamic> item):
       id = item['id'],
       name = item['name'],
       bodyWeightString = item['bodyWeightString'],
-      dateString = item['dateString'];
+      date = item['date'],
+      nextDate = item['nextDate'];
 
     Map<String, dynamic> toMap() {
       return {
         'id': id,
         'name': name,
         'bodyWeightString': bodyWeightString,
-        'dateString': dateString,
+        'date': date,
+        'nextDate': nextDate,
       };
+    }
+
+    String getCurrentBodyWeight() {
+      List<String> bw = bodyWeightString.split(';');
+
+      return bw[bw.length - 1];
     }
 }
 
@@ -49,7 +59,7 @@ class UserDBHelper {
   Future<User> getUser() async {
     final Database db = await UserDBHelper().openUser();
     User aUser;
-    final List<Map<String, Object?>> maps = await db.query('exercises');
+    final List<Map<String, Object?>> maps = await db.query('user');
     List<User> userList = maps.map((e) => User.fromMap(e)).toList();
 
     if(userList.isEmpty) {
@@ -63,7 +73,34 @@ class UserDBHelper {
     return aUser;
   }
 
-  // update dateString
+  Future<void> updateName(String name) async {
+    final Database db = await UserDBHelper().openUser();
+    String query = 'UPDATE user SET name = ? WHERE id = ?';
+
+    await db.rawUpdate(query, [name, 'UserId']);
+  }
+
+  Future<void> updateBodyWeight(String bw) async {
+    final Database db = await UserDBHelper().openUser();
+    String query = 'UPDATE user SET bodyWeightString = ? WHERE id = ?';
+
+    await db.rawUpdate(query, [bw, 'UserId']);
+  }
+
+  Future<void> updateDate(int date) async {
+    final Database db = await UserDBHelper().openUser();
+    int nextDate;
+
+    if(date == 12) {
+      nextDate = 1;
+    }
+    else {
+      nextDate = date + 1;
+    }
+
+    String query = 'UPDATE user SET date = ?, nextDate = ? WHERE id = ?';
+
+    await db.rawUpdate(query, [date, nextDate, 'UserId']);
+  }
   // update name
-  // update bodyweight
 }

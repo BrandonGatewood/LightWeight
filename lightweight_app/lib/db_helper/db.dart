@@ -38,9 +38,11 @@ class DB {
 
         await database.execute(
           '''CREATE TABLE user(
-            name TEXT PRIMARY KEY NOT NULL,
+            id TEXT PRIMARY KEY NOT NULL,
+            name TEXT NOT NULL,
             bodyWeightString TEXT NOT NULL,
-            dateString TEXT NOT NULL
+            date INTEGER NOT NULL,
+            nextDate INTEGER NOT NULL
           )'''
         );
       },

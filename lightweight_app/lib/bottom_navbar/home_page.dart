@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/bottom_navbar/home_page_widgets/track.dart';
 import 'package:lightweight_app/db_helper/current_split_db.dart';
+import 'package:lightweight_app/db_helper/user_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
 import 'home_page_widgets/summary_widget.dart';
 import 'home_page_widgets/plan_widget.dart';
@@ -13,11 +14,18 @@ class HomePage extends StatefulWidget {
     required this.myCurrentSplit,   
     required this.currentSplitDb,
     required this.callback,
+    required this.aUser,
+    required this.userDb,
+    required this.callbackBodyWeight,
   });
 
   final CurrentSplit myCurrentSplit;
   final CurrentSplitDBHelper currentSplitDb;
   final Function callback;
+
+  final User aUser;
+  final UserDBHelper userDb;
+  final Function callbackBodyWeight;
 
   @override
   State<HomePage> createState() => _HomePage();
@@ -25,9 +33,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
 
+  late Workout todaysWorkout;
+
+ 
+
   @override
   void initState() {
     super.initState();
+    todaysWorkout = widget.myCurrentSplit.getTodaysWorkout();
   }
 
   @override
@@ -37,6 +50,7 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -52,7 +66,7 @@ class _HomePage extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
-          Workout todaysWorkout = getTodaysWorkout();
+          Workout todaysWorkout = widget.myCurrentSplit.getTodaysWorkout();
 
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Track(todaysWorkout: todaysWorkout),
@@ -70,7 +84,7 @@ class _HomePage extends State<HomePage> {
   }
 
   Widget summarySection() {
-    Workout workout = getTodaysWorkout();
+    String name = widget.myCurrentSplit.getTodaysWorkout().name;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -83,7 +97,7 @@ class _HomePage extends State<HomePage> {
               style: header(), 
             ),
           ),
-          Summary(workoutName: workout.name),
+          Summary(workoutName: name, aUser: widget.aUser, userDb: widget.userDb, callbackBodyWeight: widget.callbackBodyWeight),
         ],
       ),
     );
@@ -104,7 +118,7 @@ class _HomePage extends State<HomePage> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5),
-            child: WorkoutOverview(todaysWorkout: getTodaysWorkout()),
+            child: WorkoutOverview(todaysWorkout: widget.myCurrentSplit.getTodaysWorkout()),
           ),
         ],
       ),
@@ -162,11 +176,6 @@ class _HomePage extends State<HomePage> {
       fontSize: 20,
       fontWeight: FontWeight.bold,
     );
-  }
-
-  Workout getTodaysWorkout() {
-    int todayIndex = DateTime.now().weekday - 1;
-    return widget.myCurrentSplit.workoutList[todayIndex];
   }
 }
 

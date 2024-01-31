@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/current_split_db.dart';
+import 'package:lightweight_app/db_helper/user_db.dart';
 import 'package:lightweight_app/icons.dart';
 import 'bottom_navbar/home_page.dart';
 import './bottom_navbar/progress_page.dart';
@@ -34,13 +35,23 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   // Always start off on HomePage
   int _selectedIndex = 0;
+
   late CurrentSplit myCurrentSplit;
   late CurrentSplitDBHelper currentSplitDb;
+  late User aUser;
+  late UserDBHelper userDb;
 
   callback(CurrentSplit currentSplit) {
     setState(() {
       myCurrentSplit = currentSplit;
-      HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback);
+      HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback, aUser: aUser, userDb: userDb, callbackBodyWeight: callbackBodyWeight);
+    });
+  }
+
+  callbackBodyWeight(User aUser) {
+    setState(() {
+      aUser = aUser;
+      HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback, aUser: aUser, userDb: userDb, callbackBodyWeight: callbackBodyWeight);
     });
   }
 
@@ -56,11 +67,20 @@ class _NavigationState extends State<Navigation> {
         myCurrentSplit = data;
       });
     });
+
+    aUser = User();
+    userDb = UserDBHelper();
+    userDb.openUser().whenComplete(() async {
+      final User data = await userDb.getUser();
+       setState(() {
+         aUser = data;
+       });
+    });
   }
 
   Widget selectedNavbar() {
     if(_selectedIndex == 0) {
-      return HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback,);
+      return HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callback: callback, aUser: aUser, userDb: userDb, callbackBodyWeight: callbackBodyWeight);
     }
     else {
       return const ProgressPage();
