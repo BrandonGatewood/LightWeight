@@ -43,10 +43,8 @@ class _NavigationState extends State<Navigation> {
 
   callbackCurrentSplit() async {
     final CurrentSplit currentSplitData = await currentSplitDb.getCurrentSplit();
-    final User userData = await userDb.getUser();
 
     setState(() {
-      aUser.setUser(userData);
       myCurrentSplit.setCurrentSplit(currentSplitData);
 
       _widgetOptions = <Widget>[
@@ -58,11 +56,9 @@ class _NavigationState extends State<Navigation> {
 
   callbackUser() async {
     final User userData = await userDb.getUser();
-    final CurrentSplit currentSplitData = await currentSplitDb.getCurrentSplit();
     
     setState(() {
       aUser.setUser(userData);
-      myCurrentSplit.setCurrentSplit(currentSplitData);
 
       _widgetOptions = <Widget>[
         HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callbackCurrentSplit: callbackCurrentSplit, aUser: aUser, userDb: userDb, callbackUser: callbackUser),
