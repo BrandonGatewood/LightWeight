@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/bottom_navbar/home_page_widgets/track.dart';
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/user_db.dart';
 import 'package:lightweight_app/icons.dart';
@@ -128,6 +129,21 @@ class _NavigationState extends State<Navigation> {
         unselectedItemColor: Colors.white, 
         onTap: _onItemTapped,
       ),
+floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Track(todaysWorkout: myCurrentSplit.getTodaysWorkout()),
+          ));
+        },
+        label: const Text('Track',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white, 
+          ) 
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

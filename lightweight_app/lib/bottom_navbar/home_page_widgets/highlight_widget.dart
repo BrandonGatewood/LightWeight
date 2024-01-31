@@ -1,8 +1,14 @@
 import "package:flutter/material.dart";
-import '../../charts/body_weight_chart.dart';
+import 'package:lightweight_app/charts/body_weight_chart.dart';
+import 'package:lightweight_app/db_helper/user_db.dart';
 
 class Highlight extends StatefulWidget {
-  const Highlight({super.key});
+  const Highlight({
+    super.key,
+    required this.aUser,
+  });
+
+  final User aUser;
 
   @override
   State<Highlight> createState() => _Highlight(); 

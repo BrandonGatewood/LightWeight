@@ -57,46 +57,16 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView(
-          children: <Widget>[
-            summarySection(),
-            todaysWorkoutOverviewSection(),
-            planSection(),
-            homepageSections('Highlights', 3),
-          ],
-        ),
-      );
-/*
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView(
-          children: <Widget>[
-            summarySection(),
-            todaysWorkoutOverviewSection(),
-            planSection(),
-            homepageSections('Highlights', 3),
-          ],
-        ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ListView(
+        children: <Widget>[
+          summarySection(),
+          todaysWorkoutOverviewSection(),
+          planSection(),
+          highlightsSections(),
+        ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Track(todaysWorkout: todaysWorkout),
-          ));
-        },
-        label: const Text('Track',
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white, 
-          ) 
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
-  */
   }
 
   Widget summarySection() {
@@ -162,11 +132,7 @@ class _HomePage extends State<HomePage> {
   /*
     Create a generic section with appropriate title and section
   */
-  Widget homepageSections(String title, int selection) {
-    Widget section; 
-
-      section = const Highlight();
-    
+  Widget highlightsSections() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -174,11 +140,11 @@ class _HomePage extends State<HomePage> {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              title,
+              'Highlights',
               style: header(), 
             ),
           ),
-          section,
+          Highlight(aUser: widget.aUser,),
         ],
       )
     );
