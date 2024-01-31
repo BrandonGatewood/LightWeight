@@ -159,7 +159,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
   */ 
   SizedBox selectedExerciseCard(int i) {
     return SizedBox(
-      key: Key(widget.workout.exerciseList[i].name),
+      key: Key('$i'),
       height: 80,
       child: Dismissible(
         direction: DismissDirection.endToStart,
