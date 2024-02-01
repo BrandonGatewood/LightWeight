@@ -152,7 +152,6 @@ class _SummaryState extends State<Summary> {
 
   void selectDialog(BuildContext context) {
     if(widget.aUser.date == 0 || widget.aUser.nextDate == DateTime.now().month) {
-    //if(aUser.date == 0 || aUser.nextDate == 2) {
       updateBodyWeightDialog(context);
     }
     else {

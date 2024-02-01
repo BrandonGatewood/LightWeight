@@ -33,7 +33,7 @@ class _Highlight extends State<Highlight> {
       height: 700,
       child: Column(
         children: <Widget>[
-          const BodyWeightChart(),
+          BodyWeightChart(aUser: widget.aUser,),
         ],
       )
     );

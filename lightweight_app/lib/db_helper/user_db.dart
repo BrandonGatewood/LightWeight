@@ -3,49 +3,63 @@ import 'package:lightweight_app/db_helper/db.dart';
 import 'package:sqflite/sqflite.dart';
 
 class User {
-    String id = '';
-    String name = '';
-    String bodyWeightString = '';
-    int date = 0;
-    int nextDate = 0;
+  String id = '';
+  String name = '';
+  String bodyWeightString = '';
+  int date = 0;
+  int nextDate = 0;
 
-    User() {
-      id = 'UserId';
-      name = 'username';
-      bodyWeightString = ';--';
-      date = 0;
-      nextDate = 0;
+  User() {
+    id = 'UserId';
+    name = 'username';
+    bodyWeightString = '--';
+    date = 0;
+    nextDate = 0;
+  }
+
+  User.fromMap(Map<String, dynamic> item):
+    id = item['id'],
+    name = item['name'],
+    bodyWeightString = item['bodyWeightString'],
+    date = item['date'],
+    nextDate = item['nextDate'];
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'bodyWeightString': bodyWeightString,
+      'date': date,
+      'nextDate': nextDate,
+    };
+  }
+
+  void setUser(User aUser) {
+    id = aUser.id;
+    name = aUser.name;
+    bodyWeightString = aUser.bodyWeightString;
+    date = aUser.date;
+    nextDate = aUser.nextDate;
+  }
+  
+  String getCurrentBodyWeight() {
+    List<String> bw = bodyWeightString.split(';');
+
+    return bw[bw.length - 1];
+  }
+
+  List<int> getBodyWeightList() {
+    List<int> bw = [];
+
+    List<String> bwString = bodyWeightString.split(';'); 
+
+    for(int i = 1; i < bwString.length; ++i) {
+      int data = int.parse(bwString[i]);
+      bw.add(data);
     }
 
-    User.fromMap(Map<String, dynamic> item):
-      id = item['id'],
-      name = item['name'],
-      bodyWeightString = item['bodyWeightString'],
-      date = item['date'],
-      nextDate = item['nextDate'];
-
-    Map<String, dynamic> toMap() {
-      return {
-        'id': id,
-        'name': name,
-        'bodyWeightString': bodyWeightString,
-        'date': date,
-        'nextDate': nextDate,
-      };
-    }
-
-    void setUser(User aUser) {
-      id = aUser.id;
-      name = aUser.name;
-      bodyWeightString = aUser.bodyWeightString;
-      date = aUser.date;
-      nextDate = aUser.nextDate;
-    }
-    String getCurrentBodyWeight() {
-      List<String> bw = bodyWeightString.split(';');
-
-      return bw[bw.length - 1];
-    }
+    return bw;
+  }
 }
 
 class UserDBHelper {

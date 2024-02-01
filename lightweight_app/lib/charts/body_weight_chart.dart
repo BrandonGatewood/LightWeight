@@ -1,8 +1,15 @@
 import "package:flutter/material.dart";
 import 'package:fl_chart/fl_chart.dart';
+import 'package:lightweight_app/db_helper/user_db.dart';
+import 'package:lightweight_app/styles.dart';
 
 class BodyWeightChart extends StatefulWidget {
-  const BodyWeightChart({super.key});
+  const BodyWeightChart({
+    super.key,
+    required this.aUser,
+  });
+
+  final User aUser;
 
   @override
   State<BodyWeightChart> createState() => _BodyWeightChart(); 
@@ -23,24 +30,31 @@ class _BodyWeightChart extends State<BodyWeightChart> {
       children: <Widget>[
         Expanded(
           child: SizedBox(
-            height: 330,
+            height: 350,
             child: Card(
               child: Column(
                 children: <Widget>[
-                  const Align(
-                    alignment: Alignment.topLeft,
+                  Align(
+                    alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 8),
-                      child: Text('Body Weight Chart'),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        'Body Weight Chart',
+                        style: Styles().content(),
+                      ),
                     ),
                   ),
+                  const Spacer(),
                   SizedBox(
                     height: 300,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                        right: 15,
+                        right: 25,
                         left: 10,
-                        top: 20,
+                        top: 10,
                         bottom: 10,
                       ),
                       child: LineChart(
@@ -103,28 +117,28 @@ class _BodyWeightChart extends State<BodyWeightChart> {
 
     switch (value.toInt()) {
       case 1:
-        text = '100 lbs';
+        text = '100';
         break;
       case 2:
-        text = '200 lbs';
+        text = '200';
         break;
       case 3:
-        text = '300 lbs';
+        text = '300';
         break;
       case 4:
-        text = '400 lbs';
+        text = '400';
         break;
       default:
         return Container();
     }
 
     return Padding(
-      padding: EdgeInsets.only(right: 3),
+      padding: const EdgeInsets.only(right: 2),
       child: Text(
         text, 
         style: style, 
-        textAlign: TextAlign.left
-      )
+        textAlign: TextAlign.right
+      ),
     );
   }
 
@@ -166,6 +180,9 @@ class _BodyWeightChart extends State<BodyWeightChart> {
           ),
         ),
         leftTitles: AxisTitles(
+          axisNameWidget:const  Center(
+            child: Text('lbs'),
+          ),
           sideTitles: SideTitles(
             showTitles: true,
             interval: 1,
@@ -184,7 +201,7 @@ class _BodyWeightChart extends State<BodyWeightChart> {
       maxY: 4,
       lineBarsData: [
         LineChartBarData(
-          spots: bodyWeightDummyData(),
+          spots: bodyWeightData(),
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,
@@ -200,18 +217,15 @@ class _BodyWeightChart extends State<BodyWeightChart> {
     );
   }
 
-  List<FlSpot> bodyWeightDummyData() {
-    return [
-      FlSpot(1, 184/100),
-      FlSpot(2, 183/100),
-      FlSpot(3, 185/100),
-      FlSpot(4, 190/100),
-      FlSpot(5, 185/100),
-      FlSpot(6, 183/100),
-      FlSpot(7.2, 200/100),
-      FlSpot(8, 170/100),
-      FlSpot(9, 170/100),
-      FlSpot(10, 170/100),
-    ];
+  List<FlSpot> bodyWeightData() {
+    List<FlSpot> data = [];
+    List<int> bwData = widget.aUser.getBodyWeightList();
+
+    for(int i = 0; i < bwData.length; ++i) {
+      FlSpot dp = FlSpot(i.toDouble() + 1, bwData[i].toDouble()/100);
+      data.add(dp);
+    }
+
+    return data;
   }
 }
