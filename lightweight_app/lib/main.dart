@@ -129,7 +129,7 @@ class _NavigationState extends State<Navigation> {
         unselectedItemColor: Colors.white, 
         onTap: _onItemTapped,
       ),
-floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -143,7 +143,7 @@ floatingActionButton: FloatingActionButton.extended(
           ) 
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
