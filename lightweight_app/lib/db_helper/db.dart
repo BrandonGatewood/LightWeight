@@ -16,7 +16,8 @@ class DB {
           id TEXT PRIMARY KEY NOT NULL,
           name TEXT NOT NULL,
           repsString TEXT NOT NULL,
-          weightString TEXT NOT NULL
+          weightString TEXT NOT NULL,
+          maxWeight INTEGER NOT NULL
           )'''
         );
 

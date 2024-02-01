@@ -69,6 +69,8 @@ class _ExerciseChartState extends State<ExerciseChart> {
   SizedBox exerciseCard(int exerciseIndex) {
     String name = widget.aWorkout.exerciseList[exerciseIndex].name;
     List<int> firstSetWeightList = widget.aWorkout.exerciseList[exerciseIndex].getFirstSetWeightList();
+    int maxWeight = widget.aWorkout.exerciseList[exerciseIndex].maxWeight;
+    maxWeight = (((maxWeight + 50)  ~/ 100) * 100);
 
     return SizedBox(
       height: 350,
@@ -99,7 +101,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
                   bottom: 10,
                 ),
                 child: LineChart(
-                  exerciseChart(firstSetWeightList),
+                  exerciseChart(firstSetWeightList, maxWeight),
                 ),
               ),
             ),
@@ -116,7 +118,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
     
     Text text;
     int v = value.toInt();
-    if(value % 2 == 0) {
+    if(value % 5 == 0) {
       text = Text(
         '$v',
         style: style,
@@ -138,9 +140,8 @@ class _ExerciseChartState extends State<ExerciseChart> {
     );
 
     String text;
-    int v = value.toInt() * 50;
-    if(value % 2 == 0) {
-
+    int v = value.toInt() * 100;
+    if(v % 2 == 0) {
       text = '$v';
     }
     else {
@@ -157,7 +158,16 @@ class _ExerciseChartState extends State<ExerciseChart> {
     );
   }
 
-  LineChartData exerciseChart(List<int> firstSetWeightList) {
+  LineChartData exerciseChart(List<int> firstSetWeightList, int maxWeight) {
+    double maxY;
+
+    if(maxWeight == 50) {
+      maxY = 2;
+    }
+    else {
+      maxY = maxWeight / 100;
+    }
+
     return LineChartData(
       gridData: FlGridData(
         show: true,
@@ -202,7 +212,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
             showTitles: true,
             interval: 1,
             getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
+            reservedSize: 40,
           ),
         ),
       ),
@@ -211,9 +221,9 @@ class _ExerciseChartState extends State<ExerciseChart> {
         border: Border.all(color: const Color(0xff37434d)),
       ),
       minX: 1,
-      maxX: 10,
-      minY: 1,
-      maxY: 8,
+      maxX: 20,
+      minY: 0,
+      maxY: maxY,
       lineBarsData: [
         LineChartBarData(
           spots: firstSetWeightData(firstSetWeightList),
@@ -221,7 +231,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
           gradient: LinearGradient(
             colors: gradientColors,
           ),
-          barWidth: 4,
+          barWidth: 2,
           isStrokeCapRound: true,
           dotData: const FlDotData(
             show: true,
@@ -231,16 +241,15 @@ class _ExerciseChartState extends State<ExerciseChart> {
     );
   }
 
-
-
-
   List<FlSpot> firstSetWeightData(List<int> firstSetWeightList) {
     List<FlSpot> data = [];
-    //List<int> bwData = widget.aUser.getBodyWeightList();
-
-    for(int i = 0; i < firstSetWeightList.length; ++i) {
-      FlSpot dp = FlSpot(i.toDouble() + 1, firstSetWeightList[i].toDouble()/100);
-      data.add(dp);
+    int counter = 1;
+    for(int i = firstSetWeightList.length - 1; i >= 0 ; --i) {
+      if(counter < 20) {
+        FlSpot dp = FlSpot(i.toDouble() + 1, firstSetWeightList[i].toDouble()/100);
+        ++counter;
+        data.insert(0,dp);
+      }
     }
 
     return data;

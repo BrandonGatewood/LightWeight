@@ -275,6 +275,8 @@ class _TrackState extends State<Track> {
   // save exercise reps and weight into the database.
   void onSubmitUpdate() async {
     for(int i = 0; i < widget.todaysWorkout.exerciseList.length; ++i) {
+      int maxWeight = widget.todaysWorkout.exerciseList[i].maxWeight;
+
       String delimeter = ';';
       String reps = '';
       String weight = '';
@@ -295,6 +297,13 @@ class _TrackState extends State<Track> {
           reps = '$reps$r,';
           weight = '$weight$w,';
         }
+
+        // update max weight if found
+        int checkForMax = int.parse(_controller[i][j]!.$2.text);
+        if(checkForMax > maxWeight) {
+          await exerciseDb.updateExerciseMaxWeight(widget.todaysWorkout.exerciseList[i].id, checkForMax);
+        }
+
       }
 
       await exerciseDb.updateExerciseReps(widget.todaysWorkout.exerciseList[i].id, reps);

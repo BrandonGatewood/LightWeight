@@ -7,16 +7,18 @@ class Exercise {
   final String name;
   final String repsString;
   final String weightString;
+  final int maxWeight;
 
   const Exercise({
     required this.id,
     required this.name,
     required this.repsString,
     required this.weightString,
+    required this.maxWeight,
   });
 
   Exercise.fromMap(Map<String, dynamic> item):
-    id = item['id'], name = item['name'], repsString = item['repsString'], weightString = item['weightString'];
+    id = item['id'], name = item['name'], repsString = item['repsString'], weightString = item['weightString'], maxWeight = item['maxWeight'];
 
   Map<String, dynamic> toMap() {
     return {
@@ -24,6 +26,7 @@ class Exercise {
       'name': name,
       'repsString': repsString,
       'weightString': weightString,
+      'maxWeight': maxWeight,
     };
   }
 
@@ -54,7 +57,7 @@ class ExerciseDBHelper {
 
     String id = DB().idGenerator(); 
 
-    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '');
+    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', maxWeight: 0);
 
     await db.insert(
       'exercises', 
@@ -68,7 +71,7 @@ class ExerciseDBHelper {
 
     String id = DB().idGenerator(); 
 
-    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '');
+    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', maxWeight: 0);
 
     await db.insert(
       'exercises', 
@@ -144,4 +147,11 @@ class ExerciseDBHelper {
     
     await db.rawUpdate('UPDATE exercises SET weightString = ? WHERE id = ?', [weightString, id]);
   }
+
+  Future<void> updateExerciseMaxWeight(String id, int maxWeight) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+    
+    await db.rawUpdate('UPDATE exercises SET maxWeight = ? WHERE id = ?', [maxWeight, id]);
+  }
+
 }
