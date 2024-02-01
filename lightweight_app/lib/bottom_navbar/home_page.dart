@@ -144,7 +144,7 @@ class _HomePage extends State<HomePage> {
               style: header(), 
             ),
           ),
-          Highlight(aUser: widget.aUser,),
+          Highlight(aUser: widget.aUser, aWorkout: widget.myCurrentSplit.getTodaysWorkout()),
         ],
       )
     );

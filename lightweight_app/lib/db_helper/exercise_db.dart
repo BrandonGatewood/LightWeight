@@ -26,6 +26,22 @@ class Exercise {
       'weightString': weightString,
     };
   }
+
+  List<int> getFirstSetWeightList() {
+    if(weightString.isEmpty) {
+      return [];
+    }
+    else {
+      List<int> firstSetWeightList = [];
+      List<String> allWeightsList = weightString.split(';');
+      for(int i = 0; i < allWeightsList.length; ++i) {
+        List<String> aWeightsList = allWeightsList[i].split(',');
+        int firstWeight = int.parse(aWeightsList[0]); 
+        firstSetWeightList.add(firstWeight);
+      }
+      return firstSetWeightList;
+    }
+  }
 }
 
 class ExerciseDBHelper {
@@ -127,6 +143,5 @@ class ExerciseDBHelper {
     final Database db = await ExerciseDBHelper().openExercise();
     
     await db.rawUpdate('UPDATE exercises SET weightString = ? WHERE id = ?', [weightString, id]);
-
   }
 }

@@ -16,58 +16,52 @@ class BodyWeightChart extends StatefulWidget {
 }
 
 class _BodyWeightChart extends State<BodyWeightChart> {
-    List<Color> gradientColors = [
-      Colors.deepPurple,
-      Colors.cyan,
-    ];
+  List<Color> gradientColors = [
+    Colors.deepPurple,
+    Colors.cyan,
+  ];
   @override
   Widget build(BuildContext context) {
     return chartCard();
   }
 
-  Widget chartCard() {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: SizedBox(
-            height: 350,
-            child: Card(
-              child: Column(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 10,
-                      ),
-                      child: Text(
-                        'Body Weight Chart',
-                        style: Styles().content(),
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    height: 300,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 25,
-                        left: 10,
-                        top: 10,
-                        bottom: 10,
-                      ),
-                      child: LineChart(
-                        bodyWeightChart(),
-                      ),
-                    ),
-                  ),
-                ],
+  SizedBox chartCard() {
+    return SizedBox(
+      height: 350,
+      child: Card(
+        child: Column(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 10,
+                ),
+                child: Text(
+                  'Body Weight Chart',
+                  style: Styles().content(),
+                ),
               ),
             ),
-          ),
+            const Spacer(),
+            SizedBox(
+              height: 300,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  right: 25,
+                  left: 10,
+                  top: 10,
+                  bottom: 10,
+                ),
+                child: LineChart(
+                  bodyWeightChart(),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 

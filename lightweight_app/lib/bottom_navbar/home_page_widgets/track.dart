@@ -68,6 +68,7 @@ class _TrackState extends State<Track> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
           onSubmitUpdate();
+          Navigator.pop(context);
         },
         label: const Text('Save',
           style: TextStyle(
@@ -275,8 +276,13 @@ class _TrackState extends State<Track> {
   void onSubmitUpdate() async {
     for(int i = 0; i < widget.todaysWorkout.exerciseList.length; ++i) {
       String delimeter = ';';
-      String reps = widget.todaysWorkout.exerciseList[i].repsString + delimeter;
-      String weight = widget.todaysWorkout.exerciseList[i].weightString + delimeter;
+      String reps = '';
+      String weight = '';
+
+      if(widget.todaysWorkout.exerciseList[i].repsString.isNotEmpty) {
+        reps = widget.todaysWorkout.exerciseList[i].repsString + delimeter;
+        weight = widget.todaysWorkout.exerciseList[i].weightString + delimeter;
+      }
       for(int j = 0; j < _controller[i].length; ++j) {
         String r = _controller[i][j]!.$1.text;
         String w = _controller[i][j]!.$2.text;
