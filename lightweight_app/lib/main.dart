@@ -133,7 +133,7 @@ class _NavigationState extends State<Navigation> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Track(todaysWorkout: myCurrentSplit.getTodaysWorkout()),
+            builder: (context) => Track(todaysWorkout: myCurrentSplit.getTodaysWorkout(), callbackCurrentSplit: callbackCurrentSplit),
           ));
         },
         label: const Text('Track',

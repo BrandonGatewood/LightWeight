@@ -8,9 +8,11 @@ class Track extends StatefulWidget {
   const Track({
     super.key,
     required this.todaysWorkout,
+    required this.callbackCurrentSplit,
   });
 
   final Workout todaysWorkout;
+  final Function callbackCurrentSplit;
 
   @override
   State<Track> createState() => _TrackState();
@@ -68,6 +70,9 @@ class _TrackState extends State<Track> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
           onSubmitUpdate();
+          setState(() {
+            widget.callbackCurrentSplit();
+          });
           Navigator.pop(context);
         },
         label: const Text('Save',
