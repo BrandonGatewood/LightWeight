@@ -197,6 +197,12 @@ class _ExerciseChartState extends State<ExerciseChart> {
             showTitles: false),
         ),
         bottomTitles: AxisTitles(
+          axisNameWidget: Center(
+            child: Text(
+              'Past 20 Tracked lifts',
+              style: Styles().subtitle(),
+            ),
+          ),
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 30,
@@ -205,8 +211,11 @@ class _ExerciseChartState extends State<ExerciseChart> {
           ),
         ),
         leftTitles: AxisTitles(
-          axisNameWidget:const  Center(
-            child: Text('lbs'),
+          axisNameWidget: Center(
+            child: Text(
+              'lbs',
+              style: Styles().subtitle(),
+            ),
           ),
           sideTitles: SideTitles(
             showTitles: true,
