@@ -148,72 +148,74 @@ class _WorkoutsState extends State<Workouts> {
       builder: (context) => Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-        child: SizedBox(
-          height: 550.0,
-          child: Column(
-            children: <Widget> [
-              Row(
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () => Navigator.popUntil(context, (route) => route.settings.name == '/workouts'),
-                    icon:  icons.backArrowIcon(),
-                  ),
-                  const Spacer(),
-                  Text(
-                    aWorkout.name,
-                    style: Styles().largeDialogHeader(), 
-                  ),
-                  const Spacer(),
-                  workoutDialogPopupMenu(aWorkout), 
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.only(
-                  left: 12,
-                  right: 12,
-                  bottom: 12
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: 550.0,
+            child: Column(
+              children: <Widget> [
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () => Navigator.popUntil(context, (route) => route.settings.name == '/workouts'),
+                      icon:  icons.backArrowIcon(),
+                    ),
+                    const Spacer(),
+                    Text(
+                      aWorkout.name,
+                      style: Styles().largeDialogHeader(), 
+                    ),
+                    const Spacer(),
+                    workoutDialogPopupMenu(aWorkout), 
+                  ],
                 ),
-                child: Divider(
-                  thickness: 2,
+                const Padding(
+                  padding: EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    bottom: 12
+                  ),
+                  child: Divider(
+                    thickness: 2,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 450,
-                width: 300,
-                child: ListView.builder(
-                  itemCount: aWorkout.exerciseList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    String sets = aWorkout.setsList[index];
+                SizedBox(
+                  height: 450,
+                  width: 300,
+                  child: ListView.builder(
+                    itemCount: aWorkout.exerciseList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String sets = aWorkout.setsList[index];
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                aWorkout.exerciseList[index].name,
-                                style: Styles().content(),
-                              ),
-                              const Spacer(),
-                              Text(
-                                '$sets Sets',
-                                style: Styles().content(),
-                              ),
-                            ],
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  aWorkout.exerciseList[index].name,
+                                  style: Styles().content(),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  '$sets Sets',
+                                  style: Styles().content(),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        if(aWorkout.exerciseList.isNotEmpty)
-                          const Divider(
-                            thickness: 2,
-                          ),
-                      ],
-                    );
-                  },
+                          if(aWorkout.exerciseList.isNotEmpty)
+                            const Divider(
+                              thickness: 2,
+                            ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -232,7 +234,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 215.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -252,6 +254,16 @@ class _WorkoutsState extends State<Workouts> {
                   const Spacer(),
                   const Spacer(),
                 ],
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 12
+                ),
+                child: Divider(
+                  thickness: 2,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -333,7 +345,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 215.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: dialogList,              
@@ -355,7 +367,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 210.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -376,7 +388,16 @@ class _WorkoutsState extends State<Workouts> {
                   const Spacer(),
                 ],
               ),
-              const Spacer(),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 12
+                ),
+                child: Divider(
+                  thickness: 2,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
@@ -486,6 +507,16 @@ class _WorkoutsState extends State<Workouts> {
           const Spacer(),
         ],
       ),
+      const Padding(
+        padding: EdgeInsets.only(
+          left: 12,
+          right: 12,
+          bottom: 12
+        ),
+        child: Divider(
+          thickness: 2,
+        ),
+      ),
       Padding(
         padding: const EdgeInsets.only(
           top: 20,
@@ -547,7 +578,16 @@ class _WorkoutsState extends State<Workouts> {
           const Spacer(),
         ],
       ),
-      const Spacer(),
+      const Padding(
+        padding: EdgeInsets.only(
+          left: 12,
+          right: 12,
+          bottom: 12
+        ),
+        child: Divider(
+          thickness: 2,
+        ),
+      ),
       Padding(
         padding: const EdgeInsets.all(20),
         child: Text(
@@ -590,10 +630,10 @@ class _WorkoutsState extends State<Workouts> {
 
     switch(selection) {
       case 0: 
-        title = 'Failed to add workout.';
+        title = 'Failed to Add Workout';
         break;
       case 1:
-        title = 'Failed to update workout.';
+        title = 'Failed to Update Workout';
         break;
     }
     showDialog(
@@ -602,7 +642,7 @@ class _WorkoutsState extends State<Workouts> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), 
         child: SizedBox(
-          height: 210.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -614,6 +654,16 @@ class _WorkoutsState extends State<Workouts> {
                   style: Styles().largeDialogHeader(),
                 ),
               ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 12
+                ),
+                child: Divider(
+                  thickness: 2,
+                ),
               ),
               const Spacer(),
               Center(
@@ -670,7 +720,7 @@ class _WorkoutsState extends State<Workouts> {
   
   // Communicated with database to update a workout 
   void onSubmitUpdateName(Workout aWorkout) async {
-    if(!validateWorkoutName(aWorkout.name)) {
+    if(validateWorkoutName(aWorkout.name)) {
       await _dbHelper.updateWorkoutName(aWorkout.id, _controller.text);
       handleUpdateNameRequest();
 
