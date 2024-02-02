@@ -255,7 +255,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
         bottomTitles: AxisTitles(
           axisNameWidget: Center(
             child: Text(
-              'Past 20 Tracked lifts',
+              'Past 20 Tracked Workouts',
               style: Styles().subtitle(),
             ),
           ),
