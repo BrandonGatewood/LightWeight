@@ -141,8 +141,7 @@ class _MyCurrentSplitState extends State<MyCurrentSplit> with TickerProviderStat
             ],
           ),
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height - 210,
+        Expanded(
           child:
            ListView.builder(
             itemCount: widget.myCurrentSplit.workoutList[dayIndex].exerciseList.length,
