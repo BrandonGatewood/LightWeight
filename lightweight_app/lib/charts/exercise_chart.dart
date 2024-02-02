@@ -42,7 +42,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: SizedBox(
-        height: 375,
+        height: 370,
         child: exercisePageView(),
       ),
     );
