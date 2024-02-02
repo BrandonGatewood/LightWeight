@@ -116,7 +116,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
       return Padding(
         padding: const EdgeInsets.only(
           top: 5,
-          bottom: 80,
+          //bottom: 80,
         ),
         child: selectedExercises(),
       );
@@ -157,9 +157,20 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
 
     , delete icon to remove the selected exercise. 
   */ 
-  SizedBox selectedExerciseCard(int i) {
-    return SizedBox(
+  Padding selectedExerciseCard(int i) {
+    EdgeInsets p;
+
+    if(i == widget.workout.exerciseList.length - 1) {
+      p = const EdgeInsets.only(bottom: 90,);
+    }
+    else {
+      p = const EdgeInsets.all(0);
+    }
+
+    return Padding(
       key: Key('$i'),
+      padding: p,
+      child: SizedBox(
       height: 80,
       child: Dismissible(
         direction: DismissDirection.endToStart,
@@ -223,6 +234,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
             ),
           ),
         ),
+      ),
       ),
     );
   }
