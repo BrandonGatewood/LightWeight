@@ -45,6 +45,17 @@ class Exercise {
       return firstSetWeightList;
     }
   }
+
+  List<List<int>> getAllWeightsMatrix() {
+    List<List<int>> allWeightsMatrix = [];
+
+    List<String> allWeightsList = weightString.split(';');
+
+    for(int i = 0; i < allWeightsList.length; ++i) {
+
+    }
+    return allWeightsMatrix;
+  }
 }
 
 class ExerciseDBHelper {
