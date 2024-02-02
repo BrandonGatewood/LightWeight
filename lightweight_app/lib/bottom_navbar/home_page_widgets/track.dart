@@ -126,15 +126,25 @@ class _TrackState extends State<Track> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         child: SizedBox(
-          height: 550,
+         height: MediaQuery.of(context).size.height,
           child: Column(
             children: <Widget> [
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Text(
-                  anExercise.name,
-                  style: Styles().largeDialogHeader(), 
-                ),
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon:  MyIcons().backArrowIcon(),
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  Text(
+                    anExercise.name,
+                    style: Styles().largeDialogHeader(), 
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                  const Spacer(),
+                ],
               ),
               const Padding(
                 padding: EdgeInsets.only(
@@ -145,129 +155,144 @@ class _TrackState extends State<Track> {
                   thickness: 2,
                 ),
               ),
-              SizedBox(
-                height: 450,
-                width: 350,
-                child: ListView.builder(
-                  itemCount: numOfSets,
-                  itemBuilder: (BuildContext context, int index) {
-                    int set = index + 1;
+              Expanded(
+                child: SizedBox(
+                  width: 350,
+                  child: ListView.builder(
+                    itemCount: numOfSets,
+                    itemBuilder: (BuildContext context, int index) {
+                      int set = index + 1;
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                'Set $set',
-                                style: Styles().content(),
-                              ),
-                              const Spacer(),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 10,
-                            left: 15,
-                            right: 15,
-                            bottom: 20,
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              SizedBox(
-                                width: 100,
-                                height: 50,
-                                child: TextField(
-                                  maxLength: 3,
-                                  keyboardType: TextInputType.number,
-                                  controller: _controller[i][index]!.$1,
-                                  decoration: Styles().inputReps(),
-                                  textAlign: TextAlign.center, 
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Set $set',
+                                  style: Styles().content(),
                                 ),
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    int sets = int.parse(_controller[i][index]!.$1.text) + 1; 
-                                    _controller[i][index]!.$1.text = sets.toString();  
-                                   // widget.workout.setsList[i] = sets.toString();
-                                  }); 
-                                },
-                                child: MyIcons().incrementIcon(),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(5),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                      int sets = int.parse(_controller[i][index]!.$1.text) - 1; 
+                                const Spacer(),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 10,
+                              left: 15,
+                              right: 15,
+                              bottom: 20,
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 100,
+                                  height: 50,
+                                  child: TextField(
+                                    maxLength: 3,
+                                    keyboardType: TextInputType.number,
+                                    controller: _controller[i][index]!.$1,
+                                    decoration: Styles().inputReps(),
+                                    textAlign: TextAlign.center, 
+                                  ),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      int sets = int.parse(_controller[i][index]!.$1.text) + 1; 
                                       _controller[i][index]!.$1.text = sets.toString();  
-                                      //widget.workout.setsList[i] = sets.toString();
-                                  }); 
-                                },
-                                child: MyIcons().decrementIcon(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15,
-                            right: 15,
-                            bottom: 20,
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                             SizedBox(
-                                width: 100,
-                                height: 50,
-                                child: TextField(
-                                  maxLength: 3,
-                                  keyboardType: TextInputType.number,
-                                  controller: _controller[i][index]!.$2,
-                                  decoration: Styles().inputWeight(),
-                                  textAlign: TextAlign.center, 
+                                    // widget.workout.setsList[i] = sets.toString();
+                                    }); 
+                                  },
+                                  child: MyIcons().incrementIcon(),
                                 ),
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    int sets = int.parse(_controller[i][index]!.$2.text) + 1; 
-
-                                    _controller[i][index]!.$2.text = sets.toString();  
-                                  }); 
-                                },
-                                child: MyIcons().incrementIcon(),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(5),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    int sets = int.parse(_controller[i][index]!.$2.text) - 1; 
-
-                                    _controller[i][index]!.$2.text = sets.toString();  
-                                  }); 
-                                },
-                                child: MyIcons().decrementIcon(),
-                              ),
-                            ],
+                                const Padding(
+                                  padding: EdgeInsets.all(5),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                        int sets = int.parse(_controller[i][index]!.$1.text) - 1; 
+                                        _controller[i][index]!.$1.text = sets.toString();  
+                                        //widget.workout.setsList[i] = sets.toString();
+                                    }); 
+                                  },
+                                  child: MyIcons().decrementIcon(),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        if(set > 0)
-                          const Divider(
-                            thickness: 2,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 15,
+                              right: 15,
+                              bottom: 20,
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                              SizedBox(
+                                  width: 100,
+                                  height: 50,
+                                  child: TextField(
+                                    maxLength: 3,
+                                    keyboardType: TextInputType.number,
+                                    controller: _controller[i][index]!.$2,
+                                    decoration: Styles().inputWeight(),
+                                    textAlign: TextAlign.center, 
+                                  ),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      int sets = int.parse(_controller[i][index]!.$2.text) + 1; 
+
+                                      _controller[i][index]!.$2.text = sets.toString();  
+                                    }); 
+                                  },
+                                  child: MyIcons().incrementIcon(),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(5),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      int sets = int.parse(_controller[i][index]!.$2.text) - 1; 
+
+                                      _controller[i][index]!.$2.text = sets.toString();  
+                                    }); 
+                                  },
+                                  child: MyIcons().decrementIcon(),
+                                ),
+                              ],
+                            ),
                           ),
-                      ],
-                    );
-                  },
+                          if(set > 0)
+                            const Divider(
+                              thickness: 2,
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 10,
+                  ), 
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Styles().saveTextButton(),
+                  ),
                 ),
               ),
             ],
