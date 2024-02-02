@@ -241,54 +241,56 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
       builder: (context) => Dialog(
         insetPadding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
-        child: SizedBox(
-          height: 550.0,
-          child: Column(
-            children: <Widget>[
-              const Spacer(),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon:  icons.backArrowIcon(),
-                  ),
-                  const Spacer(),
-                  const Spacer(),
-                  Text(
-                    'Select Exercise',
-                    style: Styles().largeDialogHeader(), 
-                  ),
-                  const Spacer(),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      // add new exercise 
-                      addExerciseDialog();
-                    },
-                    child: Styles().addTextButton(), 
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 450,
-                child: availableExercises(),
-              ),
-              const Spacer(),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    right: 10,
-                  ), 
-                  child: TextButton(
-                    onPressed: () {
-                      onSubmitSaveCheckButton();
-                    },
-                    child: Styles().saveTextButton(),
-                  ),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: 550.0,
+            child: Column(
+              children: <Widget>[
+                const Spacer(),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon:  icons.backArrowIcon(),
+                    ),
+                    const Spacer(),
+                    const Spacer(),
+                    Text(
+                      'Select Exercise',
+                      style: Styles().largeDialogHeader(), 
+                    ),
+                    const Spacer(),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        // add new exercise 
+                        addExerciseDialog();
+                      },
+                      child: Styles().addTextButton(), 
+                    ),
+                  ],
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 450,
+                  child: availableExercises(),
+                ),
+                const Spacer(),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 10,
+                    ), 
+                    child: TextButton(
+                      onPressed: () {
+                        onSubmitSaveCheckButton();
+                      },
+                      child: Styles().saveTextButton(),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
