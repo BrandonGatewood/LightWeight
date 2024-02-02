@@ -656,6 +656,7 @@ class _WorkoutsState extends State<Workouts> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => WorkoutSelectExercises(workout: newWorkout, workoutDb: _dbHelper,),
+          settings: const RouteSettings(name: '/select_exercises')
         ),
       ).then((value) {
         _refreshWorkouts();
