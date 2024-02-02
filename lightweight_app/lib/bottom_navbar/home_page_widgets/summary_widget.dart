@@ -171,7 +171,7 @@ class _SummaryState extends State<Summary> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         child: SizedBox(
-          height: 215.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -191,6 +191,16 @@ class _SummaryState extends State<Summary> {
                   const Spacer(),
                   const Spacer(),
                 ],
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 12
+                ),
+                child: Divider(
+                  thickness: 2,
+                ),
               ),
               const Spacer(),
               Text('Next weigh in: $nextMonth'),
