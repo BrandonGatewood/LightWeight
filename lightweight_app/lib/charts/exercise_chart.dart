@@ -42,27 +42,83 @@ class _ExerciseChartState extends State<ExerciseChart> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: SizedBox(
-        height: 350,
+        height: 375,
         child: exercisePageView(),
       ),
     );
   }
 
-  // Horizontal Scrollview for exercise cards
-  PageView exercisePageView() {
-    return PageView.builder(
-      controller: _pageController,
-      scrollDirection: Axis.horizontal,
-      itemCount: widget.aWorkout.exerciseList.length,
-      onPageChanged: (value) {
-        setState(() {
-          _selectedPage = value; 
-        });
-      },
-      itemBuilder: (context, index) {
-        return exerciseCard(index);
-      },
+  SizedBox _indicator(bool isActive) {
+    return SizedBox(
+      height: 10,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        margin: const EdgeInsets.symmetric(horizontal: 4.0),
+        height: isActive
+            ? 10:8.0,
+        width: isActive
+            ? 12:8.0,
+        decoration: BoxDecoration(
+          boxShadow: [
+            isActive
+                ? BoxShadow(
+              color: Theme.of(context).colorScheme.inversePrimary,
+            )
+            : const BoxShadow(
+              color: Colors.transparent,
+            ),
+          ],
+          shape: BoxShape.circle,
+          color: isActive ? Theme.of(context).colorScheme.inversePrimary : const Color(0XFFEAEAEA),
+        ),
+      ),
+    );
+  }
 
+  List<Widget> _buildPageIndicator() {
+    List<Widget> list = [];
+
+    for (int i = 0; i < widget.aWorkout.exerciseList.length; i++) {
+      list.add(i == _selectedPage ? _indicator(true) : _indicator(false));
+    }
+
+    return list;
+  }
+
+  // Horizontal Scrollview for exercise cards
+  Stack exercisePageView() {
+    return Stack(
+      children: <Widget>[
+        PageView.builder(
+          controller: _pageController,
+          scrollDirection: Axis.horizontal,
+          itemCount: widget.aWorkout.exerciseList.length,
+          onPageChanged: (value) {
+            setState(() {
+              _selectedPage = value; 
+            });
+          },
+          itemBuilder: (context, index) {
+            return exerciseCard(index);
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 350,
+            left: 20,
+            right:20,
+            bottom: 10
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _buildPageIndicator()
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -80,9 +136,11 @@ class _ExerciseChartState extends State<ExerciseChart> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 20,
+                  left: 15,
+                  right: 15,
                 ),
                 child: Text(
                   '$name: Set 1',
@@ -90,15 +148,13 @@ class _ExerciseChartState extends State<ExerciseChart> {
                 ),
               ),
             ),
-            const Spacer(),
             SizedBox(
               height: 300,
               child: Padding(
                 padding: const EdgeInsets.only(
                   right: 25,
                   left: 10,
-                  top: 10,
-                  bottom: 10,
+                  bottom: 25,
                 ),
                 child: LineChart(
                   exerciseChart(firstSetWeightList, maxWeight),
