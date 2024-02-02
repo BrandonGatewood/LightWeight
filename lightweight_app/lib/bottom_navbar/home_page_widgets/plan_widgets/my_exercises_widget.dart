@@ -155,7 +155,7 @@ class _ExercisesState extends State<Exercises> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 210.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: dialogList,              
@@ -178,7 +178,7 @@ class _ExercisesState extends State<Exercises> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 210.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -198,6 +198,16 @@ class _ExercisesState extends State<Exercises> {
                   const Spacer(),
                   const Spacer(),
                 ],
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 12
+                ),
+                child: Divider(
+                  thickness: 2,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -253,7 +263,7 @@ class _ExercisesState extends State<Exercises> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 210.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -274,7 +284,16 @@ class _ExercisesState extends State<Exercises> {
                   const Spacer(),
                 ],
               ),
-              const Spacer(),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 12
+                ),
+                child: Divider(
+                  thickness: 2,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Text(
@@ -335,7 +354,16 @@ class _ExercisesState extends State<Exercises> {
           ),
         ],
       ),
-      
+      const Padding(
+        padding: EdgeInsets.only(
+          left: 12,
+          right: 12,
+          bottom: 12
+        ),
+        child: Divider(
+          thickness: 2,
+        ),
+      ),
       Padding(
         padding: const EdgeInsets.only(
           top: 20,
@@ -397,7 +425,16 @@ class _ExercisesState extends State<Exercises> {
           const Spacer(),
         ],
       ),
-      const Spacer(),
+      const Padding(
+        padding: EdgeInsets.only(
+          left: 12,
+          right: 12,
+          bottom: 12
+        ),
+        child: Divider(
+          thickness: 2,
+        ),
+      ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Text(
@@ -440,10 +477,10 @@ class _ExercisesState extends State<Exercises> {
 
     switch(selection) {
       case 0: 
-        title = 'Failed to add exercise.';
+        title = 'Failed to Add Exercise';
         break;
       case 1:
-        title = 'Failed to update exercise.';
+        title = 'Failed to Update Exercise';
         break;
     }
     
@@ -453,7 +490,7 @@ class _ExercisesState extends State<Exercises> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 210.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -464,6 +501,16 @@ class _ExercisesState extends State<Exercises> {
                     title,
                     style: Styles().largeDialogHeader(),
                   ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 12
+                ),
+                child: Divider(
+                  thickness: 2,
                 ),
               ),
               const Spacer(),
@@ -513,7 +560,7 @@ class _ExercisesState extends State<Exercises> {
 
   // Communicates with database to update an exercise 
   void onSubmitUpdate(Exercise anExercise) async {
-    if(!validateExerciseName(anExercise.name)) {
+    if(validateExerciseName(anExercise.name)) {
       await _dbHelper.updateExercise(anExercise.id, _controller.text);
       handleUpdateRequest();
     }
