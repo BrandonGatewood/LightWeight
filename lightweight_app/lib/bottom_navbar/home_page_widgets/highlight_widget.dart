@@ -23,7 +23,7 @@ class _Highlight extends State<Highlight> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
       child: SizedBox(
         height: 800,
         child: Column(
