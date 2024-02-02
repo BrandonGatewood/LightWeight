@@ -398,6 +398,7 @@ class _WorkoutsState extends State<Workouts> {
                   thickness: 2,
                 ),
               ),
+              const Spacer(),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
@@ -588,6 +589,7 @@ class _WorkoutsState extends State<Workouts> {
           thickness: 2,
         ),
       ),
+      const Spacer(),
       Padding(
         padding: const EdgeInsets.all(20),
         child: Text(

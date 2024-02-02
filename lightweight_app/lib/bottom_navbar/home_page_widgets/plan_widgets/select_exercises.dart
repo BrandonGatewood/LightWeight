@@ -243,7 +243,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SingleChildScrollView(
           child: SizedBox(
-            height: 550.0,
+            height: 575.0,
             child: Column(
               children: <Widget>[
                 const Spacer(),
@@ -269,6 +269,16 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                       child: Styles().addTextButton(), 
                     ),
                   ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    bottom: 12
+                  ),
+                  child: Divider(
+                    thickness: 2,
+                  ),
                 ),
                 SizedBox(
                   height: 450,
@@ -461,7 +471,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), //this right here
         child: SizedBox(
-          height: 215.0,
+          height: 240.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -472,19 +482,31 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                     icon:  icons.backArrowIcon(),
                   ),
                   const Spacer(),
+                  const Spacer(),
                   Text(
                     'Remove Exercise',
                     style: Styles().largeDialogHeader(), 
                   ),
                   const Spacer(),
                   const Spacer(),
+                  const Spacer(),
                 ],
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 12
+                ),
+                child: Divider(
+                  thickness: 2,
+                ),
               ),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
-                  'Confirm to Remove $exerciseName from workout',
+                  'Confirm to remove $exerciseName.',
                   style: Styles().content(),
                 ),
               ),
@@ -497,7 +519,7 @@ class _WorkoutSelectExerciseState extends State<WorkoutSelectExercises> {
                     bottom: 10,
                   ), 
                   child: CircleAvatar(
-                    radius: 30,
+                    radius: 20,
                     backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                     child: IconButton(
                       onPressed: () {
