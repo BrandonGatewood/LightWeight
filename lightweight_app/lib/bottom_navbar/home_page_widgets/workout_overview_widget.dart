@@ -12,7 +12,7 @@ class WorkoutOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = 65;
+    double height = 67;
     // select height depending on workout length
     switch(todaysWorkout.exerciseList.length) {
       case 0:
@@ -27,12 +27,14 @@ class WorkoutOverview extends StatelessWidget {
         break;
       case 4:
         height *= 4;
+        height += 4;
         break;
       case 5:
         height *= 5;
+        height += 4;
         break;
       default:
-        height = 375;
+        height = 410;
         break;
     }
 
