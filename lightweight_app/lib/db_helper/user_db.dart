@@ -94,6 +94,12 @@ class UserDBHelper {
     return aUser;
   }
 
+  Future<void> deleteUser() async {
+    final Database db = await UserDBHelper().openUser();
+
+    await db.delete('user');
+  }
+
   Future<void> updateName(String name) async {
     final Database db = await UserDBHelper().openUser();
     String query = 'UPDATE user SET name = ? WHERE id = ?';

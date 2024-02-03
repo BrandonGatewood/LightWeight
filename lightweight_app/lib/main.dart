@@ -101,7 +101,12 @@ class _NavigationState extends State<Navigation> {
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               child: IconButton(
                 onPressed: () {
-                  const SettingsPage();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                      settings: const RouteSettings(name: '/settings'),
+                    ),
+                  );
                 },
                 icon: MyIcons().settingsIcon(), 
               ),

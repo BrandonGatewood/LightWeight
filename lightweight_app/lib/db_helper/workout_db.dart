@@ -137,6 +137,12 @@ class WorkoutsDBHelper {
     return true;
   }
 
+  Future<void> deleteAllWorkouts() async {
+    final Database db = await WorkoutsDBHelper().openWorkouts();
+
+    await db.delete('workouts');
+  }
+
   Future<dynamic> getWorkoutById(String id) async {
     List<Workout> workoutList = await getAllWorkouts();
 

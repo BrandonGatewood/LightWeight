@@ -131,6 +131,12 @@ class ExerciseDBHelper {
       );
   }
 
+  Future<void> deleteAllExercises() async {
+    final Database db = await ExerciseDBHelper().openExercise();
+
+    await db.delete('exercises');
+  }
+
   Future<void> updateExercise(String id, String newName) async {
     final Database db = await ExerciseDBHelper().openExercise();
 
