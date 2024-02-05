@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/charts/body_weight_chart.dart';
-import 'package:lightweight_app/charts/exercise_chart.dart';
+import 'package:lightweight_app/charts/workout_chart.dart';
 import 'package:lightweight_app/db_helper/user_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
 
@@ -29,7 +29,7 @@ class _Highlight extends State<Highlight> {
         child: Column(
           children: <Widget>[
             BodyWeightChart(aUser: widget.aUser,),
-            ExerciseChart(aWorkout: widget.aWorkout),
+            WorkoutChart(aWorkout: widget.aWorkout),
           ],
         ),
       ),

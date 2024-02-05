@@ -8,6 +8,9 @@ class Exercise {
   final String repsString;
   final String weightString;
   final int maxWeight;
+  final int maxWeightReps;
+  final int maxReps;
+  final int maxRepsWeight;
 
   const Exercise({
     required this.id,
@@ -15,10 +18,21 @@ class Exercise {
     required this.repsString,
     required this.weightString,
     required this.maxWeight,
+    required this.maxWeightReps,
+    required this.maxReps,
+    required this.maxRepsWeight,
   });
 
   Exercise.fromMap(Map<String, dynamic> item):
-    id = item['id'], name = item['name'], repsString = item['repsString'], weightString = item['weightString'], maxWeight = item['maxWeight'];
+    id = item['id'], 
+    name = item['name'], 
+    repsString = item['repsString'],
+    weightString = item['weightString'],
+    maxWeight = item['maxWeight'],
+    maxWeightReps = item['maxWeightReps'],
+    maxReps = item['maxReps'],
+    maxRepsWeight = item['maxRepsWeight'];
+
 
   Map<String, dynamic> toMap() {
     return {
@@ -27,6 +41,9 @@ class Exercise {
       'repsString': repsString,
       'weightString': weightString,
       'maxWeight': maxWeight,
+      'maxWeightReps': maxWeightReps,
+      'maxReps': maxReps,
+      'maxRepsWeight': maxRepsWeight,
     };
   }
 
@@ -52,9 +69,38 @@ class Exercise {
     List<String> allWeightsList = weightString.split(';');
 
     for(int i = 0; i < allWeightsList.length; ++i) {
+      List<String> aSetOfWeightsString = allWeightsList[i].split(',');
+      List<int> aSetOfWeightsInt = [];
 
+      for(int j = 0; j < aSetOfWeightsString.length; ++j) {
+        int weight = int.parse(aSetOfWeightsString[j]);
+        aSetOfWeightsInt.add(weight);
+      }
+    
+      allWeightsMatrix.add(aSetOfWeightsInt);
     }
     return allWeightsMatrix;
+  }
+
+  List<List<int>> getAllRepsMatric() {
+    List<List<int>> allRepsMatrix = [];
+
+    List<String> allRepsList = repsString.split(';');
+
+    for(int i = 0; i < allRepsList.length; ++i) {
+      List<String> aSetOfRepsString = allRepsList[i].split(',');
+      List<int> aSetOfRepsint = [];
+
+      for(int j = 0; j < aSetOfRepsString.length; ++j) {
+        int reps = int.parse(aSetOfRepsString[j]);
+
+        aSetOfRepsint.add(reps);
+      }
+
+      allRepsMatrix.add(aSetOfRepsint);
+    }
+
+    return allRepsMatrix;
   }
 }
 
@@ -68,7 +114,7 @@ class ExerciseDBHelper {
 
     String id = DB().idGenerator(); 
 
-    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', maxWeight: 0);
+    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', maxWeight: 0, maxWeightReps: 0, maxReps: 0, maxRepsWeight: 0);
 
     await db.insert(
       'exercises', 
@@ -82,7 +128,7 @@ class ExerciseDBHelper {
 
     String id = DB().idGenerator(); 
 
-    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', maxWeight: 0);
+    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', maxWeight: 0, maxWeightReps: 0, maxReps: 0, maxRepsWeight: 0);
 
     await db.insert(
       'exercises', 
@@ -165,10 +211,16 @@ class ExerciseDBHelper {
     await db.rawUpdate('UPDATE exercises SET weightString = ? WHERE id = ?', [weightString, id]);
   }
 
-  Future<void> updateExerciseMaxWeight(String id, int maxWeight) async {
+  Future<void> updateExerciseMaxWeight(String id, int maxWeight, int maxWeightReps) async {
     final Database db = await ExerciseDBHelper().openExercise();
     
-    await db.rawUpdate('UPDATE exercises SET maxWeight = ? WHERE id = ?', [maxWeight, id]);
+    await db.rawUpdate('UPDATE exercises SET maxWeight = ?, maxWeightReps = ? WHERE id = ?', [maxWeight, maxWeightReps, id]);
+  }
+
+  Future<void> updateExerciseMaxReps(String id, int maxReps, int maxRepsWeight) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+    
+    await db.rawUpdate('UPDATE exercises SET maxReps = ?, maxRepsWeight = ? WHERE id = ?', [maxReps, maxRepsWeight, id]);
   }
 
 }

@@ -305,8 +305,6 @@ class _TrackState extends State<Track> {
   // save exercise reps and weight into the database.
   void onSubmitUpdate() async {
     for(int i = 0; i < widget.todaysWorkout.exerciseList.length; ++i) {
-      int maxWeight = widget.todaysWorkout.exerciseList[i].maxWeight;
-
       String delimeter = ';';
       String reps = '';
       String weight = '';
@@ -329,15 +327,27 @@ class _TrackState extends State<Track> {
         }
 
         // update max weight if found
-        int checkForMax = int.parse(_controller[i][j]!.$2.text);
-        if(checkForMax > maxWeight) {
-          await exerciseDb.updateExerciseMaxWeight(widget.todaysWorkout.exerciseList[i].id, checkForMax);
-        }
-
+        int checkReps = int.parse(_controller[i][j]!.$1.text);
+        int checkWeight = int.parse(_controller[i][j]!.$2.text);
+        checkMaxWeight(widget.todaysWorkout.exerciseList[i], checkWeight, checkReps);
+        checkMaxReps(widget.todaysWorkout.exerciseList[i], checkWeight, checkReps);
       }
 
       await exerciseDb.updateExerciseReps(widget.todaysWorkout.exerciseList[i].id, reps);
       await exerciseDb.updateExerciseWeight(widget.todaysWorkout.exerciseList[i].id, weight);
+    }
+  }
+
+  void checkMaxWeight(Exercise anExercise, int checkMaxWeight, int checkMaxWeightReps) async {
+    int currMax = anExercise.maxWeight;
+    if(checkMaxWeight > currMax) {
+      await exerciseDb.updateExerciseMaxWeight(anExercise.id, checkMaxWeight, checkMaxWeightReps);
+    }
+  }
+  void checkMaxReps(Exercise anExercise, int checkMaxReps, int checkMaxRepsWeight) async {
+    int currMax = anExercise.maxReps;
+    if(checkMaxReps > currMax) {
+      await exerciseDb.updateExerciseMaxReps(anExercise.id, checkMaxReps, checkMaxRepsWeight);
     }
   }
 }
