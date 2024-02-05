@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
-import '../../../icons.dart';
-import '../../../styles.dart';
-import './select_exercises.dart';
+import 'package:lightweight_app/routes/home_page_widgets/plan_widgets/select_exercises.dart';
+import 'package:lightweight_app/assets/icons.dart';
+import 'package:lightweight_app/assets/styles.dart';
 
 enum WorkoutDialogPopupItems { rename, editExerciceList, delete }
 

@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
-import 'package:lightweight_app/icons.dart';
-import 'package:lightweight_app/styles.dart';
+import 'package:lightweight_app/assets/icons.dart';
+import 'package:lightweight_app/assets/styles.dart';
 
 class MyCurrentSplit extends StatefulWidget {
   const MyCurrentSplit({

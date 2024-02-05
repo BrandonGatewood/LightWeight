@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:lightweight_app/db_helper/exercise_db.dart";
 import "package:lightweight_app/db_helper/user_db.dart";
 import "package:lightweight_app/db_helper/workout_db.dart";
-import "package:lightweight_app/icons.dart";
-import "package:lightweight_app/styles.dart";
+import 'package:lightweight_app/assets/icons.dart';
+import 'package:lightweight_app/assets/styles.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

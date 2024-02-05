@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:lightweight_app/db_helper/user_db.dart";
-import "package:lightweight_app/icons.dart";
-import "package:lightweight_app/styles.dart";
+import 'package:lightweight_app/assets/icons.dart';
+import 'package:lightweight_app/assets/styles.dart';
 
 class Summary extends StatefulWidget {
   const Summary({

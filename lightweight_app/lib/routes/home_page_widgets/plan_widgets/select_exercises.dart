@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
-import '../../../db_helper/exercise_db.dart';
-import '../../../db_helper/workout_db.dart';
-import '../../../icons.dart';
-import '../../../styles.dart';
+import "package:lightweight_app/db_helper/exercise_db.dart";
+import 'package:lightweight_app/db_helper/workout_db.dart';
+import 'package:lightweight_app/assets/icons.dart';
+import 'package:lightweight_app/assets/styles.dart';
+
 
 class WorkoutSelectExercises extends StatefulWidget {
   const WorkoutSelectExercises({

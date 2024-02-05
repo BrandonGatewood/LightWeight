@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import '../../../icons.dart';
-import '../../../db_helper/exercise_db.dart';
-import '../../../styles.dart';
+import "package:lightweight_app/db_helper/exercise_db.dart";
+import 'package:lightweight_app/assets/icons.dart';
+import 'package:lightweight_app/assets/styles.dart';
 
 class Exercises extends StatefulWidget {
   const Exercises({super.key});

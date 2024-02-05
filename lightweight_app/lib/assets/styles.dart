@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:lightweight_app/icons.dart";
+import 'package:lightweight_app/assets/icons.dart';
 
 class Styles {
   // TextStyle for titles in homepage

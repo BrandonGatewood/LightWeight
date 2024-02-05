@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/db_helper/current_split_db.dart';
-import 'package:lightweight_app/icons.dart';
-import 'package:lightweight_app/styles.dart';
-import 'plan_widgets/my_exercises_widget.dart';
-import 'plan_widgets/my_workout_widget.dart';
-import 'plan_widgets/my_current_split_widget.dart';
+import 'package:lightweight_app/assets/icons.dart';
+import 'package:lightweight_app/assets/styles.dart';
+import 'package:lightweight_app/routes/home_page_widgets/plan_widgets/my_current_split_widget.dart';
+import 'package:lightweight_app/routes/home_page_widgets/plan_widgets/my_exercises_widget.dart';
+import 'package:lightweight_app/routes/home_page_widgets/plan_widgets/my_workout_widget.dart';
 
 class Plan extends StatelessWidget {
   const Plan({

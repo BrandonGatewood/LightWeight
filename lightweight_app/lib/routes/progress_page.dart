@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:lightweight_app/routes/exercise_progress.dart';
 import "package:lightweight_app/db_helper/exercise_db.dart";
-import "package:lightweight_app/icons.dart";
-import "package:lightweight_app/styles.dart";
+import 'package:lightweight_app/assets/icons.dart';
+import 'package:lightweight_app/assets/styles.dart';
 
 class ProgressPage extends StatefulWidget {
   const ProgressPage({super.key});

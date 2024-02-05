@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lightweight_app/db_helper/workout_db.dart';
-import 'package:lightweight_app/styles.dart';
+import 'package:lightweight_app/assets/styles.dart';
 
 class ExerciseChart extends StatefulWidget {
   @override

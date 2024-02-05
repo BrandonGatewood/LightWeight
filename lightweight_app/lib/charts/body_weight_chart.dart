@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:fl_chart/fl_chart.dart';
 import 'package:lightweight_app/db_helper/user_db.dart';
-import 'package:lightweight_app/styles.dart';
+import 'package:lightweight_app/assets/styles.dart';
 
 class BodyWeightChart extends StatefulWidget {
   const BodyWeightChart({
