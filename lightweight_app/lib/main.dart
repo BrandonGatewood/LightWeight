@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
-import 'package:lightweight_app/bottom_navbar/home_page_widgets/track.dart';
+import 'package:lightweight_app/routes/track.dart';
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/user_db.dart';
 import 'package:lightweight_app/icons.dart';
-import 'bottom_navbar/home_page.dart';
-import './bottom_navbar/progress_page.dart';
-import './bottom_navbar/settings_page.dart';
+import 'routes/home_page.dart';
+import 'routes/progress_page.dart';
+import 'routes/settings_page.dart';
 
 void main() {
   runApp(const MyApp());
