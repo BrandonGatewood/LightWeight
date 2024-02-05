@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:lightweight_app/bottom_navbar/exercise_progress.dart";
 import "package:lightweight_app/db_helper/exercise_db.dart";
 import "package:lightweight_app/icons.dart";
 import "package:lightweight_app/styles.dart";
@@ -69,8 +70,6 @@ class _ProgressPage extends State<ProgressPage> with TickerProviderStateMixin {
             EdgeInsets p;
             if(index == allExerciseList.length - 1) {
               p = const EdgeInsets.only(
-                left: 5,
-                right: 5,
                 bottom: 90,
               );
             }
@@ -83,7 +82,12 @@ class _ProgressPage extends State<ProgressPage> with TickerProviderStateMixin {
               child: ElevatedButton(
                 style: Styles().listViewButtonStyle(),
                 onPressed: () {
-                  showExerciseDialog(index);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ExerciseProgress(anExercise: allExerciseList[index]),
+                      settings: const RouteSettings(name: '/exercise_progress'),
+                    ),
+                  );
                 },
                 child: ListTile( 
                   title: Text(allExerciseList[index].name),
