@@ -17,6 +17,7 @@ class DB {
           name TEXT NOT NULL,
           repsString TEXT NOT NULL,
           weightString TEXT NOT NULL,
+          dateTrackedString TEXT NOT NULL,
           maxWeight INTEGER NOT NULL,
           maxWeightReps INTEGER NOT NULL,
           maxReps INTEGER NOT NULL,

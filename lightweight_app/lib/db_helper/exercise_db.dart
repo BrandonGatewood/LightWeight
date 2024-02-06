@@ -7,6 +7,7 @@ class Exercise {
   final String name;
   final String repsString;
   final String weightString;
+  final String dateTrackedString;
   final int maxWeight;
   final int maxWeightReps;
   final int maxReps;
@@ -17,6 +18,7 @@ class Exercise {
     required this.name,
     required this.repsString,
     required this.weightString,
+    required this.dateTrackedString,
     required this.maxWeight,
     required this.maxWeightReps,
     required this.maxReps,
@@ -28,6 +30,7 @@ class Exercise {
     name = item['name'], 
     repsString = item['repsString'],
     weightString = item['weightString'],
+    dateTrackedString = item['dateTrackedString'],
     maxWeight = item['maxWeight'],
     maxWeightReps = item['maxWeightReps'],
     maxReps = item['maxReps'],
@@ -40,6 +43,7 @@ class Exercise {
       'name': name,
       'repsString': repsString,
       'weightString': weightString,
+      'dateTrackedString': dateTrackedString,
       'maxWeight': maxWeight,
       'maxWeightReps': maxWeightReps,
       'maxReps': maxReps,
@@ -82,7 +86,7 @@ class Exercise {
     return allWeightsMatrix;
   }
 
-  List<List<int>> getAllRepsMatric() {
+  List<List<int>> getAllRepsMatrix() {
     List<List<int>> allRepsMatrix = [];
 
     List<String> allRepsList = repsString.split(';');
@@ -102,6 +106,10 @@ class Exercise {
 
     return allRepsMatrix;
   }
+
+  List<String> getDateTrackedList() {
+    return dateTrackedString.split(';');
+  }
 }
 
 class ExerciseDBHelper {
@@ -114,7 +122,7 @@ class ExerciseDBHelper {
 
     String id = DB().idGenerator(); 
 
-    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', maxWeight: 0, maxWeightReps: 0, maxReps: 0, maxRepsWeight: 0);
+    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', dateTrackedString: '', maxWeight: 0, maxWeightReps: 0, maxReps: 0, maxRepsWeight: 0);
 
     await db.insert(
       'exercises', 
@@ -128,7 +136,7 @@ class ExerciseDBHelper {
 
     String id = DB().idGenerator(); 
 
-    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', maxWeight: 0, maxWeightReps: 0, maxReps: 0, maxRepsWeight: 0);
+    Exercise newExercise = Exercise(id: id, name: name, repsString: '', weightString: '', dateTrackedString: '', maxWeight: 0, maxWeightReps: 0, maxReps: 0, maxRepsWeight: 0);
 
     await db.insert(
       'exercises', 
@@ -221,6 +229,12 @@ class ExerciseDBHelper {
     final Database db = await ExerciseDBHelper().openExercise();
     
     await db.rawUpdate('UPDATE exercises SET maxReps = ?, maxRepsWeight = ? WHERE id = ?', [maxReps, maxRepsWeight, id]);
+  }
+
+  Future<void> updateDateTrackedString(String id, String dateTrackedString) async {
+    final Database db = await ExerciseDBHelper().openExercise();
+
+    await db.rawUpdate('UPDATE exercises SET dateTrackedString = ? WHERE id = ?', [dateTrackedString, id]);
   }
 
 }

@@ -71,6 +71,8 @@ class _ProgressPage extends State<ProgressPage> with TickerProviderStateMixin {
             if(index == allExerciseList.length - 1) {
               p = const EdgeInsets.only(
                 bottom: 90,
+                left: 5,
+                right: 5,
               );
             }
             else {

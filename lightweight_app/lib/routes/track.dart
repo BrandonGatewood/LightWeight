@@ -308,6 +308,7 @@ class _TrackState extends State<Track> {
       String delimeter = ';';
       String reps = '';
       String weight = '';
+      String date = getDate(widget.todaysWorkout.exerciseList[i]); 
 
       if(widget.todaysWorkout.exerciseList[i].repsString.isNotEmpty) {
         reps = widget.todaysWorkout.exerciseList[i].repsString + delimeter;
@@ -330,9 +331,10 @@ class _TrackState extends State<Track> {
         int checkReps = int.parse(_controller[i][j]!.$1.text);
         int checkWeight = int.parse(_controller[i][j]!.$2.text);
         checkMaxWeight(widget.todaysWorkout.exerciseList[i], checkWeight, checkReps);
-        checkMaxReps(widget.todaysWorkout.exerciseList[i], checkWeight, checkReps);
+        checkMaxReps(widget.todaysWorkout.exerciseList[i], checkReps, checkReps);
       }
 
+      await exerciseDb.updateDateTrackedString(widget.todaysWorkout.exerciseList[i].id, date);
       await exerciseDb.updateExerciseReps(widget.todaysWorkout.exerciseList[i].id, reps);
       await exerciseDb.updateExerciseWeight(widget.todaysWorkout.exerciseList[i].id, weight);
     }
@@ -344,10 +346,27 @@ class _TrackState extends State<Track> {
       await exerciseDb.updateExerciseMaxWeight(anExercise.id, checkMaxWeight, checkMaxWeightReps);
     }
   }
+
   void checkMaxReps(Exercise anExercise, int checkMaxReps, int checkMaxRepsWeight) async {
     int currMax = anExercise.maxReps;
     if(checkMaxReps > currMax) {
       await exerciseDb.updateExerciseMaxReps(anExercise.id, checkMaxReps, checkMaxRepsWeight);
     }
+  }
+
+  String getDate(Exercise anExercise) {
+    String date = anExercise.dateTrackedString; 
+    int month = DateTime.now().month;
+    int day = DateTime.now().day;
+    int year = DateTime.now().year;
+
+    if(date.isEmpty) {
+      date = '$month/$day/$year';
+    }
+    else {
+      date += ';$month/$day/$year';
+    }
+
+    return date;
   }
 }
