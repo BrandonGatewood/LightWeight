@@ -83,7 +83,7 @@ class Exercise {
     
       allWeightsMatrix.add(aSetOfWeightsInt);
     }
-    return allWeightsMatrix;
+    return allWeightsMatrix.reversed.toList();
   }
 
   List<List<int>> getAllRepsMatrix() {
@@ -104,11 +104,11 @@ class Exercise {
       allRepsMatrix.add(aSetOfRepsint);
     }
 
-    return allRepsMatrix;
+    return allRepsMatrix.reversed.toList();
   }
 
   List<String> getDateTrackedList() {
-    return dateTrackedString.split(';');
+    return dateTrackedString.split(';').reversed.toList();
   }
 }
 
