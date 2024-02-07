@@ -328,8 +328,8 @@ class _TrackState extends State<Track> {
         }
 
         // update max weight if found
-        int checkReps = int.parse(_controller[i][j]!.$1.text);
-        int checkWeight = int.parse(_controller[i][j]!.$2.text);
+        int checkReps = int.parse(r);
+        int checkWeight = int.parse(w);
         checkMaxWeight(widget.todaysWorkout.exerciseList[i], checkWeight, checkReps);
         checkMaxReps(widget.todaysWorkout.exerciseList[i], checkReps, checkReps);
       }
