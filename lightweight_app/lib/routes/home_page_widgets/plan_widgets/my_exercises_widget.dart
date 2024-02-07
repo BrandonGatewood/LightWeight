@@ -94,6 +94,7 @@ class _ExercisesState extends State<Exercises> {
           itemCount: exerciseList.length,
           itemBuilder: (BuildContext context, int index) {
             int maxWeight = exerciseList[index].maxWeight;
+            int maxWeightReps = exerciseList[index].maxWeightReps;
 
             return Padding(
               padding: Styles().listViewPadding(), 
@@ -114,7 +115,7 @@ class _ExercisesState extends State<Exercises> {
                   child: ListTile(
                     title: Text(exerciseList[index].name),
                     subtitle: Text(
-                      'Max Weight: $maxWeight lbs',
+                      'Max Weight: $maxWeight lbs x $maxWeightReps reps',
                       style: Styles().subtitle()
                     ),
                     trailing: icons.forwardArrowIcon(),
