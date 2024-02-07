@@ -3,17 +3,17 @@ import 'package:sqflite/sqflite.dart';
 import 'package:lightweight_app/db_helper/db.dart';
 
 class Exercise {
-  final String id;
-  final String name;
-  final String repsString;
-  final String weightString;
-  final String dateTrackedString;
-  final int maxWeight;
-  final int maxWeightReps;
-  final int maxReps;
-  final int maxRepsWeight;
+  String id;
+  String name;
+  String repsString;
+  String weightString;
+  String dateTrackedString;
+  int maxWeight;
+  int maxWeightReps;
+  int maxReps;
+  int maxRepsWeight;
 
-  const Exercise({
+  Exercise({
     required this.id,
     required this.name,
     required this.repsString,
@@ -49,6 +49,18 @@ class Exercise {
       'maxReps': maxReps,
       'maxRepsWeight': maxRepsWeight,
     };
+  }
+
+  void setExercise(Exercise newExercise) {
+    id = newExercise.id;
+    name = newExercise.name;
+    repsString = newExercise.repsString;
+    weightString = newExercise.weightString;
+    dateTrackedString = newExercise.dateTrackedString;
+    maxWeight = newExercise.maxWeight;
+    maxWeightReps = newExercise.maxWeightReps;
+    maxReps = newExercise.maxReps;
+    maxRepsWeight = newExercise.maxRepsWeight;
   }
 
   List<int> getFirstSetWeightList() {

@@ -70,9 +70,7 @@ class _TrackState extends State<Track> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
           onSubmitUpdate();
-          setState(() {
-            widget.callbackCurrentSplit();
-          });
+          widget.callbackCurrentSplit();
           Navigator.pop(context);
         },
         label: const Text('Save',

@@ -5,42 +5,22 @@ import 'package:lightweight_app/assets/icons.dart';
 import 'package:lightweight_app/assets/styles.dart';
 
 class ProgressPage extends StatefulWidget {
-  const ProgressPage({super.key});
+  const ProgressPage({
+    super.key,
+    required this.allExerciseList
+  });
+
+  final List<Exercise> allExerciseList;
 
   @override
   State<ProgressPage> createState() => _ProgressPage();
 }
 
-class _ProgressPage extends State<ProgressPage> with TickerProviderStateMixin {
-  late final TabController _tabController;
-  late ExerciseDBHelper exercideDb;
-  List<Exercise> allExerciseList = [];
-    
-  void _refreshExercises() async {
-    final List<Exercise> data = await exercideDb.getAllExercise();
-
-    setState(() {
-      allExerciseList = data;
-    });
-  }
+class _ProgressPage extends State<ProgressPage> {
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    exercideDb = ExerciseDBHelper();
-    exercideDb.openExercise().whenComplete(() async {
-      _refreshExercises();
-      setState(() {
-        
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
   }
 
   @override
@@ -54,7 +34,7 @@ class _ProgressPage extends State<ProgressPage> with TickerProviderStateMixin {
   }
 
   Widget exerciseListView() {
-    if(allExerciseList.isEmpty) {
+    if(widget.allExerciseList.isEmpty) {
       return const Center(
         child: Text('No Exercises'),
       );
@@ -65,10 +45,10 @@ class _ProgressPage extends State<ProgressPage> with TickerProviderStateMixin {
           top: 10,
         ),
         child: ListView.builder(
-          itemCount: allExerciseList.length,
+          itemCount: widget.allExerciseList.length,
           itemBuilder: (context, index) {
             EdgeInsets p;
-            if(index == allExerciseList.length - 1) {
+            if(index == widget.allExerciseList.length - 1) {
               p = const EdgeInsets.only(
                 bottom: 90,
                 left: 5,
@@ -86,13 +66,13 @@ class _ProgressPage extends State<ProgressPage> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => ExerciseProgress(anExercise: allExerciseList[index]),
+                      builder: (context) => ExerciseProgress(anExercise: widget.allExerciseList[index]),
                       settings: const RouteSettings(name: '/exercise_progress'),
                     ),
                   );
                 },
                 child: ListTile( 
-                  title: Text(allExerciseList[index].name),
+                  title: Text(widget.allExerciseList[index].name),
                   trailing: MyIcons().forwardArrowIcon(),
                 ),
               ),

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:lightweight_app/db_helper/exercise_db.dart';
 import 'package:lightweight_app/routes/track.dart';
 import 'package:lightweight_app/db_helper/current_split_db.dart';
 import 'package:lightweight_app/db_helper/user_db.dart';
@@ -38,19 +39,23 @@ class _NavigationState extends State<Navigation> {
   int _selectedIndex = 0;
   late CurrentSplit myCurrentSplit;
   late CurrentSplitDBHelper currentSplitDb;
+  late ExerciseDBHelper exerciseDb;
+  late List<Exercise> allExerciseList = [];
   late User aUser;
   late UserDBHelper userDb;
   late List<Widget> _widgetOptions;
 
   callbackCurrentSplit() async {
     final CurrentSplit currentSplitData = await currentSplitDb.getCurrentSplit();
+    final List<Exercise> allExerciseListData = await exerciseDb.getAllExercise(); 
 
     setState(() {
       myCurrentSplit.setCurrentSplit(currentSplitData);
+      allExerciseList = allExerciseListData;
 
       _widgetOptions = <Widget>[
         HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callbackCurrentSplit: callbackCurrentSplit, aUser: aUser, userDb: userDb, callbackUser: callbackUser),
-        const ProgressPage(), 
+        ProgressPage(allExerciseList: allExerciseList), 
       ]; 
     });
   }
@@ -63,7 +68,7 @@ class _NavigationState extends State<Navigation> {
 
       _widgetOptions = <Widget>[
         HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callbackCurrentSplit: callbackCurrentSplit, aUser: aUser, userDb: userDb, callbackUser: callbackUser),
-        const ProgressPage(),
+        ProgressPage(allExerciseList: allExerciseList), 
       ];
     });
   }
@@ -75,10 +80,22 @@ class _NavigationState extends State<Navigation> {
     myCurrentSplit = CurrentSplit();
     currentSplitDb = CurrentSplitDBHelper();
     userDb = UserDBHelper();
+    exerciseDb = ExerciseDBHelper();
+    exerciseDb.openExercise().whenComplete(() async {
+      final List<Exercise> data = await exerciseDb.getAllExercise();
+
+      for(int i = 0; i < data.length; ++i) {
+        allExerciseList.add(data[i]);
+      }
+
+      setState(() {
+        allExerciseList;
+      });
+    });
 
     _widgetOptions = <Widget>[
       HomePage(myCurrentSplit: myCurrentSplit, currentSplitDb: currentSplitDb, callbackCurrentSplit: callbackCurrentSplit, aUser: aUser, userDb: userDb, callbackUser: callbackUser),
-      const ProgressPage(), 
+      ProgressPage(allExerciseList: allExerciseList), 
     ]; 
   }
 
