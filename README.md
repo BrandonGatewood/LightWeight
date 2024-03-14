@@ -48,7 +48,19 @@ Once the app is installed, follow these steps to start using LightWeight:
 1. Tap on "My Exercises" button in the homepage
 2. Tap on the "+" icon on the top right
 3. Enter exercise name
-4. Click save
+4. Tap save
+
+- **Renaming Exercise name**:
+1. Tap on "My Exercises" button in the homepage
+2. Tap on the exercise you want to rename
+3. Enter new name
+4. Tap save 
+
+- **Deleting Exercise**:
+1. Tap on "My Exercises" button in the homepage
+2. Tap on the exercise you want to delete
+3. Tap on the trash Icon
+4. Tap on check Icon the confirm deletion
 
 - **Create Workouts**:
 1. Tap on "My Workouts" button in the homepage
@@ -59,6 +71,59 @@ Once the app is installed, follow these steps to start using LightWeight:
 6. Order matters, long hold an exercise card to change the order
 7. Increase or decrease the number of sets with the "+" or "-" icon on the right of an exercise card
 8. Click save 
+
+- **View Contents of a Workout**:
+1. Tap on "My Workouts" button in the homepage
+2. Tap on a workout card
+
+- **Rename a Workout**:
+1. Tap on "My Workouts" button in the homepage
+2. Tap on a workout card
+3. Tap on the three dots Icon on the top right
+4. Tap on "Rename workout"
+5. Enter new workout name
+6. Tap save
+
+- **Updating Exercises in a Workout**:
+1. Tap on "My Workouts" button in the homepage
+2. Tap on a workout card
+3. Tap on the three dots Icon on the top right
+4. Tap on "Edit Exercises"
+5. Edit the exercises
+6. Tap save
+
+- **Delete Workout**:
+1. Tap on "My Workouts" button in the homepage
+2. Tap on a workout card
+3. Tap on the three dots Icon on the top right
+4. Tap on "Delete workout"
+5. Tap check icon the confirm deletion
+
+- **Managing Current Split**:
+1. Make sure workouts have been created
+2. Tap on "My Current Split" button in the homepage
+3. Select the day
+4. Tap on the pencil icon on the top right
+5. Select a workout
+
+- **Tracking Current Split**:
+1. Tap the "Track" button on the bottom right of the homepage or progress page
+2. Fill in the information as you workout
+3. Tap save
+
+- **View progress**:
+View graphs of body weight and progress of exercises that will be done the day of:
+1. Scroll down to the highlights section in the home page
+View stats of every exercise:
+1. Navigate to progress page using bottom nav bar
+2. Select desired exercise 
+3. Scroll up/down to view progress
+
+- **Updating Body Weight**:
+Body weight can only be updating once a month. 
+1. Tap "Body Weight  >" button
+2. Enter new body weight
+3. Click save
 
 ## License
 LightWeight is open-source software licensed under the **MIT License**. Feel free to use, modify, and distribute it as per the terms of the license.
