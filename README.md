@@ -15,9 +15,6 @@ LightWeight is a simple and easy-to-use workout tracker app built with Flutter. 
 - **Monthly Body Weight Tracking**: Keep track of body weight changes on a monthly basis to monitor overall progress.
 - **No Account Required**: LightWeight does not require users to create accounts, ensuring a hassle-free experience.
 
-## Usage
-1. 
-
 ## Installation
 
 Follow these steps to install LightWeight on your device:
@@ -25,8 +22,43 @@ Follow these steps to install LightWeight on your device:
 1. Clone this repository to your local machine:
 
 ```bash
-$ git clone https://github.com/username/lightweight.git
-$ cd lightweight
-$ flutter pub get
-$ flutter run
+$ git clone https://github.com/BrandonGatewood/LightWeight
+```
 
+2. Navigate to the project directory:
+
+```bash
+$ cd lightweight
+```
+
+3. Install dependecies:
+```bash
+$ flutter pub get
+```
+
+4. Run the app:
+```bash
+$ flutter run
+```
+
+## Usage
+Once the app is installed, follow these steps to start using LightWeight:
+
+- **Inserting New Exercise**: 
+1. Tap on "My Exercises" button in the homepage
+2. Tap on the "+" icon on the top right
+3. Enter exercise name
+4. Click save
+
+- **Create Workouts**:
+1. Tap on "My Workouts" button in the homepage
+2. Tap on the "+" icon on the top right
+3. Enter workout name
+4. Click save
+5. Tap on the "+" icon on the top right to insert exercises for the new workout
+6. Order matters, long hold an exercise card to change the order
+7. Increase or decrease the number of sets with the "+" or "-" icon on the right of an exercise card
+8. Click save 
+
+## License
+LightWeight is open-source software licensed under the MIT License. Feel free to use, modify, and distribute it as per the terms of the license.
