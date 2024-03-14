@@ -61,4 +61,4 @@ Once the app is installed, follow these steps to start using LightWeight:
 8. Click save 
 
 ## License
-LightWeight is open-source software licensed under the MIT License. Feel free to use, modify, and distribute it as per the terms of the license.
+LightWeight is open-source software licensed under the **MIT License**. Feel free to use, modify, and distribute it as per the terms of the license.
